@@ -8,17 +8,11 @@ sidebar: auto
 
 ## IDEA Setting
 
-​	　IDEA中的环境配置有`Setting`和`Default Setting`，两种配置项相同，只是作用范围不同。`Setting`用于特定的项目中，`Default Setting`是共用的配置。
+​	　IDEA中的环境配置有`Setting`和`Default Setting`，两种配置项相同，只是作用范围不同。`Setting`用于指定项目的配置，`Default Setting`是共用的配置。
 
 ### 快捷键简介
 
 ```
-[代码编辑]
-- ctrl + w：智能选取，实现选取范围的不断扩充
-- crtl + alt + l：代码格式化
-- shift + alt + insert：列编辑
-- 双击选中 -> shift + F6 ：批量修改
-
 [自动生成代码]
 - alt + insert：自动代码生成
 - psvm + enter: 快捷生成main代码
@@ -27,6 +21,10 @@ sidebar: auto
 - div.container + tab : 自动生成div标签,并设置class
 
 [常用功能]
+- ctrl + w：智能选取，实现选取范围的不断扩充
+- crtl + alt + l：代码格式化
+- shift + alt + insert：列编辑
+- 双击选中 -> shift + F6 ：批量修改
 - ctrl + e： 显示最近打开过的文件
 - ctrl + n： 显示类名查找框
 - ctrl + q： 显示 JavaDoc 的结果
@@ -36,8 +34,6 @@ sidebar: auto
 - Alt + 鼠标左键 ： 列编辑模式
 - F5：刷新
 - ctrl + F5：强制刷新 ，清除缓存
-
-[编译运行]
 - ctrl + F9: build
 - shift + F9: debug
 - alt + f8: 查看debug中的变量值
@@ -81,9 +77,9 @@ jclasslib bytecode viewer 	      可视化的字节码查看插件
 
 ### Modules
 
-​	　需要将项目中目录`Mark As`不同的含义，`Sources`表示源码、`Resources`表示资源目录、`Test`表示测试用例、`Test Resources`表示测试资源目录（也可以使用Maven刷新来自动识别）。
-
 （1）标记文件目录
+
+​	　需要将项目中目录`Mark As`不同的含义，`Sources`表示源码、`Resources`表示资源目录、`Test`表示测试用例、`Test Resources`表示测试资源目录（**建议使用Maven刷新来自动识别**）。
 
 ![11_idea_03](./images/11_idea_03.png)
 
@@ -91,7 +87,7 @@ jclasslib bytecode viewer 	      可视化的字节码查看插件
 
 （2）设置Web Resource Directory
 
-​	　对于**Servlet项目**或者**前后端未分离**的项目，资源是部署在`webapp`目录下的，此时，还需要点击`myshop`下的`Web`，在`Deployment Descriptors`中配置 `web.xml` 的位置 和 在`Web Resource Directories`中配置webapp资源目录位置、资源部署的根目录为 `/`才能正常加载资源 。
+​	　对于**Servlet项目**或者**前后端未分离**的项目，资源是部署在`webapp`目录下的，此时，还需要点击`myshop`下的`Web`，在`Deployment Descriptors`中配置 `web.xml` 的位置 和 在`Web Resource Directories`中配置`webapp`资源目录位置、资源部署的根目录为 `/`才能正常加载资源 。
 
 ![11_idea_09](./images/11_idea_09.png)
 
@@ -140,5 +136,4 @@ jclasslib bytecode viewer 	      可视化的字节码查看插件
 ::: tip 注意
 若点击[+] 号后，没有exploded的Artifact，则需要在Project Structure的Artifacts中进行配置 或者 点击 `Fix`按钮自动添加
 :::
-
 

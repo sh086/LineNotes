@@ -4,11 +4,7 @@ sidebar: auto
 
 # plugin
 
-## jQuery
-
-### jQuery Validation
-
-#### 插件安装
+## jQuery Validation
 
 ​	　首先，点击[这里](https://www.jsdelivr.com/package/npm/jquery-validation?version=1.14.0)，下载`jQuery Validation`，然后将解压后的`dist目录`下的内容放入到项目中。然后，在页面按照如下方式，引入`jQuery Validation`前端表单验证框架。
 
@@ -21,37 +17,9 @@ sidebar: auto
 
 
 
-#### validation.js
+### validation.js
 
-​	　`validation.js`是封装校验器，不仅包含了`jQuery Validation`的**默认校验规则**，还包含了**自定义的检验规则**`mobile`。
-
-##### 默认的校验规则
-
-```
-required：true 必输字段
-remote：check.php 使用 ajax 方法调用 check.php 验证输入值
-email：true 必须输入正确格式的电子邮件
-url：true 必须输入正确格式的网址
-date：true 必须输入正确格式的日期
-dateISO：true 必须输入正确格式的日期(ISO)，例如：2009-06-23，1998/01/22 只验证格式，不验证有效性
-number：true 必须输入合法的数字(负数，小数)
-digits：true 必须输入整数
-creditcard： 必须输入合法的信用卡号
-equalTo：#field，输入值必须和 #field 相同
-accept： 输入拥有合法后缀名的字符串（上传文件的后缀）
-maxlength：5，输入长度最多是5的字符串(汉字算一个字符)
-minlength：10，输入长度最小是10的字符串(汉字算一个字符)
-rangelength：[5,10]，输入长度必须介于 5 和 10 之间的字符串")(汉字算一个字符)
-range：[5,10]，输入值必须介于 5 和 10 之间
-max：5，输入值不能大于 5
-min：10，输入值不能小于 10
-```
-
-
-
-##### 封装校验器
-
-​	　`Validate`是一个**函数对象**，`return()`里面的是**公共方法**，可以**直接被外部调用**；`handlerInit`和`handlerValidate`都是**私有方法**，**私有方法只能被return里面的公共方法调用**。特别的：`$(function () {});`这种语句会在`validation.js`被页面引用的时候执行，多用于初始化操作。
+​	　新建封装校验器`validation.js`文件，其不仅包含了`jQuery Validation`的**默认校验规则**，还包含了**自定义的检验规则**`mobile`。
 
 ```js
 /**
@@ -114,11 +82,37 @@ $(function () {
 });
 ```
 
+​	　`Validate`是一个**函数对象**，`return()`里面的是**公共方法**，可以**直接被外部调用**；`handlerInit`和`handlerValidate`都是**私有方法**，**私有方法只能被return里面的公共方法调用**。特别的：`$(function () {});`这种语句会在`validation.js`被页面引用的时候执行，多用于初始化操作。
 
 
-#### 使用案例
 
-```xml{9}
+### 默认的校验规则
+
+```
+required：true 必输字段
+remote：check.php 使用 ajax 方法调用 check.php 验证输入值
+email：true 必须输入正确格式的电子邮件
+url：true 必须输入正确格式的网址
+date：true 必须输入正确格式的日期
+dateISO：true 必须输入正确格式的日期(ISO)，例如：2009-06-23，1998/01/22 只验证格式，不验证有效性
+number：true 必须输入合法的数字(负数，小数)
+digits：true 必须输入整数
+creditcard： 必须输入合法的信用卡号
+equalTo：#field，输入值必须和 #field 相同
+accept： 输入拥有合法后缀名的字符串（上传文件的后缀）
+maxlength：5，输入长度最多是5的字符串(汉字算一个字符)
+minlength：10，输入长度最小是10的字符串(汉字算一个字符)
+rangelength：[5,10]，输入长度必须介于 5 和 10 之间的字符串")(汉字算一个字符)
+range：[5,10]，输入值必须介于 5 和 10 之间
+max：5，输入值不能大于 5
+min：10，输入值不能小于 10
+```
+
+
+
+### 使用示例
+
+```xml{2,9,15}
 <!-- 第一步：引入validation.js,初始化自定义校验规则 mobile -->
 <script src="/static/assets/app/validation.js"></script>
 
@@ -156,11 +150,9 @@ $(function () {
 
 
 
-### jQuery iCheck
+## jQuery iCheck
 
-#### 页面引用
-
-​	　`jQuery iCheck`是表单复选框、单选框控件美化插件，主要用于渲染并美化当前页面的复选框或单选框和响应复选框或单选框的点击事件。
+​	　`jQuery iCheck`是表单复选框、单选框控件美化插件，主要用于渲染并美化当前页面的复选框或单选框，响应复选框或单选框的点击事件。特别的，`iCheck`插件是`AdminLTE-2.4.18`自带的，无需另外下载，在页面按照如下方式，即可引入`jQuery iCheck`插件。
 
 ```xml
 <!-- CCS部分：iCheck for checkboxes and radio inputs -->
@@ -171,40 +163,35 @@ $(function () {
 
 
 
-#### iCheck用法
+### iCheck用法
 
-##### 回调事件
+​	　iCheck 提供了大量回调事件，都可以用来监听 change 事件；也提供了不同的方法来改变iCheck 的状态，具体事件和方法如下：
 
-​	　iCheck 提供了大量回调事件，都可以用来监听 change 事件。元素需要使用 `on()` 方法绑定事件。
+| 事件名称    | 使用时机                               | 方法名称 | 作用               |
+| ----------- | -------------------------------------- | -------- | ------------------ |
+| ifClicked   | 点击自定义的输入框或与其相关联的 label | check    | 设置 checked状态   |
+| ifChanged   | 输入框的 checked 或 disabled 状态改变  | uncheck  | 移除 checked 状态  |
+| ifChecked   | 输入框的状态变为 checked               | disable  | 设置 disabled状态  |
+| ifUnchecked | checked 状态被移除                     | enable   | 移除 disabled 状态 |
+| ifDisabled  | 输入框状态变为 disabled                | destroy  | 移除 iCheck 样式   |
+| ifEnabled   | disabled 状态被移除                    | on       | 绑定事件           |
+| ifCreated   | 输入框被应用了 iCheck 样式             | update   |                    |
+| ifDestroyed | iCheck 样式被移除                      | toggle   |                    |
 
-| 事件名称    | 使用时机                                     |
-| ----------- | -------------------------------------------- |
-| ifClicked   | 用户点击了自定义的输入框或与其相关联的 label |
-| ifChanged   | 输入框的 checked 或 disabled 状态改变了      |
-| ifChecked   | 输入框的状态变为 checked                     |
-| ifUnchecked | checked 状态被移除                           |
-| ifDisabled  | 输入框状态变为 disabled                      |
-| ifEnabled   | disabled 状态被移除                          |
-| ifCreated   | 输入框被应用了 iCheck 样式                   |
-| ifDestroyed | iCheck 样式被移除                            |
+​	　`input`元素绑定iCheck `回调事件` 或 `方法` 的示例如下：
 
-
-
-##### 方法
-
-| 方法名称 | 作用                          |
-| -------- | ----------------------------- |
-| check    | 将输入框的状态设置为 checked  |
-| uncheck  | 移除 checked 状态             |
-| toggle   |                               |
-| disable  | 将输入框的状态设置为 disabled |
-| enable   | 移除 disabled 状态            |
-| update   |                               |
-| destroy  | 移除 iCheck 样式              |
+```js
+// 使用 on() 方法绑定事件
+$('input').on('ifChecked', function(event){
+  alert(event.type + ' callback');
+});
+// 改变输入框状态
+$('input').iCheck('方法名称')
+```
 
 
 
-#### icheck.js
+### icheck.js
 
 ```js
 var Icheck = function (){
@@ -231,14 +218,17 @@ var Icheck = function (){
      * 全选
      * */
     var handleCheckboxAll = function(){
+        //使用 on() 方法绑定事件
         _masterCheckbox.on("ifClicked", function (e) {
             // true当前状态已选中，点击后应取消选择
             if (e.target.checked) {
+                //移除 checked 状态
                 _checkbox.iCheck("uncheck");
             }
 
             // 当前状态未选中，点击后应全选
             else {
+                //设置 chec k状态
                 _checkbox.iCheck("check");
             }
         });
@@ -278,9 +268,9 @@ $(document).ready(function (){
 
 
 
-#### 使用案例
+### 使用示例
 
-```html{8,17,30}
+```html{2,8,17,30}
 <!-- 第一步：引入iCheck.js -->
 <script src="/static/assets/app/iCheck.js"></script>
 
@@ -318,21 +308,41 @@ $(document).ready(function (){
 
 
 
-### jQuery Datatables
+## jQuery Datatables
 
-### jQuery TreeTable
+​	　DataTables 是一款 jQuery 表格插件。它是一个高度灵活的工具，可以将任何HTML表格添加高级的交互功能。然后，在页面按照如下方式，即可引入`jQuery Datatables`插件。
 
-### jQuery zTree
+```xml
+<!-- CCS部分-->
+<link rel="stylesheet" href="/static/assets/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
+<!-- JS部分-->
+<script src="/static/assets/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="/static/assets/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+```
 
-## JavaScript插件
 
-### Dropzone
 
-### wangEditor
+### dataTable.js
 
-## JavaScript工具类
 
-### DateTime
+
+### 使用示例
+
+```
+$('#dataTable').DataTable();
+```
+
+
+
+## jQuery TreeTable
+
+## jQuery zTree
+
+## Dropzone
+
+## wangEditor
+
+## DateTime
 
 ```js
 /**

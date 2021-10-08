@@ -23,7 +23,7 @@ sidebar: auto
 
 ### JunitTest
 
-#### 引入jar包
+（1）引入jar包
 
 ```xml
 <dependency>
@@ -34,7 +34,7 @@ sidebar: auto
 </dependency>
 ```
 
-#### 单元测试方法
+（2）编写单元测类
 
 ```java
 import org.junit.After;
@@ -79,9 +79,9 @@ Hello Log4j
 
 
 
-### SpringTest
+### SpringWebTest
 
-#### 引入Jar包
+（1）引入Jar包
 
 ```xml
 <dependency>
@@ -98,7 +98,7 @@ Hello Log4j
 
 
 
-#### 单元测试方法
+（2）编写单元测试类
 
 ```java
 import com.shooter.funtl.module.entity.User;
@@ -130,11 +130,43 @@ public class UserServiceTest {
 
 
 
+### SpringBootTest
+
+（1）引入Jar包
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-test</artifactId>
+    <scope>test</scope>
+</dependency>
+```
+
+
+
+（2）编写单元测试类
+
+```java
+import com.cmhb.Application;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = Application.class)
+@Slf4j
+public class DateTest {
+    //测试方法
+}
+```
+
+
+
 ## 单元测试
 
 ### Junit注解
 
-（1）@Test 和 @Ignore
+（1）`@Test` 和 `@Ignore`
 
 ​	　`@Test`注解表明该方法是一个测试方法。当想暂时禁用特定的测试方法执行时，可以使用`@Ignore`注解。
 
@@ -149,7 +181,7 @@ public void ignoreLog4j() {
 }
 ```
 
-（2）@Before 和 @After
+（2）`@Before` 和 `@After`
 
 ​	　	`@Before` 和 `@After` 注解 表明该方法必须在类中**每个测试方法**执行 `之前/之后` 执行。
 
@@ -166,7 +198,7 @@ public void after() {
 
 
 
-（3）@BeforeClass和 @AfterClass
+（3）`@BeforeClass`和 `@AfterClass`
 
 ​	　`@BeforeClass` 和 `@AfterClass`注解只能在**测试用例类执行** `之前/之后` 执行**一次,** 方法必须声明为`public static`。多用于开启资源和关闭资源。
 
@@ -261,5 +293,4 @@ void assertNotSame([String message], java.lang.Object unexpected, java.lang.Obje
  * */
 void assertArrayEquals([String message], expectedArray, resultArray)
 ```
-
 

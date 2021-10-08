@@ -25,12 +25,12 @@ sidebarDepth: 0
         <td colspan="2" align="center"><b>前端</b></td> 
         <td><a href="./jsp.html" target="_blank">JSP</a></td>
         <td><a href="./bootstrap.html" target="_blank">BootStrap</a></td>
-        <td><a href="./plugin.html" target="_blank">Plugin</a></td>
+        <td><a href="./plugin.html" target="_blank">Plugin插件</a></td>
         <td></td> 
         <td></td> 
    </tr>
     <tr>
-        <td rowspan="3"><b>后端</b></td>    
+        <td rowspan="4"><b>后端</b></td>    
         <td>基础</td>
         <td colspan="2"><a href="./mvc.html" target="_blank">MVC三层架构</a></td> 
 	<td></td> 
@@ -38,19 +38,26 @@ sidebarDepth: 0
         <td></td> 
     </tr>
     <tr>
-    	<td>SSM</td>
-        <td><a href="./spring.html" target="_blank">Spring</a></td>
-        <td><a href="./springweb.html" target="_blank">SpringWeb</a></td>  
-        <td><a href="./springmvc.html" target="_blank">SpringMVC</a></td>  
-        <td><a href="./springtransaction.html" target="_blank">SpringTransaction</a></td>  
+    	<td rowspan="2">SSM</td>
+    	<td><a href="./spring.html" target="_blank">Spring</a></td>
+        <td><a href="./springweb.html" target="_blank">Spring Web</a></td>  
+        <td><a href="./springmvc.html" target="_blank">Spring MVC</a></td>  
         <td><a href="./mybatis.html" target="_blank">Mybatis</a></td> 
+        <td><a href="./springtransaction.html" target="_blank">Spring事务</a></td>
+    </tr>
+    <tr>
+        <td ><a href="" target="_blank">HttpClient</a></td> 
+        <td colspan="2" align="center"><a href="" target="_blank">Maven模块化</a></td> 
+        <td></td> 
+        <td></td> 
     </tr>
     <tr>
     	<td>组件</td>
         <td><a href="./junit.html" target="_blank">Junit</a></td>
         <td><a href="./log4j.html" target="_blank">Log4j</a></td>  
-        <td><a href="./common.html" target="_blank">Common</a></td>  
+        <td><a href="./utils.html" target="_blank">Utils工具类</a></td>  
         <td></td> 
+        <td></td>
         <td></td> 
     </tr>
 </table>

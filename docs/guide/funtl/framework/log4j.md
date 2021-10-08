@@ -68,7 +68,7 @@ sidebar: auto
 
 ### log4j.properties
 
-​	　	　在`resources`资源目录下，新建`log4j.properties`日志配置文件。`log4j.appender.file.File`在JavaSE中默认当前路径是**当前项目主目录**，在Web容器中默认路径是**Tomcat下面的`bin`目录**，所以在Web中需要自定义该目录。
+​	　	　在`resources`资源目录下，新建`log4j.properties`日志配置文件。`log4j.appender.file.File`默认当前路径是**当前项目主目录**。
 
 ```properties
 log4j.rootLogger=INFO, console, file
@@ -78,7 +78,7 @@ log4j.appender.console.layout=org.apache.log4j.PatternLayout
 log4j.appender.console.layout.ConversionPattern=%d %p [%c] - %m%n
 
 log4j.appender.file=org.apache.log4j.DailyRollingFileAppender
-log4j.appender.file.File=logs/log.log
+log4j.appender.file.File=./logs/log.log
 log4j.appender.file.layout=org.apache.log4j.PatternLayout
 log4j.appender.A3.MaxFileSize=1024KB
 log4j.appender.A3.MaxBackupIndex=10
@@ -141,7 +141,7 @@ log4j.rootLogger=INFO, console, file
 ​	　日志附加器本质是一个接口，由**日志输出位置定义**，可以为日志记录器附加上很多其它设置信息，如输出布局、文件位置、文件大小等，定义语法为：
 
 ```properties
-log4j.appender.appenderName = 输出位置
+log4j.appender.{appenderName} = 输出位置
 ```
 
 
@@ -170,7 +170,7 @@ log4j.appender.file=org.apache.log4j.rolling.RollingFileAppender
 
 #### 常用布局类型
 
-​	　布局类型分为简单布局、网页布局、匹配器布局。以`console`输出位置举例，如下展示了不同布局类型的引用方式。
+​	　布局类型分为**简单布局**、**网页布局**、**匹配器布局**。以`console`输出位置举例，如下展示了不同布局类型的引用方式。
 
 ```properties
 # 网页布局，以 HTML 表格形式布局
@@ -227,5 +227,4 @@ logger.info("slf4j message is : {}", "message");
 ```java
 String.format("meaasge is : %s %s",message1,message2);
 ```
-
 

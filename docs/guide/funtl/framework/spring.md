@@ -10,7 +10,7 @@ sidebar: auto
 
 ## Spring简介
 
-​	　Spring 由 20 多个模块组成，它们可以分为 **数据访问/集成**（Data Access/Integration）、**Web**、**面向切面编程**（AOP, Aspects）、**应用服务器设备管理**（Instrumentation）、**消息发送**（Messaging）、核心容器（Core Container）和**测试**（Test）。
+​	　Spring 由 20 多个模块组成，它们可以分为 **数据访问/集成**（Data Access/Integration）、**Web**、**面向切面编程**（AOP, Aspects）、**应用服务器设备管理**（Instrumentation）、**消息发送**（Messaging）、**核心容器**（Core Container）和**测试**（Test）。
 
 ![2_spring_01](./images/2_spring_01.png)
 
@@ -22,17 +22,17 @@ sidebar: auto
 
 ### 面向切面编程AOP
 
-​	　**面向切面编程**（`AOP`，`Aspect Orient Programming`），是对面向对象编程思想 （`OOP`）的补充。Spring 提供了面向切面编程的丰富支持，允许通过分离应用的**业务逻辑**与**系统级服务**进行开发。**应用对象只完成业务逻辑**，并不负责系统级服务。
+​	　**面向切面编程**（`AOP`，`Aspect Orient Programming`），是对面向对象编程思想 `OOP`的补充。Spring 提供了面向切面编程的丰富支持，允许通过分离应用的 **业务逻辑** 与**系统级服务** 进行开发。**应用对象只完成业务逻辑**，并不负责系统级服务。
 
 ​	　根据功能的不同，系统中的代码可以分为 **主业务逻辑** 与 **系统级业务逻辑** 两类。`主业务代码`间逻辑联系紧密，有具体的专业业务应用场景，复用性相对较低；`系统级业务`相对功能独立，没有具体的专业业务应用场景，主要是为主业务提供系统级服务，如日志、安全、事务、数据库连接等，**复用性强**。
 
 ```
 如：JDBC来链接数据库：
-	1、加载去掉（系统级业务逻辑）
+	1、加载JDBC驱动程序（系统级业务逻辑）
 	2、创建连接（系统级业务逻辑）
-	3、开启事务（系统级业务逻辑）
-	4、SQL操作 （主业务逻辑：银行业务、保险业务、电商业务、物流业务）
-	5、提交事务（系统级业务逻辑）
+	3、创建Statement对象（系统级业务逻辑）
+	4、执行SQL语句 （主业务逻辑：银行业务、保险业务、电商业务、物流业务）
+	5、处理sql的返回结果（系统级业务逻辑）
 	6、释放连接（系统级业务逻辑）
 ```
 
@@ -120,5 +120,4 @@ public class UserServiceImpl implements UserService {
      userService.sayHi();
  }
 ```
-
 

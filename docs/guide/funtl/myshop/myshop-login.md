@@ -10,7 +10,7 @@ sidebar: auto
 
 #### 目录结构
 
-​	　在IDEA中选择`File` -> `New Project`中选择`Maven`，然后根据提示新建Maven项目，并完成如下文件结构的建立：
+​	　在IDEA中选择`File` -> `New Project`中选择`Maven`，然后根据提示，新建Maven项目，并完成如下文件结构的建立：
 
 ```text
 src\main 目录
@@ -19,7 +19,7 @@ src\main 目录
 ------common                 ---公共组件          |
 ------config                 ---配置模块          |-→ 代码目录
 ------module                 ---业务逻辑         _⌋
----------entity                        ---数据实体
+--------entity                        ---数据实体
 ----------User.java
 --------dao                            ---数据访问层
 ----------UserDao.java
@@ -32,6 +32,8 @@ src\main 目录
 --------web                            ---前端控制层
 ----------controller
 ------------LoginController.java
+----------interceptor
+------------LoginInterceptor.java
 
 --webapp： 视图层
 ----WEB-INF
@@ -43,24 +45,79 @@ src\main 目录
 
 
 
+#### pom.xml
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.shooter.funtl</groupId>
+    <artifactId>myshop</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>war</packaging>
+ 
+    <dependencies>
+        <!--引入servlet包-->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>4.0.1</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!--引入lombok包-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+            <version>1.16.18</version>
+        </dependency>
+    </dependencies>
+</project>
+```
+
+
+
+### log4j日志
+
 #### 引入Jar包
 
 ```xml
-<!--引入servlet包-->
+<!--Log4j-->
 <dependency>
-    <groupId>javax.servlet</groupId>
-    <artifactId>javax.servlet-api</artifactId>
-    <version>4.0.1</version>
-    <scope>provided</scope>
+    <groupId>org.slf4j</groupId>
+    <artifactId>slf4j-api</artifactId>
+    <version>1.7.25</version>
 </dependency>
+<dependency>
+    <groupId>org.slf4j</groupId>
+    <artifactId>slf4j-log4j12</artifactId>
+    <version>1.7.25</version>
+</dependency>
+```
 
-<!--引入lombok包-->
-<dependency>
-    <groupId>org.projectlombok</groupId>
-    <artifactId>lombok</artifactId>
-    <scope>provided</scope>
-    <version>1.16.18</version>
-</dependency>
+
+
+#### log4j.properties
+
+​	　在`resources`资源目录下，新建`log4j.properties`日志配置文件，并指定`log4j.appender.file.File`的位置，特别的，指定的目录可以是`绝对目录`，也可以是`相对于主目录`的目录。
+
+```properties
+log4j.rootLogger=INFO, console, file
+
+log4j.appender.console=org.apache.log4j.ConsoleAppender
+log4j.appender.console.layout=org.apache.log4j.PatternLayout
+log4j.appender.console.layout.ConversionPattern=%d %p [%c] - %m%n
+
+log4j.appender.file=org.apache.log4j.DailyRollingFileAppender
+log4j.appender.file.File=./log/log.log
+log4j.appender.file.layout=org.apache.log4j.PatternLayout
+log4j.appender.A3.MaxFileSize=1024KB
+log4j.appender.A3.MaxBackupIndex=10
+log4j.appender.file.layout.ConversionPattern=%d %p [%c] - %m%n
 ```
 
 
@@ -190,7 +247,7 @@ public class LoginController extends HttpServlet {
 </web-app>
 ```
 
-​	　**特别注意**：配置`web.xml`完成后，还需要再指定`Web Resource Directory`（参考[这里](https://sh086.github.io/funtl/guide/quickstart.html#project-struct)的`Modules`中的第(2)点）中webapp和web.xml的位置。
+​	　**特别注意**：配置`web.xml`完成后，还需要再指定`Web Resource Directory`（参考<a href="../framework/idea.html#modules" target="_blank">这里</a>的`Modules`中的第(2)点）中`webapp`和`web.xml`的位置。
 
 
 
@@ -198,7 +255,7 @@ public class LoginController extends HttpServlet {
 
 #### 欢迎页面
 
-​	　`index.jsp`是Servlet项目默认的欢迎页面，无需在`web.xml`中显示配置。项目部署成功后，访问根路径会直接跳转到`index.jsp`页面。
+​	　`index.jsp`是Servlet项目默认的欢迎页面，无需在`web.xml`中进行配置，项目部署成功后，访问根路径会直接跳转到`index.jsp`页面。
 
 ```html
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -261,7 +318,7 @@ pages demo 示例
 plugins 插件(需引入到项目）
 ```
 
-​	　接着在`webapp`目录下新建`assets`目录，然后将AdminLTE`需引入到项目`的5个目录，全部复制到项目的`assets`目录下，即可使用AdminLTE模板。
+​	　接着在`webapp`目录下新建`assets`目录，然后将`AdminLTE`需引入到项目的5个目录，全部复制到项目的`assets`目录下。此时，`AdminLTE`模板已经引入成功了。
 
 ```
 webapp/assets目录
@@ -274,52 +331,11 @@ webapp/assets目录
 
 
 
-### log4j日志
-
-#### 引入Jar包
-
-```xml
-<!--Log4j-->
-<dependency>
-    <groupId>org.slf4j</groupId>
-    <artifactId>slf4j-api</artifactId>
-    <version>1.7.25</version>
-</dependency>
-<dependency>
-    <groupId>org.slf4j</groupId>
-    <artifactId>slf4j-log4j12</artifactId>
-    <version>1.7.25</version>
-</dependency>
-```
-
-
-
-#### log4j.properties
-
-​	　在`resources`资源目录下，新建`log4j.properties`日志配置文件，并指定`log4j.appender.file.File`的位置。
-
-```properties
-log4j.rootLogger=INFO, console, file
-
-log4j.appender.console=org.apache.log4j.ConsoleAppender
-log4j.appender.console.layout=org.apache.log4j.PatternLayout
-log4j.appender.console.layout.ConversionPattern=%d %p [%c] - %m%n
-
-log4j.appender.file=org.apache.log4j.DailyRollingFileAppender
-log4j.appender.file.File=E:/WorkPlace/funtl/myshop/logs/log.log
-log4j.appender.file.layout=org.apache.log4j.PatternLayout
-log4j.appender.A3.MaxFileSize=1024KB
-log4j.appender.A3.MaxBackupIndex=10
-log4j.appender.file.layout.ConversionPattern=%d %p [%c] - %m%n
-```
-
-
-
 ### 编写业务代码
 
 #### 登录页面
 
-​	　首先，我们需要模仿AdminLTE中`pages\examples\login.html`页面，重写登录页面`index.jsp` ，特别注意，修改Google Font的地址请参考[这里](https://sb.sb/blog/css-cdn/)。
+​	　首先，我们需要模仿AdminLTE模板中`pages\examples\login.html`页面，重写登录页面`index.jsp` ，特别的，修改`Google Font`的地址请参考[这里](https://sb.sb/blog/css-cdn/)。
 
 ```html
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -457,9 +473,9 @@ log4j.appender.file.layout.ConversionPattern=%d %p [%c] - %m%n
 
 #### 前端控制器
 
-​	　首先修改页面跳转逻辑，将登录失败跳转为`index.jsp`页面(`fail.jsp`可以删除了)并显示错误信息。此外，还需打印登陆使用的loginId和loginPwd。
+​	　首先修改页面跳转逻辑，将登录失败跳转为`index.jsp`页面(`fail.jsp`可以删除了)并显示错误信息。此外，还需打印登陆使用的`loginId`和`loginPwd`。
 
-```java{16,26,32,33,37,38}
+```java{32,33,37,38}
 package com.shooter.funtl.module.web.controller;
 
 import com.shooter.funtl.module.entity.User;
@@ -540,11 +556,11 @@ public class LoginController extends HttpServlet{
 
 
 
-### 编写业务代码
+### 编写测试用例
 
 #### spring-context.xml
 
-​	　在resource目录下新建Spring的配置文件`spring-context.xml`，将类的实例化工作交给 Spring 容器管理（`IoC`）。
+​	　在`resource`目录下新建Spring的配置文件`spring-context.xml`，将类的实例化工作交给 Spring 容器管理（`IoC`）。
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -618,7 +634,7 @@ public class SpringContextTest {
 
 #### web.xml
 
-​	　web.xml配置中新增如下配置信息：
+​	　`web.xml`配置中新增如下配置信息：
 
 ```xml
 <!--JavaBean的配置信息-->
@@ -772,7 +788,7 @@ private UserDao userDao
 
 （2）Service层的装配
 
-​	　由于目前项目**还没有整合SpringMVC，所以在Controller中无法使用`@Autowired`获取UserService实例**，只能先使用SpringContext的getBean方法。
+​	　由于目前项目**还没有整合SpringMVC，所以在Controller中无法使用`@Autowired`获取UserService实例**，只能先使用`SpringContext`的`getBean`方法。
 
 ```java
 @Service
@@ -1020,10 +1036,9 @@ public final class CookieUtils {
 
 #### 设置Cooick
 
-​	　在`LoginController`的`doPost`方法中，`icheck`在`选中时`设置Cooick键值对生效时间为7天；若`未选中`则删除原先的Cooick键值对。特别注意：**cookie不支持分号**。
+​	　在`LoginController`的`doPost`方法中，`icheck`在`选中时`，设置Cooick键值对生效时间为7天；若`未选中`，则删除原先的Cooick键值对。特别注意：**cookie不支持分号**。
 
-```java{12,22,23,24,25,26,27,20,21}
-
+```java{11,21,22,23,24,25,26,19,20}
 public class LoginController extends HttpServlet{
 
     private UserService userService = SpringContext.getBean(UserServiceImpl.class);
@@ -1065,7 +1080,7 @@ public class LoginController extends HttpServlet{
 
 #### 获取Cooick
 
-​	　由于**Cooick只能通过Get方法获取**，需要改成`/login`的[`GET`请求获取Cooick、`POST`设置Cooick]。所以再使用`index.jsp`作为登录页面已经不合适了（因为`index.jsp`是访问路径 `/` 请求的页面），此时，需要登录页面改名成`login.jsp`（代码中的相关跳转也需要修改），`index.jsp`仅作为一个跳转页面。
+​	　由于**Cooick只能通过Get方法获取**，需要改成`/login`的  **`GET`  请求获取Cooick、`POST`设置Cooick**。所以再使用`index.jsp`作为登录页面已经不合适了（因为`index.jsp`是访问路径 `/` 请求的页面），此时，需要登录页面改名成`login.jsp`（代码中的相关跳转也需要修改），`index.jsp`仅作为一个跳转页面。
 
 ```html
 <!--index.jsp页面-->
@@ -1199,7 +1214,7 @@ protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 
 #### spring-mvc.xml
 
-​	　在resource目录下新建`sprin-mvc.xml`文件来配置 MVC。
+​	　在`resource`目录下新建`sprin-mvc.xml`文件来配置 MVC。
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -1240,7 +1255,7 @@ protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 
 #### myshop.properties
 
-​	　在resource目录下新建`myshop.properties`文件用于动态加载属性配置文件。
+​	　在`resource`目录下新建`myshop.properties`文件用于动态加载属性配置文件。
 
 ```properties
 web.view.prefix=/WEB-INF/views/
@@ -1250,6 +1265,8 @@ web.view.suffix=.jsp
 
 
 #### spring-context.xml
+
+​	　`@Controller`已交于`spring-mvc.xml`管理，故需要将`spring-context.xml`中的 `@Controller` 注解的扫描配置排除。
 
 ```xml{3,4}
 <context:component-scan base-package="com.shooter.funtl">
@@ -1273,9 +1290,25 @@ web.view.suffix=.jsp
 
 ​	　目前，项目中有`login.jsp`和`main.jsp`，对应`LoginController`和`MainController`。使用SpringMVC重写`记住我`的功能，并新增退出登录的功能。
 
+#### SessionConstant
+
+​	　新建`SessionConstant`类，并将常量`user`作为`SESSION_USER`。
+
+```java
+package com.shooter.funtl.common.constant;
+
+public class SessionConstant {
+
+    public static final String SESSION_USER = "user";
+
+}
+```
+
+
+
 #### LoginController
 
-```java{65,66,74-78}
+```java{20,21,26,41-44,65,66,74-78}
 package com.shooter.funtl.module.web.controller;
 import com.shooter.funtl.common.constant.SessionConstant;
 import com.shooter.funtl.common.utils.CookieUtils;
@@ -1382,22 +1415,6 @@ public class MainController {
 
 
 
-#### SessionConstant
-
-​	　新建SessionConstant类，并将常量`user`作为`SESSION_USER`。
-
-```java
-package com.shooter.funtl.common.constant;
-
-public class SessionConstant {
-
-    public static final String SESSION_USER = "user";
-
-}
-```
-
-
-
 ### SpringMVC拦截器
 
 ​	　SpringMVC中不能使用Servlet过滤器，只能使用**SpringMVC拦截器**做日志记录、权限管理等。如实现  **未登陆的只能访问登录页**（登陆拦截器）和 **已经登陆的不能再访问登录页**（权限拦截器） 。
@@ -1438,6 +1455,7 @@ import javax.servlet.http.HttpServletResponse;
  * */
 public class LoginInterceptor implements HandlerInterceptor {
 
+    @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
         User user = (User)httpServletRequest.getSession().getAttribute(SessionConstant.SESSION_USER);
         //未登录
@@ -1450,10 +1468,12 @@ public class LoginInterceptor implements HandlerInterceptor {
         return true;
     }
 
+    @Override
     public void postHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, ModelAndView modelAndView) throws Exception {
 
     }
 
+    @Override
     public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) throws Exception {
 
     }
@@ -1503,12 +1523,14 @@ import javax.servlet.http.HttpServletResponse;
  * */
 public class PermissionInterceptor implements HandlerInterceptor {
 
+    @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
 
         //放行
         return true;
     }
 
+    @Override
     public void postHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, ModelAndView modelAndView) throws Exception {
 
         //当返回JSON数据时，modelAndView为空
@@ -1520,6 +1542,7 @@ public class PermissionInterceptor implements HandlerInterceptor {
         }
     }
 
+    @Override
     public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) throws Exception {
 
     }
@@ -1577,9 +1600,9 @@ L3 三级缓存 8MB  网络缓存
 # JDBC
 # MySQL 8.x: com.mysql.cj.jdbc.Driver
 jdbc.driverClass=com.mysql.jdbc.Driver
-jdbc.connectionURL=jdbc:mysql://56.56.56.165:3306/myshop?useUnicode=true&characterEncoding=utf-8&useSSL=false
-jdbc.username=ywwl
-jdbc.password=T#UsF4vXHq6GIhJ$
+jdbc.connectionURL=jdbc:mysql://数据库IP:3306/数据库名称?useUnicode=true&characterEncoding=utf-8&useSSL=false
+jdbc.username=用户名
+jdbc.password=密码
 
 # JDBC Pool
 jdbc.pool.init=1
@@ -1695,7 +1718,7 @@ web.view.suffix=.jsp
 <configuration>
     <!-- 全局参数 -->
     <settings>
-        <!-- 打印 SQL 语句 -->
+        <!-- 打印 SQL 语句，该配置只能在开发环境中开启 -->
         <setting name="logImpl" value="STDOUT_LOGGING" />
 
         <!-- 使全局的映射器启用或禁用缓存。 -->
@@ -2065,11 +2088,13 @@ public interface UserDao {
 #### 引入Jar包
 
 ```xml
+<!--引入spring-test测试包-->
 <dependency>
     <groupId>org.springframework</groupId>
     <artifactId>spring-test</artifactId>
     <version>4.3.17.RELEASE</version>
 </dependency>
+<!--Junit的jar包已经引入过了-->
 ```
 
 

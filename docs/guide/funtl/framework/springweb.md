@@ -4,9 +4,9 @@ sidebar: auto
 
 # SpringWeb
 
-​	　Spring中装配JavaBean的方式有两类，第一类通过**Spring在JavaSE容器中装配JavaBean**，这一类不常用（参见[这里](./spring.md#整合spring)）；第二类是通过**SpringWeb在Web容器中装配JavaBean**，该类型有两种方法，第一种是通过**XML配置**的方式，第二种是通过**注解**的方式，目流行的是**通过SpringWeb注解的方式装配JavaBean**。
+​	　Spring中装配`JavaBean`的方式有两类，第一类通过**Spring在JavaSE容器中装配JavaBean**，这一类不常用（参见[这里](./spring.md#整合spring)）；第二类是通过**SpringWeb在Web容器中装配JavaBean**，该类型有两种方法，第一种是通过**XML配置**的方式，第二种是通过**注解**的方式，目流行的是**通过SpringWeb注解的方式装配JavaBean**。
 
-​	　注解方式 **配置方便、直观**，但以硬编码的方式写入到了 Java 代码中，其修改是需要重新编译代码的。XML 配置方式的最大好处是对其所做修改**无需编译代码**，只需重启服务器即可将新的配置加载。若注解与 XML 同用，**XML 的优先级要高于注解**。
+​	　注解方式 **配置方便、直观**，但以硬编码的方式写入到了 Java 代码中，其修改是需要重新编译代码的，而XML 配置方式的最大好处是对其所做修改**无需编译代码**可立即生效。若注解与 XML 同用，**XML 的优先级要高于注解**。特别的，项目通过`SpringWeb`修改了Bean的装配方式后，原先`new`的方式就不能正常使用了的。
 
 
 
@@ -51,7 +51,7 @@ sidebar: auto
 
 ### spring-context.xml
 
-​	　在Spring的配置文件`spring-context.xml`中配置bean与class之间的对应关系，将类的实例化工作交给 Spring 容器管理（`IoC`）。特别的，class不能是抽象类或者接口。
+​	　在Spring的配置文件`spring-context.xml`中配置`bean`与`class`之间的对应关系，将类的实例化工作交给 Spring 容器管理（`IoC`）。特别的，class不能是抽象类或者接口。
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -126,7 +126,7 @@ public class SpringContext implements ApplicationContextAware,DisposableBean{
 
 ### bean实例注入
 
-​	　Bean 的装配方式可以通过`类名`或者`beanId`调用`getBean`的方式从容器获取指定的 Bean 实例。特别的：项目已经使用`SpringWeb`修改了Bean的装配方式，原先`new`的方式已经不能正常使用了的。
+​	　Bean 的装配方式可以通过`类名`或者`beanId`调用`getBean`的方式从容器获取指定的 Bean 实例。示例代码如下：
 
 ```java
 /**
@@ -150,7 +150,7 @@ public class UserServiceImpl implements UserService {
 
 ### spring-context.xml
 
-​	　采用SpringWeb注解的方式装配JavaBean，无需每次当Class新增的时候就在`spring-context.xml`中新增一个bean的XML配置，而是采用了**自动扫描目录下注解**的方式装配JavaBean。
+​	　采用`SpringWeb`注解的方式装配`JavaBean`，无需每次当Class新增的时候就在`spring-context.xml`中新增一个bean的XML配置，而是采用了**自动扫描目录下注解**的方式装配`JavaBean`。
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -174,7 +174,7 @@ public class UserServiceImpl implements UserService {
 
 ### Bean标注注解
 
-​	　SpringWeb通过在类上声明如下四个注解，来指定class与bean之间关系的注解，同样的这些class不能是抽象类或者接口。
+​	　SpringWeb通过在类上声明如下四个注解，来指定`class`与`bean`之间关系的注解， `value` 属性用于指定该 `bean` 的 `id` 值，同样的这些`class`不能是抽象类或者接口。
 
 ```
 - @Component：用于 Component 或者 class 实现类进行注解
@@ -183,25 +183,20 @@ public class UserServiceImpl implements UserService {
 - @Controller：用于对 Controller 实现类进行注解
 ```
 
-​	　`@Controller`注解后续`SpringMvc`会对其单独做处理；其他的三个注解，除语义外功能上是等效注解（只有例如SpringDataJpa等会对不同的注解做出区别），但是建议不同的注解要标注在相应的类上。
+​	　`@Controller`注解后续`SpringMvc`会对其单独做处理；其他的三个注解，除语义外功能上是等效注解（只有例如`SpringDataJpa`等会对不同的注解做出区别），但是建议不同的注解要标注在相应的类上。
 
 ```java
 /**
-* 相当于
-* <bean id = "userDao" 
-*    class="com.shooter.funtl.module.dao.impl.UserDaoImpl" scope="singleton"/>
+* 相当于（建议）
+* <bean id = "userDao" class="com.shooter.funtl.module.dao.impl.UserDaoImpl"/>
 * */
-@Scope("singleton")
 @Repository
 public class UserDaoImpl implements UserDao {}
 
-
 /**
 * 相当于
-* <bean id = "userDaoTest" 
-*    class="com.shooter.funtl.module.dao.impl.UserDaoImpl" scope="prototype"/>
+* <bean id = "userDaoTest" class="com.shooter.funtl.module.dao.impl.UserDaoImpl"/>
 * */
-@Scope("prototype")
 @Repository(value = "userDaoTest")
 public class UserDaoImpl implements UserDao {}
 ```
@@ -211,7 +206,7 @@ public class UserDaoImpl implements UserDao {}
 ### bean实例注入
 
 ```java
-- @Autowired: 按类型自动装配，可用于属性、方法或者构造器。
+- @Autowired: 按类型自动装配Bean，可用于属性、方法或者构造器。
 - @Resource: 按beanId(可由name属性指定)自动装配，可用于属性、方法或者构造器。
 - @Value：该注解的 value 属性用于指定要注入的值，可用于属性、方法或者构造器。
 - @PostConstruct：在方法上使用 @PostConstruct 相当于初始化，会在构造器之前调用。
@@ -221,45 +216,56 @@ public class UserDaoImpl implements UserDao {}
 
 ```java
 /**
-* 根据类型装配
+* @Autowired根据类型装配
+* 方式一：使用该注解完成属性注入时，类中无需 setter
+* 说明：Student类已经使用@Component注解进行标注了
 */
 @Autowired
 private Student student;
 
 /**
-* 根据beanId装配
+* 方式二：若属性有 setter，则也可将其加到 setter 上
+*/
+@Autowired
+public void setStudent(Student student) {
+    this.student = student;
+}
+=======================================
+/**
+* @Resource根据beanId装配
 */
 @Resource(name="student")
 private Student student;
-
+=======================================
 /**
-* 初始化userName属性值为：userName
+* @Value初始化入参passWd值为：passWd
+* 方式一：使用 @Value 注解完成属性注入时，类中无需 setter
 */
-@Value("userName")
-private String userName;
+@Value("passWd")
+private String passWd;
 
 /**
-* 初始化入参passWd值为：passWd
+* 方式二：若属性有 setter，则也可将其加到 setter 上
 */
 @Value("passWd")
 public void setPassWd(String passWd) {
     this.passWd = passWd;
 }
-
+=======================================
 /**
-* 根据类型初始化入参user值
+* 在方法上使用 @PostConstruct 相当于初始化
 */
-@Autowired
-public void setUser(User user) {
-    this.user = user;
+@PostConstruct
+public void setPassWd() {
+    this.passWd = "passWd";
 }
 ```
 
 
 
-## 容器中 Bean的作用域
+## Bean的作用域
 
-​	　当通过 Spring 容器创建一个 Bean 实例时，不仅可以完成 Bean 的实例化，还可以通过 scope 属性，为 Bean 指定特定的作用域。
+​	　当通过 Spring 容器创建一个 Bean 实例时，不仅可以完成 Bean 的实例化，还可以通过 `scope` 属性，为 Bean 指定特定的作用域。
 
 ### Bean 5 种作用域
 
@@ -269,7 +275,7 @@ public void setUser(User user) {
 - `session`：对于每个不同的 HTTP session，都将产生一个不同的 Bean 实例。
 - `global session`：每个全局的 HTTP session 对应一个 Bean 实例。典型情况下，仅在使用 portlet 集群时有效，多个 Web 应用共享一个 session。一般应用中，global-session 与 session 是等同的。
 
-**注意事项**：对于 scope 的值 request、session 与 global session，只有在 Web 应用中使用 Spring 时，该作用域才有效。
+**注意事项**：对于 scope 的值 `request`、`session` 与 `global session`，**只有在 Web 应用中使用 Spring 时**，该作用域才有效。
 
 
 

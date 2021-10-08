@@ -14,7 +14,7 @@ sidebar: auto
 确保JDK 为1.8 及以上版本，并已设置JAVA_HOME 环境变量
 :::
 
-​	　 首先在[maven官网](https://maven.apache.org/download.cgi)下载 Maven 的 zip 文件，然后解压到安装目录后，在`config/settings.xml`配置文件中修改`localRepository`元素值(可选)，来自定义Maven本地仓库路径。
+​	　 首先在[maven官网](https://maven.apache.org/download.cgi)下载 Maven 的 `zip` 文件，然后解压到安装目录后，在`config/settings.xml`配置文件中修改`localRepository`元素值(可选)，来自定义Maven本地仓库路径。
 
 ```xml
  <localRepository>F:/Reference/mave/Respository</localRepository>
@@ -50,11 +50,11 @@ OS name: "windows 10", version: "10.0", arch: "amd64", family: "windows"
 
 ### POM对象
 
-​	　POM（**项目对象模型**）位于**项目的基本目录**中，是 Maven 工作的**基本单位**。每个项目只有**一个** POM 文件，POM以XML方式配置Jar包、插件等的坐标信息。
+​	　POM（**项目对象模型**）位于**项目的基本目录**中，是 Maven 工作的**基本单位**。每个项目只有**一个** POM 文件，POM以`XML`方式配置`Jar`包、插件等的坐标信息。
 
-#### POM主要节点
+（1）POM主要节点
 
-​	　POM的根元素是[**project**]，由`groupId`**，**`artifactId`和`version`三个主要节点（必填）组成，这三个属性是项目仓库的唯一标识，项目在仓库中的项目符号由`groupId:artifactId:version`表示。 
+​	　POM的根元素[`project`]，由`groupId`**，**`artifactId`和`version`三个主要节点（必填）组成，这三个属性是项目仓库的唯一标识，项目在仓库中的项目符号由`groupId:artifactId:version`表示。 
 
 - groupId：由`公司域名反转.项目组名称` 组成，全球唯一
 - artifactId：表示唯一的项目名称
@@ -77,7 +77,7 @@ OS name: "windows 10", version: "10.0", arch: "amd64", family: "windows"
 
 
 
-#### POM其他节点
+（2）POM其他节点
 
 ​	　此外，POM的根元素是[**project**]下还有`packaging`（打包格式）、`name`（表示项目名称）、`description`（项目描述信息）、`dependencies`（项目依赖配置）和`properties` (自定义属性)等节点信息。
 
@@ -111,7 +111,7 @@ OS name: "windows 10", version: "10.0", arch: "amd64", family: "windows"
 
 
 
-#### 语义化版本规范
+（3）语义化版本规范
 
 ​	　Java版本号常使用**语义化版本规范**或者**逢十进一**的方式，建议使用语义化版本规范。如初始版本号为`1.0.0` ，接下来版本命名方式如下：
 
@@ -125,9 +125,9 @@ OS name: "windows 10", version: "10.0", arch: "amd64", family: "windows"
 
 ### Maven快照
 
-​	　在使用**版本**时，如果 Maven 下载所提到的版本为 `data-service:1.0`，那么它永远不会尝试在库中下载已经更新的版本 1.0。要下载更新的代码，data-service 的版本**必须要升级到 1.1**。这样需要数据服务团在发布更新时每次都要告诉应用程序 UI 团队，请UI 团队更新一下 `pom.xml` 以获得更新应用的版本。为了处理这类情况，引入快照的概念。
+​	　若`pom.xml`中设置项目版本是 `data-service:1.0`，Maven是永远不会尝试下载已经更新的版本 `1.1 `的，要下载最新更新的代码，`data-service` 的版本**必须要升级到 1.1**。这样需要数据服务团在发布更新时每次都要告诉应用程序 UI 团队，请UI 团队更新一下 `pom.xml` 以获得更新应用的版本。为了处理这类情况，引入快照的概念。
 
-​	　Maven版本与发行版和快照版两种。 **发行版**是**稳定的版本**，类和方法在命名、参数列表、功能上不会发生变更。**快照（SNAPSHOT）**是一个**特殊版本**，指出**目前开发拷贝**，快照不同于常规版本，Maven会在数据服务团队发布代码后更新快照存储库，使用新生成的快照来替换旧的快照。在使用快照时，Maven 会**自动获取最新的快照版本**。
+​	　Maven版本与发行版和快照版两种。 **发行版**是**稳定的版本**，类和方法在命名、参数列表、功能上不会发生变更。**快照（SNAPSHOT）**是一个**特殊版本**，指出**目前开发拷贝**，快照不同于常规版本，Maven会在数据服务团队发布代码后更新快照存储库，使用新生成的快照来替换旧的快照，在UI 团队使用快照时 **自动获取最新的快照版本**。
 
 ```text
 # 发行版
@@ -152,11 +152,7 @@ OS name: "windows 10", version: "10.0", arch: "amd64", family: "windows"
 
 ## Maven命令
 
-### Maven插件
-
-​	　Maven插件分为 **构建插件** 和 **报告插件** 两种类型插件。构建插件是在**生成过程中执行**，报告插件在**网站生成期间执行**。Maven插件首先需要在 `pom.xml` 中的 元素进行配置，才能使用。Maven 插件通常用于创建 jar 文件、创建 war文件、编译代码文件、进行代码单元测试、创建项目文档、创建项目报告。
-
-​	　Maven 是一个**执行插件**的框架，每一个任务实际上是由插件完成的。一个Maven插件通常提供了一组目标，可使用以下语法来执行：
+​	　Maven 是一个**执行插件**的框架，每一个任务实际上是由插件完成的。Maven插件分为 **构建插件** 和 **报告插件** 两种类型插件，构建插件是在**生成过程中执行**，报告插件在**网站生成期间执行**。Maven插件首先需要在 `pom.xml` 中的 元素进行配置，才能使用。
 
 ```
 mvn [plugin-name]:[goal-name]
@@ -164,7 +160,7 @@ mvn [plugin-name]:[goal-name]
 
 
 
-### 常见Maven命令
+### Maven命令
 
 ```
 mvn clean：调用maven-clean-plugin，删除根目录下target目录
@@ -173,8 +169,9 @@ mvn compiler:compile ：编译目标
 mvn test：执行src/test/java目录下类名为*Test.java的单元测试类
 mvn package：打包根目录下的目录，web project打成war包，java project打成jar包
 mvn install：打包到本地仓库，解决本地多个项目公用一个jar包的问题
-mvn -dmaven.test.skip=true：只打包不测试（跳过测试）
-mvn source:jar或mvn source:jar-no-fork：源码打包
+mvn package -Dmaven.test.skip=true：只打包不测试（跳过测试）
+mvn source:jar：源码打包
+mvn source:jar-no-fork：源码打包
 mvn tomcat:run	通过maven命令将web项目发布到Tomcat
 ```
 
@@ -182,11 +179,11 @@ mvn tomcat:run	通过maven命令将web项目发布到Tomcat
 
 ### Maven生命周期
 
-​	　 Maven在项目构建中存在`cleanLifeCycle`（清理生命周期）、`defaultLifeCycle`（默认生命周期)、`siteLifeCycle`（站点生命周期）三类生命周期，这三类生命周期间相互独立、互不影响，在一类生命周期之内，执行后面的命令前面的操作会自动执行。
+​	　 Maven有三类生命周期：用于生成描述项目`javadoc`文档的`siteLifeCycle`（站点生命周期）、用于构建项目应用的`defaultLifeCycle`（默认生命周期)、用于项目清理的`cleanLifeCycle`（清理生命周期）
 
-```
-- defaultLifeCycle：是默认生命周期，包含compile、test、package、install、deploy四个节点
-- siteLifeCycle：用于生成描述项目的javadoc文档。
-```
+​	　 这三类生命周期间相互独立、互不影响，在一类生命周期之内，执行后面的命令，前面的操作也会自动执行。特别的，`defaultLifeCycle`生命周期由以下几个阶段组成：
+
+![img](./images/maven-package.png)
+
 
 
