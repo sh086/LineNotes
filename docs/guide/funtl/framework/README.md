@@ -66,6 +66,8 @@ sidebarDepth: 0
 
 **实战：**
 
-- <a href="../myshop/myshop-login.html" target="_blank">简单的登录功能</a>
-- <a href="../myshop/myshop-ssm.html" target="_blank">项目实战MyShop</a>
+- <a href="../myshop/myshop-login.html" target="_blank">v1.0 - 简单的登录功能</a>
+- <a href="../myshop/myshop-ssm-user.html" target="_blank">v1.1 - 用户管理功能</a>
+- <a href="../myshop/myshop-ssm-content.html" target="_blank">v1.2 - 内容管理功能</a>
+- <a href="../myshop/myshop-ssm-common.html" target="_blank">v1.3 - 通用组件模块</a>
 

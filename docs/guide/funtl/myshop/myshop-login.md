@@ -4,7 +4,7 @@ sidebar: auto
 # 简单的登录功能
 
 
-## v1.0 项目初始化
+## v1.0.0 项目初始化
 
 ### 新建Maven项目
 
@@ -301,7 +301,7 @@ public class LoginController extends HttpServlet {
 
 
 
-## v1.1 登录页面
+## v1.0.1 登录页面
 
 ### 引入AdminLTE模板
 
@@ -535,7 +535,7 @@ public class LoginController extends HttpServlet{
 
 
 
-## v1.2 Spring
+## v1.0.2 Spring
 
 ### 引入Jar包
 
@@ -611,7 +611,7 @@ public class SpringContextTest {
 
 
 
-## v1.3 SpringWeb
+## v1.0.3 SpringWeb
 
 ### Spring整合Web
 
@@ -807,7 +807,7 @@ public class LoginController extends HttpServlet
 
 
 
-## v1.4 记住我
+## v1.0.4 记住我
 
 ### CooickUtils
 
@@ -1132,7 +1132,7 @@ protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 
 
 
-## v1.5 SpringMVC
+## v1.0.5 SpringMVC
 
 ### Spring整合MVC
 
@@ -1561,7 +1561,7 @@ public class PermissionInterceptor implements HandlerInterceptor {
 
 
 
-## v1.6 Mybatis
+## v1.0.6 Mybatis
 
 ​	　**ORM**是指**对象关系映射**，可以将**数据库关系** 和 **Java原生对象** 关联起来。Mybatis具有**三级缓存**，具有**幂等性**的查询适合放缓存中，一级缓存空间最小，查询速度最快，三级最大，查询速度也最慢，若三级也查询不到，就会在数据库中查询。
 
@@ -1834,6 +1834,7 @@ public interface UserService {
     void updateById(User user);
     void deleteById(Long id);
     User login(String email, String passWord);
+    void deleteByIds(String[] ids);
 }
 ```
 
@@ -1923,6 +1924,13 @@ public class UserServiceImpl implements UserService {
     public List<User> selectByUserLike(User user) {
         return userDao.selectByUserLike(user);
     }
+    
+    @Override
+    public void deleteByIds(String[] ids) {
+        if(ids != null && ids.length > 0){
+            userDao.deleteByIds(ids);
+        }
+    }
 }
 ```
 
@@ -1960,6 +1968,9 @@ public interface UserDao {
 
     /**删除用户信息**/
     void deleteById(Long id);
+    
+    /**批量删除用户信息**/
+    void deleteByIds(String[] ids);
 }
 ```
 
@@ -2077,6 +2088,15 @@ public interface UserDao {
             updated = now()
         WHERE id = #{id}
     </update>
+    
+    <delete id="deleteByIds">
+        <if test="array != null and array.length > 0">
+            DELETE FROM tb_user WHERE id IN
+            <foreach collection="array" open="(" close=")" separator="," item="id">
+                #{id}
+            </foreach>
+        </if>
+    </delete>
 
 </mapper>
 ```
@@ -2182,3 +2202,247 @@ public class UserServiceTest {
 
 
 
+## v1.0.7 登录主页面
+
+​	　参考[这里](http://adminlte.la998.com/)重新编写MyShop的`mian.jsp`主页面。首先，在`WEB-INF`目录下新建`includes目录`，接着，将`nav.jsp`导航栏、`menu.jsp`菜单栏、`copyright.jsp`版权说明、`header.jsp`和`foot.jsp`资源引用等作为单独的页面抽出，并保存在`includes目录`下。
+
+### 首页布局
+
+（1）主页面
+
+​	　在`main.jsp`中引入`includes`目录下的页面，即可完成主页面的模块化编辑。特别的，**`main.jsp`可以作为本项目的模板页面**。
+
+```xml
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<!DOCTYPE html>
+    <head>
+        <title>我的商城 | 控制面板</title>
+        <jsp:include page="../includes/header.jsp"/>
+    </head>
+    <body class="hold-transition skin-blue sidebar-mini">
+        <div class="wrapper">
+
+            <jsp:include page="../includes/nav.jsp"/>
+
+            <jsp:include page="../includes/menu.jsp"/>
+
+            <!-- Content Wrapper. Contains page content -->
+            <div class="content-wrapper">
+                <!-- Content Header (Page header) -->
+                <section class="content-header">
+                    <h1>
+                        控制面板
+                        <small></small>
+                    </h1>
+                    <ol class="breadcrumb">
+                        <li><a href="#"><i class="fa fa-dashboard"></i> 首页</a></li>
+                        <li class="active">控制面板</li>
+                    </ol>
+                </section>
+
+                <!-- Main content -->
+                <section class="content">
+
+                </section>
+            </div>
+
+            <jsp:include page="../includes/copyright.jsp"/>
+
+        </div>
+        <jsp:include page="../includes/foot.jsp"/>
+    </body>
+</html>
+```
+
+
+
+（2）导航栏`nav.jsp`页面
+
+​	　登录时，会首先调用`LoginController`中的`login`方法，若登录成功，会在`HttpServletRequest`对象`req`放入`键值对user`，`nav.jsp`页面就可以显示登录用户名、用户创建时间等信息了。
+
+```html
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<header class="main-header">
+    <!-- Logo -->
+    <a href="/main" class="logo">
+        <!-- mini logo for sidebar mini 50x50 pixels -->
+        <span class="logo-mini"><b>商城</b></span>
+        <!-- logo for regular state and mobile devices -->
+        <span class="logo-lg"><b>我的商城</b></span>
+    </a>
+    <!-- Header Navbar: style can be found in header.less -->
+    <nav class="navbar navbar-static-top">
+        <!-- Sidebar toggle button-->
+        <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+            <span class="sr-only">Toggle navigation</span>
+        </a>
+
+        <div class="navbar-custom-menu">
+            <ul class="nav navbar-nav">
+                <!-- User Account: style can be found in dropdown.less -->
+                <li class="dropdown user user-menu">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <img src="/static/assets/img/user2-160x160.jpg" class="user-image" alt="User Image">
+                        <span class="hidden-xs">${user.email}</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <!-- User image -->
+                        <li class="user-header">
+                            <img src="/static/assets/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                            <p>
+                                ${user.userName} - 管理员
+                                <small>
+                                    <fmt:formatDate value="${user.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/>
+                                </small>
+                            </p>
+                        </li>
+                        <!-- Menu Footer-->
+                        <li class="user-footer">
+                            <div class="pull-left">
+                                <a href="#" class="btn btn-default btn-flat">个人信息</a>
+                            </div>
+                            <div class="pull-right">
+                                <a href="/logout" class="btn btn-default btn-flat">注销</a>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+```
+
+
+
+（3）菜单栏`menu.jsp`页面
+
+```html
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<!-- Left side column. contains the logo and sidebar -->
+<aside class="main-sidebar">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+        <!-- Sidebar user panel -->
+        <div class="user-panel">
+            <div class="pull-left image">
+                <img src="/static/assets/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+            </div>
+            <div class="pull-left info">
+                <p>Alexander Pierce</p>
+                <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+            </div>
+        </div>
+
+        <!-- sidebar menu: : style can be found in sidebar.less -->
+        <ul class="sidebar-menu" data-widget="tree">
+            <li class="header">功能菜单</li>
+            <li class="active treeview">
+                <a href="#">
+                    <i class="fa fa-users"></i> <span>模块1</span>
+                    <span class="pull-right-container">
+                                  <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                </a>
+                <ul class="treeview-menu">
+                   
+                </ul>
+            </li>
+        </ul>
+    </section>
+</aside>
+```
+
+
+
+（4）版权说明页面
+
+```html
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<!-- /.content-wrapper -->
+<footer class="main-footer">
+    <div class="pull-right hidden-xs">
+        <b>Version</b> 1.0.0
+    </div>
+    <strong>Copyright &copy; 2018-2020 <a href="https://github.com/sh086/myshop">MyShop</a>.</strong> All rights
+    reserved.
+</footer>
+```
+
+
+
+（5）`header.jsp`存放的是需要引入的CSS文件。
+
+```html
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<!-- Tell the browser to be responsive to screen width -->
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+<!-- Bootstrap 3.3.7 -->
+<link rel="stylesheet" href="/static/assets/bower_components/bootstrap/dist/css/bootstrap.min.css">
+<!-- Font Awesome -->
+<link rel="stylesheet" href="/static/assets/bower_components/font-awesome/css/font-awesome.min.css">
+<!-- Ionicons -->
+<link rel="stylesheet" href="/static/assets/bower_components/Ionicons/css/ionicons.min.css">
+<!-- Theme style -->
+<link rel="stylesheet" href="/static/assets/css/AdminLTE.min.css">
+<!-- AdminLTE Skins. Choose a skin from the css/skins
+folder instead of downloading all of them to reduce the load. -->
+<link rel="stylesheet" href="/static/assets/css/skins/_all-skins.min.css">
+```
+
+
+
+（6）`foot.jsp`存放的是需要引入的JS文件
+
+```html
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+<![endif]-->
+<!-- jQuery 3 -->
+<script src="/static/assets/bower_components/jquery/dist/jquery.min.js"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="/static/assets/bower_components/jquery-ui/jquery-ui.min.js"></script>
+<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+<script>
+    $.widget.bridge('uibutton', $.ui.button);
+</script>
+<!-- Bootstrap 3.3.7 -->
+<script src="/static/assets/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<!-- Slimscroll -->
+<script src="/static/assets/bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+<!-- FastClick -->
+<script src="/static/assets/bower_components/fastclick/lib/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="/static/assets/js/adminlte.min.js"></script>
+```
+
+
+
+### 测试运行
+
+​	　重新运行项目，可以看到`主页面`已经重新渲染成功了。
+
+![1614174939318](./images/1614174939318.png)
+
+
+
+**至此，简单的登录功能已经完成了。**

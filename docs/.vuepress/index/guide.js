@@ -32,6 +32,41 @@ const funtl = [
 
 module.exports.funtl = funtl
 
+//LeetCode
+const leetcode = [
+    {
+        title: '学习',
+        collapsable: false,
+        children: [
+            ['', '开篇'],
+            ['learn/linelist/', '线性表'],
+            ['learn/tree/', '树与二叉树'],
+            ['learn/graph/', '图论'],
+            ['learn/arithmetic/', '算法分析'],
+            ['learn/machinelearn/', '机器学习'],
+        ]
+    },
+    {
+        title: '题库',
+        collapsable: false,
+        children: [
+            ['problems/arithmetic/', '算法'],
+            ['problems/database/', '数据库'],
+            ['problems/shell/', 'Shell'],
+            ['problems/thread/', '多线程'],
+        ]
+    },
+    {
+        title: '专题',
+        collapsable: false,
+        children: [
+            ['interview/', '名企面试题'],
+            ['contest/', '竞赛'],
+        ]
+    },
+]
+
+module.exports.leetcode = leetcode
 
 //黑马程序员
 const itheima = [
