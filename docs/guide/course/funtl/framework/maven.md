@@ -46,7 +46,7 @@ OS name: "windows 10", version: "10.0", arch: "amd64", family: "windows"
 
 
 
-## Maven依赖
+## Maven语法
 
 ### POM对象
 
@@ -148,21 +148,19 @@ OS name: "windows 10", version: "10.0", arch: "amd64", family: "windows"
 可以使用 [MVNrepository](https://mvnrepository.com/) 查询Maven中央仓库中包含的依赖
 :::
 
-
-
-## Maven命令
-
-​	　Maven 是一个**执行插件**的框架，每一个任务实际上是由插件完成的。Maven插件分为 **构建插件** 和 **报告插件** 两种类型插件，构建插件是在**生成过程中执行**，报告插件在**网站生成期间执行**。Maven插件首先需要在 `pom.xml` 中的 元素进行配置，才能使用。
-
-```
-mvn [plugin-name]:[goal-name]
-```
+​	　特别的，需要定期清理Maven本地仓库中的`.last`后缀的文件 和 `unknow`文件夹，这些都是更新失败的缓存，会导致无法再从Maven中央仓库中获取最新的依赖。
 
 
 
 ### Maven命令
 
-```
+​	　Maven 是一个**执行插件**的框架，每一个任务实际上是由插件完成的。Maven插件分为 **构建插件** 和 **报告插件** 两种类型插件，构建插件是在**生成过程中执行**，报告插件在**网站生成期间执行**。Maven插件首先需要在 `pom.xml` 中的 元素进行配置，才能使用。
+
+```shell
+# 语法格式
+mvn [plugin-name]:[goal-name]
+
+# 详细命令
 mvn clean：调用maven-clean-plugin，删除根目录下target目录
 mvn compile：调用maven-compile-plugin编译源码到target目录下
 mvn compiler:compile ：编译目标
@@ -184,6 +182,4 @@ mvn tomcat:run	通过maven命令将web项目发布到Tomcat
 ​	　 这三类生命周期间相互独立、互不影响，在一类生命周期之内，执行后面的命令，前面的操作也会自动执行。特别的，`defaultLifeCycle`生命周期由以下几个阶段组成：
 
 ![img](./images/maven-package.png)
-
-
 

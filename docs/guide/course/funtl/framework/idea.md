@@ -51,6 +51,7 @@ MyBatisCodeHelperPro 	          让你的mybatis.xml像java代码一样编辑
 Lombok Plugin				      代码注解插件
 Alibaba Java Coding Guidelines    阿里巴巴 Java代码规范插件
 jclasslib bytecode viewer 	      可视化的字节码查看插件
+JRebel							  热部署插件
 ```
 
 

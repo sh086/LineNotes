@@ -51,7 +51,8 @@ src\main 目录
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.shooter.funtl</groupId>
@@ -86,7 +87,6 @@ src\main 目录
 #### 引入Jar包
 
 ```xml
-<!--Log4j-->
 <dependency>
     <groupId>org.slf4j</groupId>
     <artifactId>slf4j-api</artifactId>
@@ -103,7 +103,7 @@ src\main 目录
 
 #### log4j.properties
 
-​	　在`resources`资源目录下，新建`log4j.properties`日志配置文件，并指定`log4j.appender.file.File`的位置，特别的，指定的目录可以是`绝对目录`，也可以是`相对于主目录`的目录。
+​	　在`resources`资源目录下，新建`log4j.properties`日志配置文件，并指定`log4j.appender.file.File`的位置，特别的，指定的目录可以是`绝对目录`，也可以是`相对目录`，默认当前主目录是`tomcat\bin`。
 
 ```properties
 log4j.rootLogger=INFO, console, file
@@ -305,7 +305,7 @@ public class LoginController extends HttpServlet {
 
 ### 引入AdminLTE模板
 
-​	　**AdminLTE**是一个基于BootStrap的管理模板，首先[下载](https://github.com/ColorlibHQ/AdminLTE/releases)`AdminLTE-2.4.18`版本，下载完成后解压文件，得到如下目录：
+​	　**AdminLTE**是一个基于`BootStrap`的管理模板，首先[下载](https://github.com/ColorlibHQ/AdminLTE/releases)`AdminLTE-2.4.18`版本，下载完成后解压文件，得到如下目录：
 
 ```
 bower_components 浏览器组件(需引入到项目）
@@ -335,7 +335,7 @@ webapp/assets目录
 
 #### 登录页面
 
-​	　首先，我们需要模仿AdminLTE模板中`pages\examples\login.html`页面，重写登录页面`index.jsp` ，特别的，修改`Google Font`的地址请参考[这里](https://sb.sb/blog/css-cdn/)。
+​	　首先，我们需要模仿`AdminLTE`模板中`pages\examples\login.html`页面，重写登录页面`index.jsp` ，特别的，修改`Google Font`的地址请参考[这里](https://sb.sb/blog/css-cdn/)。
 
 ```html
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -810,6 +810,19 @@ public class LoginController extends HttpServlet
 ## v1.0.4 记住我
 
 ### CooickUtils
+
+​	　**Cookie** 是指存储在用户**本地终端**上的数据（存储空间为 **4k**），同时它是与具体的 Web 页面或者站点相关的。Cookie 数据会自动在 `Web 浏览器`和 `Web 服务器`之间传输，也就是说 HTTP 请求发送时，会把保存在该请求**域名下的所有 Cookie 值发送给 Web 服务器**，服务器端脚本是可以**读、写**存储在客户端的 Cookie 的操作。
+
+::: details 其他浏览器端存储技术
+
+- LocalStorage：HTML5新特性，**解决了 Cookie 存储空间不足的问题**(一般浏览器支持5M)，可以永久存储
+- SessionStorage：当**会话**结束的时候SessionStorage 中的键值对就会被清空
+- userData ：是 **IE 浏览器专属**，它的容量可以达到 640K
+- globalStorage： 适用于 **Firefox** 2+ 的浏览器，类似于 IE 的 userData
+- google gear ：是**谷歌**开发出的一种本地存储技术，需要安装 Gear 组件
+- Flash Cookie：可以**跨浏览器**，而且清楚缓存不能使其失效，但需要安装Flash 控件
+
+:::
 
 ​	　在`common`中新建`utils`目录，并添加 Cookie 工具类`CookieUtils` 。
 

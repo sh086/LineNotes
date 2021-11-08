@@ -413,15 +413,9 @@ asserts目录
 
 ### 其它字体图标
 
+- [Adminlte图标](http://adminlte.la998.com/v2/pages/UI/icons.html)
 - [阿里巴巴矢量图标库(推荐)](http://www.iconfont.cn/)
-
 - [SocialIcons](http://www.socicon.com/chart.php)
-
 - [LineAwesome](https://icons8.com/line-awesome)
-
 - [FontAwesome](http://fontawesome.dashgame.com/)
-
-
-
-
 

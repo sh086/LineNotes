@@ -245,13 +245,28 @@ jdbc.testSql=SELECT 'x' FROM DUAL
 <select id="selectUserById" resultType="User">
     SELECT user.* FROM tb_user as user
     WHERE 1=1
-    <if test="id != null and id != ''">
+    <!-- 适用于long 或者 Integer类型 非空判断-->
+    <if test="id != null">
         AND user.id =  #{id}
     </if>
+    <!-- 适用于字符串类型非空判断-->
+    <if test="name != null and name != ''">
+        AND user.name =  #{name}
+    </if>
+    <!-- 适用于非空判断、逻辑判断-->
     <if test="age != null and age > 0">
         AND user.age > #{age}
     </if>
 </select>
+```
+
+​	　特别的，当`id`传值为`0`时，`mybatis`会自动把`0`当成`null`，所以写法一`if`判断为`false`，只要将判断为空串的判断去掉即可。
+
+```xml
+<!--  id = 0 时 这个判断不会进入 -->
+<if test="id != null and id != ''">
+<!-- 正确写法 -->
+<if test="id != null">
 ```
 
 
@@ -263,9 +278,10 @@ jdbc.testSql=SELECT 'x' FROM DUAL
 ```xmL
 <select id="selectUserById" resultType="User">
     SELECT user.* FROM tb_user as user
+    <!-- WHERE 1=1 被优化-->
     <where>
-        <if test="id != null and id != ''">
-            AND user.id =  #{id}
+        <if test="id != null">
+            AND user.id = #{id}
         </if>
     </where>
 </select>
@@ -302,7 +318,7 @@ jdbc.testSql=SELECT 'x' FROM DUAL
 
 ​	　`<foreach/>` 标签用于实现对于数组与集合的遍历。`collection` 表示要遍历的集合类型（`array`表示数组，`list`表示集合），`open`、`close`、`separator` 为对遍历内容的 SQL 拼接。
 
-#### 遍历数组
+（1）遍历数组
 
 ```xml
 <!-- foreach -->
@@ -321,9 +337,7 @@ jdbc.testSql=SELECT 'x' FROM DUAL
 
 
 
-#### 遍历集合
-
-（1）基本类型的List
+（2）遍历基本类型的List
 
 ```java
 public List<Student> selectByForeachWithListBase(List<Long> ids);
@@ -348,7 +362,7 @@ public List<Student> selectByForeachWithListBase(List<Long> ids);
 
 
 
-（2）自定义类型List
+（3）遍历自定义类型List
 
 ```java
 public List<Student> selectByForeachWithListCustom(List<Student> students);
@@ -377,7 +391,7 @@ public List<Student> selectByForeachWithListCustom(List<Student> students);
 
 ​	　`<sql/>` 标签可以定义 SQL 语句中的任何部分为 **SQL 片断**，该SQL片段可以被`<include/>` 标签在动态 SQL 的任何位置**复用**。
 
-#### 定义SQL片段
+（1）定义SQL片段
 
 ```xml
 <sql id="userSelect">
@@ -388,7 +402,9 @@ public List<Student> selectByForeachWithListCustom(List<Student> students);
 </sql>
 ```
 
-#### 引用SQL片段
+
+
+（2）引用SQL片段
 
 ```xml
 <select id="selectUserAll" resultType="User">
@@ -443,7 +459,7 @@ void deleteById(Long id);
 
 ```java
 /**按条件查询用户信息**/
-User selectUserById(Long id);
+User selectUserById(@Param("id") Long id);
 ```
 
 对应的Mapper：
@@ -455,7 +471,7 @@ User selectUserById(Long id);
     FROM
     tb_user AS user
     <where>
-        <if test="id != null and id != ''">
+        <if test="id != null">
             AND user.id =  #{id}
         </if>
     </where>
@@ -480,7 +496,7 @@ List<User> selectUserByUserNameLike(String userNameLike);
     FROM
     tb_user AS user
     <where>
-        <if test="id != null and id != ''">
+        <if test="id != null">
            AND username LIKE CONCAT ('%', #{userNameLike}, '%')
         </if
     </where>
@@ -488,6 +504,37 @@ List<User> selectUserByUserNameLike(String userNameLike);
 ```
 
 > 注意：`xml`中不能使用`+`完成字符连接，只能使用`CONCAT()函数`进字符串连接。
+
+
+
+（3）分页查询
+
+```
+/**分页查询**/
+List<User> page(Map<String,Object> params);
+```
+
+对应的Mapper：
+
+```xml
+<select id="page" resultType="User" parameterType="java.util.Map">
+    SELECT
+    	<include refid="userSelect" />
+    FROM tb_user AS user
+    <where>
+        <if test="user.userName != null and user.userName != ''">
+            AND user.username LIKE CONCAT ('%', #{user.userName}, '%')
+        </if>
+        <if test="user.email != null and user.email != ''">
+            AND user.email LIKE CONCAT ('%', #{user.email}, '%')
+        </if>
+        <if test="user.phone != null and user.phone != ''">
+            AND user.phone LIKE CONCAT ('%', #{user.phone}, '%')
+        </if>
+    </where>
+    LIMIT #{start},#{length}
+</select>
+```
 
 
 

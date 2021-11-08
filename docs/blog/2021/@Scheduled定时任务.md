@@ -173,7 +173,7 @@ public void doTask() throws InterruptedException  {
 
 ## 多线程执行
 
-​	　Spring**默认是单线程**的，实现定时任务多线程执行可以直接采用`@Async`注解（不建议），本文采用的是重写 `SchedulingConfigurer`和 `AsyncConfigurer`中的方法，来自定义配置默认的线程池的方法，实现指定线程池大小、线程前缀名称等。
+​	　Spring**默认是单线程**的，实现定时任务多线程执行可以直接采用`@Async`注解（不建议），本文采用的是重写 `SchedulingConfigurer`和 `AsyncConfigurer`中的方法，来**自定义配置默认的线程池**的方法，实现指定线程池大小、线程前缀名称等。
 
 ### ScheduleConfig
 
@@ -190,12 +190,15 @@ import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 import java.util.concurrent.Executor;
 
 /**
- * 定时任务以多线程的形式进行
+ * 默认线程池配置
  */
 @Configuration
 @Slf4j
 public class ScheduleConfig implements SchedulingConfigurer, AsyncConfigurer
 {
+    /**
+     * 定时任务以多线程的形式进行
+     * */
     @Override
     public void configureTasks(ScheduledTaskRegistrar taskRegistrar)
     {
@@ -203,6 +206,9 @@ public class ScheduleConfig implements SchedulingConfigurer, AsyncConfigurer
         taskRegistrar.setTaskScheduler(taskScheduler);
     }
 
+     /**
+     * 配置默认线程池
+     * */
     @Bean(destroyMethod="shutdown")
     public ThreadPoolTaskScheduler taskScheduler()
     {
@@ -221,6 +227,9 @@ public class ScheduleConfig implements SchedulingConfigurer, AsyncConfigurer
         return executor;
     }
 
+    /**
+     * 异步任务中异常处理
+     * */
     @Override
     public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler()
     {

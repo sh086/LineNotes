@@ -4,7 +4,7 @@ sidebar: auto
 
 # SpringWeb
 
-​	　Spring中装配`JavaBean`的方式有两类，第一类通过**Spring在JavaSE容器中装配JavaBean**，这一类不常用（参见[这里](./spring.md#整合spring)）；第二类是通过**SpringWeb在Web容器中装配JavaBean**，该类型有两种方法，第一种是通过**XML配置**的方式，第二种是通过**注解**的方式，目流行的是**通过SpringWeb注解的方式装配JavaBean**。
+​	　Spring中装配`JavaBean`的方式有两类，第一类通过**Spring在JavaSE容器中装配JavaBean**，这一类不常用（参见[这里](./spring.md#整合spring)）；第二类是通过**SpringWeb在Web容器中装配JavaBean**，该类型有两种方法，第一种是通过**XML配置**的方式，第二种是通过**注解**的方式，目流行的是**通过SpringWeb注解的方式装配JavaBean**。特别的，Spring**只能自动注入对象**，**不能自动注入`static标注`的属性**，`static属性`需要手动注入。
 
 ​	　注解方式 **配置方便、直观**，但以硬编码的方式写入到了 Java 代码中，其修改是需要重新编译代码的，而XML 配置方式的最大好处是对其所做修改**无需编译代码**可立即生效。若注解与 XML 同用，**XML 的优先级要高于注解**。特别的，项目通过`SpringWeb`修改了Bean的装配方式后，原先`new`的方式就不能正常使用了的。
 
@@ -43,7 +43,7 @@ sidebar: auto
 </listener>
 ```
 
-​	　在启动Web容器时，首先会运行`web.xml`中配置的`listener`对象`ContextLoaderListener`，其会根据`spring-context*.xml`中配置的**JavaBean与Class的对应关系** 以及  **Bean的作用域**，适时**调用 Bean 类的无参构造器**，创建空值的实例对象，**自动装配**`ApplicationContext`。
+​	　在启动Web容器时，首先会运行`web.xml`中配置的`listener`对象`ContextLoaderListener`，其会根据`spring-context*.xml`中配置的**JavaBean与Class的对应关系** 以及  **Bean的作用域**，适时**调用 Bean 类的构造器**，创建空值的实例对象，**自动装配**`ApplicationContext`。
 
 
 
@@ -72,6 +72,43 @@ sidebar: auto
 
 ​	　`<bean/>`元素用于定义一个实例对象，**一个实例对应一个 bean 元素**；`id`属性是 Bean 实例的**唯一标识**，程序通过 id 属性访问 Bean，Bean 与 Bean 间的依赖关系也是通过 id 属性关联的；`class`属性指定该 Bean 所属的类，注意这里**只能是类**，不能是接口。
 
+​	　此外，还可以通过`<property/>`标签初始化实例对象中的属性，`constructor-arg`标签设定构造器参数，示例代码如下。
+
+```xml
+<!-- 示例一：实例化validator-->
+<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
+<!-- 实例化beanValidator，并给validator属性赋予初值-->
+<bean id="beanValidator" class="com.shooter.funtl.common.utils.BeanValidator">
+    <!-- 相当于：beanValidator.setValidator(validator) -->
+    <property name="validator" ref="validator" />
+</bean>
+
+<!-- 示例二：实例化DefaultKaptcha-->
+<bean id="captchaProducer" class="com.google.code.kaptcha.impl.DefaultKaptcha">
+    <!-- 相当于：beanValidator.setConfig(validator) -->
+    <property name="config">
+        <!-- 相当于：var config = new Config(border=yes ...) -->
+        <bean class="com.google.code.kaptcha.util.Config">
+            <constructor-arg>
+                <props>
+                    <prop key="kaptcha.border">yes</prop>
+                    <prop key="kaptcha.border.color">105,179,90</prop>
+                    <prop key="kaptcha.textproducer.font.color">blue</prop>
+                    <prop key="kaptcha.image.width">125</prop>
+                    <prop key="kaptcha.image.height">45</prop>
+                    <prop key="kaptcha.textproducer.font.size">45</prop>
+                    <prop key="kaptcha.session.key">code</prop>
+                    <prop key="kaptcha.textproducer.char.length">4</prop>
+                    <prop key="kaptcha.textproducer.font.names">宋体,楷体,微软雅黑</prop>
+                </props>
+            </constructor-arg>
+        </bean>
+    </property>
+</bean>
+```
+
+
+
 ### SpringContext
 
 ​	　`SpringContext`工具类通过实现`ApplicationContextAware`接口的`setApplicationContext`方法获取已经初始化完成的`ApplicationContext`对象；以及通过实现`DisposableBean`接口的`destroy`方法可以销毁该`ApplicationContext`对象。 
@@ -92,6 +129,7 @@ public class SpringContext implements ApplicationContextAware,DisposableBean{
     /**
      * 容器停止时调用
      * */
+    @Override
     public void destroy() throws Exception {
         applicationContext = null;
     }
@@ -99,6 +137,7 @@ public class SpringContext implements ApplicationContextAware,DisposableBean{
     /**
      * 将web.xml生成的ApplicationContext实例装载到applicationContext中
      * */
+    @Override
     public void setApplicationContext(ApplicationContext applicationContext) 
         							throws BeansException {
         SpringContext.applicationContext = applicationContext;

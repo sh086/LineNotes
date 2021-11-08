@@ -47,7 +47,20 @@ sidebar: auto
 
 
 
-（2）格式化标签
+（2）forEach 标签
+
+```html
+<c:forEach  items="${user}"  var="userItem" varStatus="userStatus"> 
+   <!-- 每次访问项的状态相关值由 userStatus 对象暂存 -->
+   ${userStatus.index} 
+   <!-- 每次访问的项暂时存储在 userItem 变量中 -->
+   ${userItem.userName} 
+</c:foreach>
+```
+
+
+
+（3）格式化标签
 
 ```xml
 <!-- 引入JSTL的fmt标签库 -->
@@ -56,5 +69,4 @@ sidebar: auto
 <!-- 使用案例： 指定时间格式 -->
 <fmt:formatDate value="${user.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/>
 ```
-
 

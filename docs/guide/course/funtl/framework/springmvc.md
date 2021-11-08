@@ -84,7 +84,7 @@ sidebar: auto
 
 ### spring-mvc.xml
 
-​	　在`resource`目录下新建`sprin-mvc.xml`文件来配置 MVC。
+​	　在`resource`目录下新建`sprin-mvc.xml`文件来配置 MVC。特别的，`/static/**` 表示通配以`static开头的全路径`，`/static/*`仅表示通配如`/static/app.js`的路径。
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -249,6 +249,19 @@ public String login(@RequestParam(required = true) String loginId,
 
 
 
+### @PathVariable
+
+​	　通过 `@PathVariable` 可以将请求URL中的模板变量映射到接口方法的参数上。
+
+```java
+@RequestMapping("/getUserById/{name}")
+public User getUser(@PathVariable("name") String name){
+    return userService.selectUser(name);
+}
+```
+
+
+
 ### @RequestBody
 
 ​	　`@RequestBody`可以调用实体类的`setter`方法，将`POST`提交的HTTP的输入流(含`JSON`数据的请求体)装配到目标类。`@RequestBody` 与`@RequestParam`可以同时在`POST`方式提交时使用，`@RequestBody` 接收的是请求体里面的`JSON`数据，而`@RequestParam`接收的是`key-value`里面的参数。
@@ -308,7 +321,7 @@ public User login() {
 
 ```java
 /**
-* 从Form表单 或 URL参数 中获取user对象
+* 从model、Form表单 或 URL参数 中获取user对象
 */
 @RequestMapping(value = "/helloWorld")
 public String helloWorld(@ModelAttribute User user) {
@@ -317,10 +330,10 @@ public String helloWorld(@ModelAttribute User user) {
 }
 
 /**
-* 从model中获取user对象
+* 从model中获取指定名称的User对象
 */
 @RequestMapping(value = "/helloWorld")
-public String helloWorld(@ModelAttribute("user" User user) {
+public String helloWorld(@ModelAttribute("user") User user) {
     return "helloWorld";
 }
 ```
@@ -329,28 +342,54 @@ public String helloWorld(@ModelAttribute("user" User user) {
 
 （2）注解在一般方法上
 
-​	　　通过`@ModelAttribute`注解的方法会在**此controller每个方法执行前被执行**，若被注解的方法存在返回值，则**该返回值会自动加入到model属性中**，设定该返回值在`model`属性的名称默认是**返回值名称**，也可以通过`@ModelAttribute("attributeName")`的方式指定，但若返回的是常量，则必须指定名称；另外，该返回值在`model`属性的值就是**方法的返回值**。
+​	　　通过`@ModelAttribute`注解的方法会在**此controller每个方法执行前被执行**，若被注解的方法存在返回值，则**该返回值会自动加入到model属性中**，并默认设定**符合类的驼峰标识**的**名称**为`model`属性名。
+
+​	　　也可以通过`@ModelAttribute("attributeName")`的方式指定属性名称，但若返回的是常量，则必须自定义指定属性名称；另外，该返回值在`model`属性的值就是**方法的返回值**。
 
 ```java
 @ModelAttribute
-public String getId(Long id) {
-    /**
-    * 首先，/helloWorld请求会先调用getId方法，并将请求中的参数id传入getId(Long id)
-    * 然后执行model.addAttribute("id",id); 后继续执行helloWorld()方法
-    */
-    return id;
+public ContentCategory getContentCategory(Long id){
+    // form请求会先调用getContentCategory方法，并将请求中的参数id传入
+    ContentCategory contentCategory = null;
+    if(id != null){
+        //展示更新页面前或者更新失败后，填入数据
+        contentCategory = contentCategoryService.selectById(id);
+    }else {
+        //新增页面，若无modelAttribute会提示错误
+        contentCategory = new ContentCategory();
+    }
+    //执行model.addAttribute("contentCategory",contentCategory)
+    //ContentCategory类默认返回的只能时contentCategory名称，否则需要自定义
+    return contentCategory;
 }
 
-@RequestMapping(value = "/helloWorld")
-public String helloWorld() {
-    //model中已存在id属性，页面上可以直接使用
-    return "helloWorld";
+/**
+* 场景一：跳转新增页面（无参）
+* */
+@RequestMapping(value = "form",method = RequestMethod.GET)
+public String form(){
+    //model中已存在getContentCategory返回的contentCategory属性
+    return "content_category_form";
 }
+
+/**
+* 场景二：跳转新增页面（有参）
+* */
+@RequestMapping(value = "form",method = RequestMethod.GET)
+public String form(ContentCategory contentCategory){
+    //参数contentCategory会将getContentCategory返回的contentCategory覆盖
+    return "content_category_form";
+}
+
+/**
+* 页面上可以直接使用contentCategory属性
+* */
+<form:form id="inputForm" action="#" method="post" modelAttribute="contentCategory">
 ```
 
 
 
-（4）注解RequestMapping方法
+（3）注解RequestMapping方法
 
 ```java
 @RequestMapping(value = "/helloWorld.do")

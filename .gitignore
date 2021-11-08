@@ -10,5 +10,7 @@ assets
 *.iml
 resource
 repository
+itheima
+notebook
 example
 *.log
