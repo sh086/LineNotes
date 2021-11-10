@@ -3622,6 +3622,86 @@ if(!sessionVerifyCode.equals(verifyCode)){
 
 
 
+## v1.2.6 SimpleEmail
+
+### 引入依赖
+
+```xml
+<dependency>
+    <groupId>org.apache.commons</groupId>
+    <artifactId>commons-email</artifactId>
+    <version>1.3.3</version>
+</dependency>
+```
+
+
+
+### 开启SMTP服务
+
+​	　登录QQ邮箱，开启SMTP服务，并记录生产的授权码。
+
+![image-20211109101937055](./images/image-20211109101937055.png)
+
+
+
+### EmailIUtils
+
+```java
+import lombok.SneakyThrows;
+import org.apache.commons.mail.Email;
+import org.apache.commons.mail.SimpleEmail;
+import org.springframework.stereotype.Component;
+
+
+public class EmailIUtils {
+
+    private final static String hostName = "smtp.qq.com";
+
+    private final static String formEmailAddress = "发件人邮箱@qq.com";
+    
+    private final static String formEmailName = "发件人姓名";
+
+    private final static String authCode = "授权码";
+
+    @SneakyThrows
+    public static void sendEmail(String title,String msg,String ... toEmail) {
+        // QQ邮箱发送邮件
+        Email simpleEmail = new SimpleEmail();
+        //SMTP服务器名称
+        simpleEmail.setHostName(hostName);
+        //SMTP服务器端口
+        simpleEmail.setSmtpPort(587);
+        //发件人邮箱及授权码
+        simpleEmail.setAuthentication(formEmailAddress, authCode);
+        //发件人邮箱及发件人名称
+        simpleEmail.setFrom(formEmailAddress, formEmailName,"UTF-8");
+        //收件人邮箱列表
+        simpleEmail.addTo(toEmail);
+        //开启SSL加密
+        simpleEmail.setSSLOnConnect(true);
+        //邮件主题
+        simpleEmail.setSubject(title);
+        //邮件内容
+        simpleEmail.setMsg(msg);
+        //发送邮件
+        simpleEmail.send();
+    }
+}
+```
+
+
+
+### 测试运行
+
+```java
+ public static void main(String[] args) {
+     // QQ邮箱发送邮件
+     sendEmail("title","测试邮件","2319631421@qq.com");
+ }
+```
+
+
+
 ## v1.3.1 抽象公共方法
 
 ​	　在`common`目录下新建`template`目录，用于抽取`Entity`、`Mapper`、`Service`、`Controller`层的公共代码。特别的，泛型中 `T` 表示实体类，`S`表示服务， `D` 表示`DAO`。

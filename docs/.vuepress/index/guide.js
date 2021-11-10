@@ -15,8 +15,8 @@ const funtl = [
         title: '专题',
         collapsable: false,
         children: [
-            ['topic/vue.md','GitFlow工作流'],
-            ['topic/gitflow.md','Vue渐进式JavaScript框架'],
+            ['topic/gitflow.md','GitFlow工作流'],
+            ['topic/vue.md','Vue渐进式JavaScript框架'],
             ['topic/springsecurityoauth2.md','Spring Security Oauth2'],
         ]
     },
