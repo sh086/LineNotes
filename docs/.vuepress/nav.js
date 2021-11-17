@@ -3,8 +3,8 @@ module.exports = [
     {text: 'Guide', link: '/guide/'},
     // {text: 'Data', link: '/data/'},
     // {text: 'Smart', link: ''},
-    {text: 'Quantity', link: '/quantity/'},
     {text: 'Media', link: '/media/'},
+    {text: 'Quantity', link: '/quantity/'},
     {text: 'Project', link: '/project/'},
     // {text: 'WorkFlow', link: '/workflow/'}
 ];

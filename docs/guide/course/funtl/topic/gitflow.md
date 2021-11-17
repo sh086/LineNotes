@@ -70,7 +70,8 @@ git status # 查看本地仓库的修改状态
 git add # 暂存文件
 git fetch origin develop # 协同开发时，提交前先获取中央仓库的新增提交
 git pull --rebase origin develop # 同一分支远端若有更新，则以远端最新代码为基本线性合并
-git commit # 提交文件
+git commit -m 注释 # 提交文件
+git push # 推送b
 ```
 
 ​	　功能分支开发完成后，需要在 Web 界面发起Pull Requests，通知团队中涉及这个功能的成员，功能开发已经完成，需要在集成提交的变更到正式项目前，对变更进行Code Review。
@@ -217,7 +218,6 @@ git merge FETCH_HEAD
 # push 变更到服务器上的正式仓库
 git push origin master
 ```
-
 
 
 

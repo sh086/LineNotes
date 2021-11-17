@@ -31,10 +31,17 @@ sidebar: auto
 ​	　可以执行Docker官方提供的安装脚本快速安装Docker。
 
 ```shell
-# 下载安装脚本
-curl -fsSL get.docker.com -o get-docker.sh
-# 运行脚本
-sudo sh get-docker.sh --mirror AzureChinaCloud
+# 阿里云一键安装命令
+curl -fsSL https://get.docker.com | bash -s docker --mirror Aliyun
+# daocloud一键安装命令
+curl -sSL https://get.daocloud.io/docker | sh
+
+# 启动Docker
+service docker start
+# 运行 hello-world镜像，则表明安装成功
+docker run hello-world
+# 查看docker版本
+docker version
 ```
 
 ​	　只有 `root` 用户和 `docker` 组的用户才可以访问 Docker 引擎，出于安全考虑，一般 Linux 系统上不会直接使用 `root` 用户，因此，更好地做法是将需要使用 `docker` 的用户加入 `docker` 用户组。
@@ -44,10 +51,6 @@ sudo sh get-docker.sh --mirror AzureChinaCloud
 sudo groupadd docker
 # 将当前用户加入docker组
 sudo usermod -aG docker $USER
-# 退出当前终端并重新登录，若可以运行 hello-world镜像，则表明安装成功
-docker run hello-world
-# 查看docker版本
-docker version
 ```
 
 ​	　国内从 DockerHub 拉取镜像有时会遇到困难，此时可以配置镜像加速器。Docker 官方和国内很多云服务商都提供了国内加速器服务，例如：
@@ -652,7 +655,7 @@ docker container ls （docker ps）
 # 查看全部容器信息（包括终止状态态容器）
 docker container ls -a （docker ps -a）
 # 查看最近的运行容器
-docker ps -l
+docker container ls -l （docker ps -l）
 
 # 启动已终止容器
 docker start [container ID or NAMES]
@@ -748,7 +751,7 @@ docker tag IMAGE[:TAG] [REGISTRY_HOST[:REGISTRY_PORT]/]REPOSITORY[:TAG]
 docker tag ubuntu:17.10 username/ubuntu:17.10
 
 # 将标记的镜像上传到 Docker Hub
-docker push username/ubuntu:latest
+docker push username/ubuntu:17.10
 
 # 查询username下的仓库，判断是否推送成功
 docker search username
@@ -816,17 +819,25 @@ sudo service docker restart
 
 ## Docker实践
 
-### Dockerfile
+​	　可以通过Dockerfile将**项目定制为镜像**的方式进行项目部署。但是，这里建议采用**数据卷**的方式来运行项目。
+
+### 项目镜像定制
+
+（1）JAR包
 
 ```dockerfile
-# 示例一：jar包
 FROM openjdk:8
 WORKDIR /app
 COPY project-1.0.0.jar .
 EXPOSE 8080
 CMD java -jar -Dserver.port=8080 ./project-1.0.0.jar
+```
 
-# 示例二：war包
+
+
+（2）WAR包
+
+```dockerfile
 FROM tomcat:8.5.32
 WORKDIR /usr/local/tomcat/webapps/
 RUN rm -rf *
@@ -840,11 +851,11 @@ CMD ["catalina.sh","run"]
 
 
 
-### 启动容器
+### 启动应用
 
-（1）启动tomcat
+（1）启动Tomcat
 
-```dockerfile
+```shell
 docker run --name tomcat \
     -p 8080:8080 \
 	--restart always  \
@@ -854,9 +865,11 @@ docker run --name tomcat \
 	-d tomcat
 ```
 
+
+
 （2）启动Mysql
 
-```dockerfile
+```shell
 docker run -p 3306:3306 --name mysql \
 	--restart always  \
 	# 将主机当前目录下的 conf 挂载到容器的 /etc/mysql
