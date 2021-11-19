@@ -1,6 +1,107 @@
 ---
 sidebar: auto
 ---
-# Registry
+# Docker Registry
 
-官方的 Docker Hub 是一个用于管理公共镜像的地方，我们可以在上面找到我们想要的镜像，也可以把我们自己的镜像推送上去。但是，有时候我们的服务器无法访问互联网，或者你不希望将自己的镜像放到公网当中，那么你就需要 Docker Registry，它可以用来存储和管理自己的镜像。
+​	　Registry是**Docker镜像管理平台**。官方的 Docker Hub 是公共镜像管理平台，虽然也能实现私有镜像管理，但是，若不希望将私有镜像放到公网当中，就需要在内网搭建Docker Registry私服，来存储和管理自己的镜像。
+
+
+
+## 快速开始
+
+​	　通过Docker 来可以安装和运行 Registry，安装成功后就可以使用 docker 命令行工具对 registry 做各种操作了。建议也同步安装 `Docker Registry WebUI`。首先，编辑`docker-compose.yml`文件。
+
+```yaml
+version: '3.1'
+services:
+  # 安装Docker Registry
+  registry:
+    image: registry
+    restart: always
+    container_name: registry
+    ports:
+      - 5000:5000
+    volumes:
+      - /usr/local/docker/registry/data:/var/lib/registry
+  
+  # 安装Docker Registry WebUI
+  # 常用的有docker-registry-frontend和docker-registry-web
+  frontend:
+    image: konradkleine/docker-registry-frontend:v2
+    ports:
+      - 8080:80
+    volumes:
+      - ./certs/frontend.crt:/etc/apache2/server.crt:ro
+      - ./certs/frontend.key:/etc/apache2/server.key:ro
+    environment:
+      - ENV_DOCKER_REGISTRY_HOST=127.0.0.1      # Registry部署IP
+      - ENV_DOCKER_REGISTRY_PORT=5000           # Registry部署PORT
+```
+
+​	　Docker Registry私服支持**浏览器访问**和**终端访问**。
+
+```shell
+# 浏览器访问Registry
+http://101.43.15.250:5000/v2/
+# 终端访问Registry
+curl http://192.168.75.133:5000/v2/
+# 浏览器访问WebUI
+http://192.168.75.133:8080
+```
+
+
+
+## 使用Docker私服
+
+### 配置私服地址
+
+​	　若内网地址作为私有仓库地址（非127.0.0.1本地地址），Docker 是默认不允许以非 `HTTPS` 方式推送镜像，可以通过 Docker 的配置选项来取消这个限制。可以在**配置Docker加速器的文件中**新增配置来取消这个限制。
+
+```json{5-7}
+{
+  "registry-mirrors": [
+    "https://registry.docker-cn.com"
+  ],
+  "insecure-registries": [
+    "192.168.75.133:5000" # 此处为Registry部署IP和port
+  ]
+}
+```
+
+​	　配置完成后，重启Docker。
+
+```shell
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+```
+
+​	　最后，通过`docker info`命令检查客户端配置是否生效。
+
+```shell
+Insecure Registries:
+ 192.168.75.133:5000 # 表明生效
+```
+
+
+
+### 上传镜像到私服
+
+​	　以 ubuntu 为例，将测试镜像上传到Docker私服。
+
+```shell
+# 标记本地镜像并指向目标仓库
+# 标记版本号：ip:port/image_name:tag
+docker tag ubuntu 192.168.75.133:5000/ubuntu:latest
+
+# 上传标记的镜像
+docker push 192.168.75.133:5000/ubuntu:latest
+
+# 查看仓库中的镜像
+curl 192.168.75.133:5000/v2/_catalog
+# 查看指定镜像
+curl 192.168.75.133:5000/v2/ubuntu/tags/list
+
+# 拉取镜像
+docker pull 192.168.75.133:5000/ubuntu:latest
+```
+

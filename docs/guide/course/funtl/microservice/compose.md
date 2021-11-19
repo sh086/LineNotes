@@ -568,7 +568,7 @@ services:
     ports:
       - 8080:8080
     volumes:
-      - /usr/local/docker/tomcat/webapps/test:/usr/local/tomcat/webapps/test
+      - /usr/local/docker/tomcat/webapps/ROOT:/usr/local/tomcat/webapps/ROOT
     environment:
       TZ: Asia/Shanghai
 ```
@@ -605,6 +605,13 @@ volumes:
   mysql-data:
 ```
 
+​	　特别的，Compose默认的数据卷放在`/var/lib/docker/volumes`目录下。
+
+```shell
+# 默认数据卷mysql-data路径
+/var/lib/docker/volumes/mysql_mysql-data
+```
+
 
 
 （2）部署MySQL8
@@ -629,7 +636,4 @@ services:
       - ./data:/var/lib/mysql
 ```
 
-
-
-### 项目部署
 

@@ -129,12 +129,17 @@ OS name: "windows 10", version: "10.0", arch: "amd64", family: "windows"
 
 ​	　Maven版本与发行版和快照版两种。 **发行版**是**稳定的版本**，类和方法在命名、参数列表、功能上不会发生变更。**快照（SNAPSHOT）**是一个**特殊版本**，指出**目前开发拷贝**，快照不同于常规版本，Maven会在数据服务团队发布代码后更新快照存储库，使用新生成的快照来替换旧的快照，在UI 团队使用快照时 **自动获取最新的快照版本**。
 
+​	　当发布依赖到远端Maven仓库时，若项目的`pom.xml` 中设置的版本号添加 `SNAPSHOT` 标识，则会发布为 `SNAPSHOT` 版本；若没有 `SNAPSHOT` 标识，则会发布为 `RELEASE` 版本。
+
 ```text
 # 发行版
 1.0.0-RELEASE
 # 快照版(SNAPSHOT指代最新的快照版本号)
-1.0.1-SNAPSHOT  -> 编译后动态生成后缀 1.0.1-20190310676786867
+1.0.1-SNAPSHOT  -> 编译后动态生成后缀  1.0.1-20190310676786867
+                -> 发布远端Maven的后缀 1.0.0-SNAPSHOT-20190306.123456-1.jar
 ```
+
+​	　特别的，IDEA中需要在`settings -> Maven`中勾选`Always update snapshots`，才能每次都拉取最新的快照版本。
 
 
 
@@ -160,17 +165,10 @@ OS name: "windows 10", version: "10.0", arch: "amd64", family: "windows"
 # 语法格式
 mvn [plugin-name]:[goal-name]
 
-# 详细命令
-mvn clean：调用maven-clean-plugin，删除根目录下target目录
-mvn compile：调用maven-compile-plugin编译源码到target目录下
-mvn compiler:compile ：编译目标
-mvn test：执行src/test/java目录下类名为*Test.java的单元测试类
-mvn package：打包根目录下的目录，web project打成war包，java project打成jar包
-mvn install：打包到本地仓库，解决本地多个项目公用一个jar包的问题
-mvn package -Dmaven.test.skip=true：只打包不测试（跳过测试）
-mvn source:jar：源码打包
-mvn source:jar-no-fork：源码打包
-mvn tomcat:run	通过maven命令将web项目发布到Tomcat
+# 示例
+mvn source:jar           # 源码打包
+mvn source:jar-no-fork   # 源码打包
+mvn tomcat:run	         # 通过maven命令将web项目发布到Tomcat
 ```
 
 
@@ -182,4 +180,26 @@ mvn tomcat:run	通过maven命令将web项目发布到Tomcat
 ​	　 这三类生命周期间相互独立、互不影响，在一类生命周期之内，执行后面的命令，前面的操作也会自动执行。特别的，`defaultLifeCycle`生命周期由以下几个阶段组成：
 
 ![img](./images/maven-package.png)
+
+
+
+```shell
+# 默认生命周期
+# 编译
+mvn compile            # 调用maven-compile-plugin编译源码到target目录下
+# 测试
+mvn test               # 执行src/test/java目录下类名为*Test.java的单元测试类
+# 打包 -> 当前目录
+mvn package            # 打包根目录下的目录，web项目打成war包，java项目打成jar包
+mvn package -Dmaven.test.skip=true # 只打包不测试（跳过测试）
+# 打包 -> 本地仓库
+mvn install            # 打包到本地仓库，解决本地多个项目公用一个jar包的问题
+# 打包 -> Maven仓库
+mvn deploy             # 打包到远程Maven仓库,以让其它开发人员与项目共享
+
+# 清理生命周期
+mvn clean              # 调用maven-clean-plugin删除根目录下target目录
+# 站点生命周期
+mvn site               # 生成项目文档
+```
 

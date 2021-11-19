@@ -119,6 +119,10 @@ Registry Mirrors:
 ```shell
 # 语法格式
 docker pull [选项] [Docker Registry 地址[:端口号]/]仓库名[:标签]
+
+# 从DockerHub官方拉取镜像，不需要指定IP、Port、用户名（默认用户名为library）
+# 从DockerHub个人拉取、推送镜像，不需要指定IP、Port，但是要指定用户名
+# 从Docker私服拉取、推送镜像，需要指定IP、Port
 ```
 
 ​	　Docker 镜像仓库地址的格式一般是 `<域名/IP>[:端口号]`，默认地址是 `Docker Hub`；仓库名格式是 `<用户名>/<软件名>`，对于 Docker Hub，如果不给出用户名，则默认为 `library`，也就是官方镜像。
@@ -780,17 +784,24 @@ docker run -d \
     -p 5000:5000 \
     -v /opt/data/registry:/var/lib/registry \
     registry
-# 将 ubuntu:latest 这个镜像标记为 127.0.0.1:5000/ubuntu:latest
-docker tag ubuntu:latest 127.0.0.1:5000/ubuntu:latest
+    
+# 标记本地镜像并指向目标仓库
+# 标记版本号：ip:port/image_name:tag
+docker tag ubuntu 127.0.0.1:5000/ubuntu:latest
+
 # 上传标记的镜像
 docker push 127.0.0.1:5000/ubuntu:latest
+
 # 查看仓库中的镜像
 curl 127.0.0.1:5000/v2/_catalog
+# 查看指定镜像
+curl 127.0.0.1:5000/v2/ubuntu/tags/list
+
 # 拉取镜像
 docker pull 127.0.0.1:5000/ubuntu:latest
 ```
 
-​	　若内网地址作为私有仓库地址，Docker 默认不允许非 `HTTPS` 方式推送镜像，可以通过 Docker 的配置选项来取消这个限制。
+​	　若内网地址作为私有仓库地址（非127.0.0.1本地地址），Docker 是默认不允许以非 `HTTPS` 方式推送镜像，可以通过 Docker 的配置选项来取消这个限制。
 
 ```shell
 # 类型一：Ubuntu 14.04, Debian 7 Wheezy
@@ -879,6 +890,8 @@ docker run -p 3306:3306 --name mysql \
 	-e MYSQL_ROOT_PASSWORD=123456 \ # 初始化root用户的密码
 	-d mysql
 ```
+
+
 
 （3）传输文件
 

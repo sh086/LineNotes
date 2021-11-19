@@ -3,12 +3,13 @@ sidebarDepth: 0
 ---
 # 微服务解决复杂问题
 
-​	　**微服务**的最大进步在于改变了我们的工作方式，敏捷软件开发技术、应用迁移云端、DevOps文化、持续集成与持续部署（CI/CD）和容器应用都使用了微服务来革新应用开发与交付。微服务发展趋势是向**标准化微服务框架**发展，目前常见的三种微服务解决方案如下：
+​	　**微服务**的最大进步在于改变了我们的工作方式，敏捷软件开发技术、应用迁移云端、DevOps文化、持续集成与持续部署（CI/CD）和容器应用都使用了微服务来革新应用开发与交付。微服务发展趋势是向**标准化微服务框架**发展，目前常见的微服务解决方案如下：
 
-```
+```shell
 Spring Boot + Spring Cloud Alibaba
 Spring Boot + Dubbo + Zookeeper 
-Spring Boot + Spring Cloud Netflix 目前已停止更新，只进行维护
+Spring Boot + Spring Cloud Netflix  # 目前已停止更新，只进行维护
+Spring Cloud Alibaba + Dubbo 		# 非主流微服务架构解决方案
 ```
 
 ​	　**云计算服务**可以为微服务、大数据提供运维技术支持，云计算可以分为基础设施即服务（IaaS）、平台即服务（PaaS）、软件即服务（SaaS）、区块链即服务（BaaS）。
@@ -26,17 +27,58 @@ Spring Boot + Spring Cloud Netflix 目前已停止更新，只进行维护
 <table>
     <tr>
         <td rowspan="3"><b>云计算服务</b></td>    
-        <td>IaaS</td>
-        <td><a href="./linux.html" target="_blank">Linux</a></td> 
-		<td><a href="./docker.html" target="_blank">Docker</a></td>
-       <td><a href="./compose.html" target="_blank">Docke Compose</a></td>
+        <td rowspan="2">Iass</td>
+        <td align="center"><a href="./linux.html" target="_blank">Linux</a></td> 
+		<td colspan="6"></td> 
+        <td></td> 
+    </tr>
+    <tr>
+		<td align="center"><a href="./docker.html" target="_blank">Docker</a></td>
+        <td colspan="6" align="center">
+            <a href="./compose.html" target="_blank">Docke Compose</a>
+        </td>
         <td></td> 
     </tr>
     <tr>
     	<td>PaaS</td>
-        <td><a href="./spring.html" target="_blank">GitLab</a></td>
-        <td><a href="./springweb.html" target="_blank">Nexus</a></td>  
-        <td><a href="./springweb.html" target="_blank">Registry</a></td> 
+        <td align="center"><a href="./gitlab.html" target="_blank">GitLab</a></td>
+        <td  colspan="3" align="center">
+           <a href="./nexus.html" target="_blank">Nexus</a>
+        </td>  
+        <td  colspan="3" align="center">
+            <a href="./registry.html" target="_blank">Registry</a>
+        </td> 
+        <td></td> 
+    </tr>
+    <tr>
+    	<td rowspan="5"  align="center"><b>微服务架构</b></td>
+    	<td rowspan="3">主流</td> 
+    	<td rowspan="4" align="center">
+    	    <a href="./gitlab.html" target="_blank">SpringBoot</a>
+    	</td>
+    	<td colspan="6" align="center">
+    	    <a href="./gitlab.html" target="_blank">Spring Cloud Alibaba</a>
+    	</td>
+    	<td  rowspan="4" align="center">
+    	    <a href="./registry.html" target="_blank">VueJs</a>
+    	</td>  
+    </tr>
+    <tr>
+    	<td  colspan="3" align="center">
+    	    <a href="./registry.html" target="_blank">Apache Dubbo</a>
+    	</td> 
+    	<td align="center"><a href="./registry.html" target="_blank">Zookeeper</a></td> 
+    </tr>
+    <tr>
+    	<td colspan="6" align="center">
+    	    <a href="./gitlab.html" target="_blank">Spring Cloud Netflix</a>
+    	</td>
+    </tr>
+    <tr>
+    	<td>非主流</td> 
+    	<td colspan="6" align="center">
+    	    <a href="./gitlab.html" target="_blank">Spring Cloud Alibaba Dubbo</a>
+    	</td>
     </tr>
 </table>
 
@@ -44,5 +86,5 @@ Spring Boot + Spring Cloud Netflix 目前已停止更新，只进行维护
 
 **实战：**
 
-- [实战]()
+- [Spring Cloud iToken]()
 

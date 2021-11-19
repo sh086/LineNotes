@@ -37,6 +37,7 @@ sidebar: auto
 - [科大谷歌字体加速 ](https://servers.ustclug.org/2014/06/blog-googlefonts-speedup/)
 - [谷歌字体库](https://cdn.baomitu.com/index/fonts)
 - [Google Fonts国内加速服务](https://sb.sb/blog/css-cdn/)
+- [全球通用头像](http://cn.gravatar.com/)
 
 
 
