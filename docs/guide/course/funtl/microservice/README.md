@@ -3,14 +3,7 @@ sidebarDepth: 0
 ---
 # 微服务解决复杂问题
 
-​	　**微服务**的最大进步在于改变了我们的工作方式，敏捷软件开发技术、应用迁移云端、DevOps文化、持续集成与持续部署（CI/CD）和容器应用都使用了微服务来革新应用开发与交付。微服务发展趋势是向**标准化微服务框架**发展，目前常见的微服务解决方案如下：
-
-```shell
-Spring Boot + Spring Cloud Alibaba
-Spring Boot + Dubbo + Zookeeper 
-Spring Boot + Spring Cloud Netflix  # 目前已停止更新，只进行维护
-Spring Cloud Alibaba + Dubbo 		# 非主流微服务架构解决方案
-```
+​	　**微服务**的最大进步在于改变了我们的工作方式，敏捷软件开发技术、应用迁移云端、DevOps文化、持续集成与持续部署（CI/CD）和容器应用都使用了微服务来革新应用开发与交付，微服务发展趋势是向**标准化微服务框架**发展。
 
 ​	　**云计算服务**可以为微服务、大数据提供运维技术支持，云计算可以分为基础设施即服务（IaaS）、平台即服务（PaaS）、软件即服务（SaaS）、区块链即服务（BaaS）。
 
@@ -26,7 +19,7 @@ Spring Cloud Alibaba + Dubbo 		# 非主流微服务架构解决方案
 
 <table>
     <tr>
-        <td rowspan="3"><b>云计算服务</b></td>    
+        <td rowspan="3" align="center"><b>云计算服务</b></td>    
         <td rowspan="2">Iass</td>
         <td align="center"><a href="./linux.html" target="_blank">Linux</a></td> 
 		<td colspan="6"></td> 
@@ -37,7 +30,11 @@ Spring Cloud Alibaba + Dubbo 		# 非主流微服务架构解决方案
         <td colspan="6" align="center">
             <a href="./compose.html" target="_blank">Docke Compose</a>
         </td>
-        <td></td> 
+        <td rowspan="2">
+           <font  color=green>一次构建</font>
+           <br>
+           <font  color=green>到处运行</font>
+        </td> 
     </tr>
     <tr>
     	<td>PaaS</td>
@@ -48,13 +45,12 @@ Spring Cloud Alibaba + Dubbo 		# 非主流微服务架构解决方案
         <td  colspan="3" align="center">
             <a href="./registry.html" target="_blank">Registry</a>
         </td> 
-        <td></td> 
     </tr>
     <tr>
-    	<td rowspan="5"  align="center"><b>微服务架构</b></td>
+    	<td rowspan="5"  align="center"><b>微服务架构1.0</b></td>
     	<td rowspan="3">主流</td> 
     	<td rowspan="4" align="center">
-    	    <a href="./gitlab.html" target="_blank">SpringBoot</a>
+    	    <a href="./springboot.html" target="_blank">SpringBoot</a>
     	</td>
     	<td colspan="6" align="center">
     	    <a href="./gitlab.html" target="_blank">Spring Cloud Alibaba</a>

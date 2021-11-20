@@ -11,7 +11,9 @@ sidebar: auto
 
 
 
-## 在线编辑
+## 在线工具
+
+- [网站生成字符串](http://patorjk.com/software/taag)
 
 - [PDF 转换器 ](https://smallpdf.com/cn/pdf-to-word)
 - [JSON 编辑器 ](https://www.bejson.com/jsoneditoronline)
