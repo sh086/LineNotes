@@ -47,13 +47,13 @@ sidebarDepth: 0
         </td> 
     </tr>
     <tr>
-    	<td rowspan="5"  align="center"><b>微服务架构1.0</b></td>
+    	<td rowspan="5"  align="center"><b>微服务1.0</b></td>
     	<td rowspan="3">主流</td> 
     	<td rowspan="4" align="center">
     	    <a href="./springboot.html" target="_blank">SpringBoot</a>
     	</td>
     	<td colspan="6" align="center">
-    	    <a href="./gitlab.html" target="_blank">Spring Cloud Alibaba</a>
+    	    <a href="./springcloudnetflix.html" target="_blank">Spring Cloud Netflix</a>
     	</td>
     	<td  rowspan="4" align="center">
     	    <a href="./registry.html" target="_blank">VueJs</a>
@@ -61,26 +61,37 @@ sidebarDepth: 0
     </tr>
     <tr>
     	<td  colspan="3" align="center">
-    	    <a href="./registry.html" target="_blank">Apache Dubbo</a>
+    	    <a href="./dubbo.html" target="_blank">Apache Dubbo</a>
     	</td> 
-    	<td align="center"><a href="./registry.html" target="_blank">Zookeeper</a></td> 
+    	<td align="center"><a href="./zookeeper.html" target="_blank">Zookeeper</a></td> 
     </tr>
     <tr>
     	<td colspan="6" align="center">
-    	    <a href="./gitlab.html" target="_blank">Spring Cloud Netflix</a>
+    	    <a href="./springcloudalibaba.html" target="_blank">Spring Cloud Alibaba</a>
     	</td>
     </tr>
     <tr>
     	<td>非主流</td> 
     	<td colspan="6" align="center">
-    	    <a href="./gitlab.html" target="_blank">Spring Cloud Alibaba Dubbo</a>
+    	    <a href="./springcloudalibabadubbo.html" target="_blank">Spring Cloud Alibaba Dubbo</a>
     	</td>
     </tr>
 </table>
+
+
+**文档：**
+
+- [微服务从设计到部署](https://docshome.gitbook.io/microservices/)
+- [重构-改善既有代码的设计](http://gdut_yy.gitee.io/doc-refact2/)
+- [Java Cloud With Dubbo](https://github.com/topsale/book-java-cloud-dubbo)
+- 研磨设计模式
+- 架构即未来
+
 
 
 
 **实战：**
 
 - [Spring Cloud iToken]()
+- [Spring Cloud Alibaba For MyShop]()
 

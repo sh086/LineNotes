@@ -138,3 +138,14 @@ JRebel							  热部署插件
 若点击[+] 号后，没有exploded的Artifact，则需要在Project Structure的Artifacts中进行配置 或者 点击 `Fix`按钮自动添加
 :::
 
+
+
+## Jar部署
+
+​	　部署Jar包时，只需允许`Application.class`启动类即可。若想多实例启动，需要勾选`Allow paraller run`选项。
+
+![image-20211122125951092](./images/image-20211122125951092.png)
+
+​	　多实例启动后，可以在`Services`中管理。
+
+![image-20211122130400779](./images/image-20211122130400779.png)

@@ -62,7 +62,7 @@ pomx.xml                              # Maven 依赖管理配置文件
 ​	　接着，新建一个`IndexController`。
 
 ```java
-package com.shooter.funtl.myshop.controller;
+package com.shooter.funtl.springboot.controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -83,7 +83,7 @@ public class IndexController {
 
 ### YML配置
 
-​	　 `application.properties` 或 `application.yml`，是SpringBoot的全局的配置文件，详情参见[这里](https://docs.spring.io/spring-boot/docs/2.0.2.RELEASE/reference/html/common-application-properties.html)。
+​	　 `application.properties` 或 `application.yml`，是SpringBoot的全局的配置文件，详细用法参见[这里](https://docs.spring.io/spring-boot/docs/2.0.2.RELEASE/reference/html/common-application-properties.html)。
 
 ```yaml
 server:
@@ -100,7 +100,79 @@ logging:
     org.mybatis: info
     org.springframework: info
     org.springframework.jdbc: info
-    com.shooter.funtl.myshop: debug
+    com.shooter.funtl.springboot: debug
+```
+
+
+
+### POM文件
+
+​	　 `pom.xml`是Spring Boot的项目管理和依赖配置文件。
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.shooter.funtl</groupId>
+    <artifactId>springboot</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>springboot</name>
+    <description>Demo project for Spring Boot</description>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.2.6.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+    </properties>
+
+    <dependencies>
+        <!--SpringBoot START-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!--SpringBoot END-->
+        
+         <!--Common Utils END-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+         <!--Common Utils END-->
+
+    </dependencies>
+
+    <build>
+        <!-- 资源文件配置 -->
+        <!-- 默认Jar打包时不会将资源文件打包的 -->
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
+    </build>
+</project>
 ```
 
 
@@ -348,14 +420,14 @@ spring:
       driver-class-name: com.mysql.cj.jdbc.Driver
 
 mybatis:
-  type-aliases-package: com.shooter.funtl.myshop.entity
+  type-aliases-package: com.shooter.funtl.springboot.entity
   mapper-locations: classpath:mapper/*.xml
 ```
 
 ​	　然后，创建一个通用的父级接口。
 
 ```java
-package com.shooter.funtl.myshop.common.mybatis;
+package com.shooter.funtl.springboot.common.mybatis;
 import tk.mybatis.mapper.common.Mapper;
 import tk.mybatis.mapper.common.MySqlMapper;
 
@@ -432,7 +504,7 @@ public interface BaseMapper<T> extends Mapper<T>, MySqlMapper<T> {
 
         <!-- 配置 tk.mybatis 插件 -->
         <plugin type="tk.mybatis.mapper.generator.MapperPlugin">
-            <property name="mappers" value="com.shooter.funtl.myshop.common.mybatis.BaseMapper"/>
+            <property name="mappers" value="com.shooter.funtl.springboot.common.mybatis.BaseMapper"/>
         </plugin>
 
         <!-- 配置数据库连接 -->
@@ -460,14 +532,14 @@ public interface BaseMapper<T> extends Mapper<T>, MySqlMapper<T> {
         </javaTypeResolver>
 
         <!-- 配置实体类存放路径 -->
-        <javaModelGenerator targetPackage="com.shooter.funtl.myshop.entity" targetProject="src/main/java"/>
+        <javaModelGenerator targetPackage="com.shooter.funtl.springboot.entity" targetProject="src/main/java"/>
 
         <!-- 配置 XML 存放路径 -->
         <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources"/>
 
         <!-- 配置 DAO 存放路径 -->
         <javaClientGenerator
-                targetPackage="com.shooter.funtl.myshop.mapper"
+                targetPackage="com.shooter.funtl.springboot.mapper"
                 targetProject="src/main/java"
                 type="XMLMAPPER"/>
 
@@ -510,7 +582,7 @@ mvn mybatis-generator:generate
 import tk.mybatis.spring.annotation.MapperScan;
 
 @SpringBootApplication
-@MapperScan(basePackages = "com.shooter.funtl.myshop.mapper")
+@MapperScan(basePackages = "com.shooter.funtl.springboot.mapper")
 public class Application {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
@@ -523,8 +595,8 @@ public class Application {
 ```java
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.shooter.funtl.myshop.entity.TcUser;
-import com.shooter.funtl.myshop.mapper.TcUserMapper;
+import com.shooter.funtl.springboot.entity.TcUser;
+import com.shooter.funtl.springboot.mapper.TcUserMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -628,4 +700,193 @@ public class MyBatisTests {
 ```
 
 
+
+## 附录
+
+### pom.xml
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.shooter.funtl</groupId>
+    <artifactId>springboot</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>springboot</name>
+    <description>Demo project for Spring Boot</description>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.2.6.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+    </properties>
+
+    <dependencies>
+        <!--SpringBoot START-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!--SpringBoot END-->
+
+        <!--Thymeleaf START-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.sourceforge.nekohtml</groupId>
+            <artifactId>nekohtml</artifactId>
+            <version>1.9.22</version>
+        </dependency>
+        <!--Thymeleaf END-->
+
+        <!--Mybatis START-->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
+            <version>1.1.10</version>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>tk.mybatis</groupId>
+            <artifactId>mapper-spring-boot-starter</artifactId>
+            <version>2.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper-spring-boot-starter</artifactId>
+            <version>1.2.5</version>
+        </dependency>
+        <!--Mybatis END-->
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.mybatis.generator</groupId>
+                <artifactId>mybatis-generator-maven-plugin</artifactId>
+                <version>1.3.5</version>
+                <configuration>
+                    <configurationFile>src/main/resources/config/generator/generatorConfig.xml</configurationFile>
+                    <overwrite>true</overwrite>
+                    <verbose>true</verbose>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>mysql</groupId>
+                        <artifactId>mysql-connector-java</artifactId>
+                        <version>${mysql.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>tk.mybatis</groupId>
+                        <artifactId>mapper</artifactId>
+                        <version>3.4.4</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+        
+         <!-- 资源文件配置 -->
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
+        
+    </build>
+
+</project>
+```
+
+
+
+### application.yml
+
+```yaml
+
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+logging:
+  file:
+    name: ./logs/log..log
+  level:
+    root: info
+    org.mybatis: info
+    org.springframework: info
+    org.springframework.jdbc: info
+    com.shooter.funtl.springboot: debug
+
+spring:
+  datasource:
+    druid:
+      url: jdbc:mysql://IP:3306/myshop?useUnicode=true&characterEncoding=utf-8&useSSL=false
+      username: root
+      password: 密码
+      initial-size: 1
+      min-idle: 1
+      max-active: 20
+      test-on-borrow: true
+      # MySQL 8.x: com.mysql.cj.jdbc.Driver
+      # MySQL 5.x: com.mysql.jdbc.Driver
+      driver-class-name: com.mysql.cj.jdbc.Driver
+  thymeleaf:
+    cache: false       # 开发时关闭缓存,不然没法看到实时页面
+    mode: LEGACYHTML5  # 使用非严格HTML5
+    encoding: UTF-8
+    servlet:
+      content-type: text/html
+
+mybatis:
+  type-aliases-package: com.shooter.funtl.springboot.entity
+  mapper-locations: classpath:mapper/*.xml
+```
 

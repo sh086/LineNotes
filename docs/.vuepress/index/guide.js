@@ -9,7 +9,6 @@ const funtl = [
             ['microservice/', '微服务解决复杂问题'],
             ['datascience/', '价值互联网'],
             ['interview/', '面试宝典'],
-            
         ]
     },
     {

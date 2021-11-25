@@ -37,10 +37,11 @@ sidebarDepth: 0
 
 ​	　**微服务架构**主要解决了`客户端如何访问这些服务`、`每个服务之间如何通信`、`如何实现如此多的服务`、`如何解决服务挂了`这四个分布式开发时会存在的问题，目前存在三种解决方案：
 
-```
+```shell
 Spring Boot + Spring Cloud Alibaba
 Spring Boot + Dubbo + Zookeeper 
-Spring Boot + Spring Cloud Netflix 目前已停止更新，只进行维护
+Spring Boot + Spring Cloud Netflix          # 目前已停止更新，只进行维护
+Spring Boot + Spring Cloud Alibaba + Dubbo  # 非主流
 ```
 
 ​	　微服务架构可以更加快速的构建一个稳定、高速的系统，但是目前还不成熟，发展趋势是向**标准化微服务框架**发展，如**ServiceMesh**服务网格化、Istio等。
