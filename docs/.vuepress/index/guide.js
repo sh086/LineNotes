@@ -43,7 +43,6 @@ const leetcode = [
             ['learn/tree/', '树与二叉树'],
             ['learn/graph/', '图论'],
             ['learn/arithmetic/', '算法分析'],
-            ['learn/machinelearn/', '机器学习'],
         ]
     },
     {

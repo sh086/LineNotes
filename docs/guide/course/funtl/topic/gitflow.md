@@ -221,9 +221,10 @@ git push origin master
 
 
 
-## 常用Git命令
+## 附录
 
 ```shell
+# 常用Git命令
 git init          # 创建新的 Git 仓库
 git clone [url]   # 拷贝一个 Git 仓库到本地
 git add           # 将该文件添加到缓存
