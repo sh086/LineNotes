@@ -12,7 +12,7 @@ sidebar: auto
 
 **参考资料：**
 
-- [Spring Cloud版本](https://spring.io/projects/spring-cloud/)
+- [Spring Cloud官网](https://spring.io/projects/spring-cloud/)
 - <a href="../project/itoken-springcloudnetflix.html" target="_blank">Spring Cloud Itoken项目实战</a>
 
 

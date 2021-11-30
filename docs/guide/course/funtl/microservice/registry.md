@@ -102,7 +102,7 @@ Insecure Registries:
 # 方式一：在构建的时候标记 (建议) 
 docker build -t 192.168.75.133:5000/ubuntu .
 
-# 方式二：通过tag标记已有版本号
+# 方式二：通过tag标记指向目标仓库
 # ip:port/ubuntu 默认最新版 <==>  ip:port/ubuntu:latest 
 docker tag ubuntu 192.168.75.133:5000/ubuntu
 

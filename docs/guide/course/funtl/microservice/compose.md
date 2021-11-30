@@ -6,7 +6,7 @@ sidebar: auto
 
 ## 简介
 
-​	　**Dockerfile 模板文件可以很方便的定义一个单独的应用容器**，但是，为了满足**快速的部署分布式应用**的需求，引入了Docker Compose。
+​	　**Dockerfile 模板文件可以很方便的定义一个单独的应用容器**。但是，为了**快速部署分布式应用** 以及 **简化Docker脚本开发**，引入了Docker Compose。
 
 ​	　Docker Compose通过 `docker-compose.yml` 模板文件（YAML 格式），可以**定义和运行一组相关联的应用容器为一个项目**，实现对 Docker **容器集群**的快速部署。`Compose` 的默认管理对象是项目，通过子命令对项目 (project)中的一组容器(service)进行便捷地**生命周期管理**。
 
@@ -17,6 +17,7 @@ sidebar: auto
 **参考资料：**
 
 - [官方 GitHub Release](https://github.com/docker/compose/releases) 
+- [Docker 极速下载](https://get.daocloud.io/)
 
 
 
@@ -30,8 +31,10 @@ sidebar: auto
 
 ```shell
 # 安装
-sudo curl -L https://github.com/docker/compose/releases/download/2.1.1\
-	/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+# 使用Daocloud地址
+curl -L https://get.daocloud.io/docker/compose/releases/download/v2.1.1/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+	
+# 赋予权限
 sudo chmod +x /usr/local/bin/docker-compose
 
 # 查看compose版本
@@ -57,8 +60,7 @@ sudo pip uninstall docker-compose
 （3） 方法三，bash 补全命令，不破坏系统环境，更适合云计算场景
 
 ```shell
-curl -L https://raw.githubusercontent.com/docker/compose/1.8.0\
-	/contrib/completion/bash/docker-compose > /etc/bash_completion.d/docker-compose
+curl -L https://raw.githubusercontent.com/docker/compose/1.8.0/contrib/completion/bash/docker-compose > /etc/bash_completion.d/docker-compose
 ```
 
 
@@ -480,7 +482,7 @@ services:
 
 （6）环境变量指令
 
-​	　environment指令，用于设置环境变量。只给定名称的变量会自动获取运行 Compose 主机上对应变量的值，可以用来防止泄露不必要的数据。
+​	　environment指令，用于**设置容器环境变量**。只给定名称的**变量**会自动获取运行 Compose 主机上对应**变量的值**，可以用来防止泄露不必要的数据。
 
 ```yaml
 # 对象格式
@@ -617,6 +619,35 @@ y|Y|yes|Yes|YES|n|N|no|No|NO|true|True|TRUE|false|False|FALSE|on|On|ON|off|Off|O
 
 
 ## Compose实战
+
+### SpringBoot模板
+
+```yml
+version: '3.1'
+services:
+  web:
+    restart: always
+    image: app
+    container_name: app
+    ports:
+      - 8080:8080
+    environment:
+      TZ: Asia/Shanghai
+  nginx:
+    image: nginx
+    container_name: nginx
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      TZ: Asia/Shanghai
+    volumes:
+      - /etc/docker/nginx/config/nginx.conf:/etc/nginx/nginx.conf # nginx.conf 配置
+      - /etc/docker/nginx/logs:/var/log/nginx # 日志
+      - /etc/docker/nginx/html:/usr/share/nginx/html # 静态资源
+```
+
+
 
 ### Tomcat模板
 

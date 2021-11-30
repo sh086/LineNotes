@@ -220,22 +220,27 @@ public class SpringContextTest {
 
 ​	　使用 `@Transaction` 注解到需要开启事务的类或者方法上即可。
 
-```java{2}
-@Override
-@Transactional
-public void saveTransaction () {
-    ContentCategory category = new ContentCategory();
-    category.setId(1L);
-    category.setName("测试事务分类");
+```java{2,6}
+// 开启事务，所有的方法都只读
+@Transactional(readOnly = true)
+public class testTransactional(){
 
-    Content content = new Content();
-    content.setCategoryId(category.getId());
-    // 首先，设置title字段长度为200，可正常插入
-    // 然后，设置title字段长度为4触发事务回滚
-    content.setTitle("测试事务内容");
+    // 对需要写入的方法，取消事务
+    @Transactional(readOnly = false)
+    public void saveTransaction () {
+        ContentCategory category = new ContentCategory();
+        category.setId(1L);
+        category.setName("测试事务分类");
 
-    contentCategoryDao.insert(category);
-    contentDao.insert(content);
+        Content content = new Content();
+        content.setCategoryId(category.getId());
+        // 首先，设置title字段长度为200，可正常插入
+        // 然后，设置title字段长度为4触发事务回滚
+        content.setTitle("测试事务内容");
+
+        contentCategoryDao.insert(category);
+        contentDao.insert(content);
+    }
 }
 ```
 

@@ -36,10 +36,9 @@ sidebarDepth: 0
         <td  colspan="2" align="center">
            <a href="./registry.html" target="_blank">Registry</a></td> 
         </td> 
-        <td  colspan="2" align="center">
-           <a href="./registry.html" target="_blank">Jenkins</a></td>
-        </td> 
-        <td></td
+        <td  colspan="3" align="center">
+           <a href="./cicd.html" target="_blank">CI/CD</a></td>
+        </td>
     </tr>
     <tr>
     	<td>SaaS</td>
@@ -91,5 +90,4 @@ sidebarDepth: 0
 
 - <a href="../project/itoken-springcloudnetflix.html" target="_blank">Spring Cloud Itoken项目实战</a>
 - [Spring Cloud Alibaba For MyShop]()
-
 

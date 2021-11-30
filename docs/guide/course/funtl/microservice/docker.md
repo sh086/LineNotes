@@ -7,6 +7,7 @@ sidebar: auto
 
 - [Docker 官方 Ubuntu 安装文档](https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/)
 - [DaoCloud镜像服务](https://www.daocloud.io/mirror#accelerator-doc)
+- [Docker 极速下载](https://get.daocloud.io/)
 
 
 
@@ -208,7 +209,21 @@ docker image ls --format "table {{.ID}}\t{{.Repository}}\t{{.Tag}}
 
 
 
-（3）删除镜像
+（3）标记镜像
+
+```shell
+# 通过tag标记已有版本号
+# 语法格式
+docker tag IMAGE[:TAG] [REGISTRY_HOST[:REGISTRY_PORT]/]REPOSITORY[:TAG]
+
+# 示例
+# 将镜像 ubuntu:17.10 标记为  ubuntu:latest
+docker tag ubuntu:17.10 ubuntu
+```
+
+
+
+（4）删除镜像
 
 ​	　执行删除镜像命令时，由于镜像是多层存储结构，因此在删除的时候也是从上层向基础层方向依次进行判断删除。首先，需要将满足要求的所有镜像标签都删除，即`Untagged`删除行为.
 
@@ -250,6 +265,17 @@ docker rmi $(docker images -q -f dangling=true)
 （1）虚悬镜像
 
 ​	　在镜像维护或者版本更新时，都会**以原来的标签发布新版本**，由于新旧镜像同名，旧镜像名称被取消，从而出现仓库名、标签均为 `<none>` 的镜像，这类无标签镜像也被称为 **虚悬镜像** 。
+
+```shell
+# docker pull 和 docker build 操作可能会导致出现虚悬镜像
+
+# 拉取最新的nginx，若nginx:latest有维护，还是会以原来的标签发布新版本的
+# 这就导致pull操作h，原来的nginx:latest就成了虚悬镜像
+docker pull nginx
+
+# 重新构建nginx:latest,就会导致上一个nginx最新版变成虚悬镜像
+docker build -t nginx .
+```
 
 ​	　`docker pull`和`docker build`都有可能出现这种情况。一般来说，虚悬镜像已经失去了存在的价值，是可以随意删除的。
 
@@ -486,11 +512,16 @@ docker run -it ubuntu cat /etc/os-release # 输出系统版本信息
 ​	　场景一，让镜像变成像命令一样使用。
 
 ```dockerfile
+# 示例一
+# docker run myip -i ==> ENTRYPOINT 解析成 curl -s http://ip.cn -i，正确
 ENTRYPOINT [ "curl", "-s", "http://ip.cn" ]
 
-# ENTRYPOINT 解析成 curl -s http://ip.cn -i
-# CMD 会将 -i 替换默认命令执行，引发执行文件找不到错误
-docker run myip -i
+# docker run myip -i ==> CMD 会将 -i 替换默认命令执行，直接执行 -i ,引发执行文件找不到错误
+CMD [ "curl", "-s", "http://ip.cn" ]
+
+# 示例二
+# 在Dockerfile中CMD和ENTRYPOINT都只能出现一次,但有时需要在Dockerfile中执行多个脚本进行初始化，这时候只能使用ENTRYPOINT
+ENTRYPOINT ["dockerize", "-timeout", "5m", "-wait", "tcp://192.168.75.128:8888", "java", "-jar", "/app/app.jar", "--spring.profiles.active=prod"]
 ```
 
 ​	　场景二，处理应用运行前和容器 `CMD` 无关的预处理工作。
@@ -653,7 +684,26 @@ docker run -d \
 
 
 
-（2）常用命令
+（2）进入容器
+
+```shell
+# 进入以守护态运行的容器
+
+# 方法一（推荐）
+# 以交互的方式进入容器，可以执行容器的环境变量中的所有命令，如bash
+# 示例一，执行环境变量中的命令bash
+docker exec -it [container ID or NAMES] bash
+# 示例一，执行环境变量中的命令gitlab-runner，register是参数
+docker exec -it gitlab-runner gitlab-runner register
+
+# 方法二（不建议）
+# Docker自带的命令，进入容器在stdin中输入exit，会导致容器的停止
+docker attach [container ID or NAMES]
+```
+
+
+
+（3）查看容器信息
 
 ```shell
 # 查看正在运行的容器信息
@@ -663,25 +713,26 @@ docker container ls -a （docker ps -a）
 # 查看最近的运行容器
 docker container ls -l （docker ps -l）
 
+# 查看日志
+docker logs [container ID or NAMES]
+```
+
+
+
+（4）操作容器命令
+
+```shell
 # 启动已终止容器
 docker start [container ID or NAMES]
 # 重启正则运行状态容器
 docker restart [container ID or NAMES]
+
 # 终止容器
 docker stop [container ID or NAMES]
 
-# 进入以守护态运行的容器
-# 方法一（推荐）
-docker exec -it [container ID or NAMES] bash
-# 方法二（不建议）：Docker自带的命令，进入容器在stdin中输入exit，会导致容器的停止
-docker attach [container ID or NAMES]
-
-# 查看日志
-docker logs [container ID or NAMES]
-
 # 删除容器
 docker rm [container ID or NAMES]
-# 删除所有未正在运行的容器 
+# 删除所有未正在运行的容器（正在运行的容器s）
 docker rm $(docker ps -a -q)
 ```
 
@@ -754,12 +805,7 @@ docker logout
 # 标记本地镜像并指向目标仓库
 # 方式一：在构建的时候标记 (建议) 
 docker build -t username/ubuntu .
-
-# 方式二：通过tag标记已有版本号
-# 语法格式
-docker tag IMAGE[:TAG] [REGISTRY_HOST[:REGISTRY_PORT]/]REPOSITORY[:TAG]
-# ip:port/ubuntu 默认最新版 <==>  ip:port/ubuntu:latest 
-# 将镜像 ubuntu:17.10 标记为  username/ubuntu:17.10
+# 方式二：通过tag指向目标仓库
 docker tag ubuntu:17.10 username/ubuntu:17.10
 
 # 将标记的镜像上传到 Docker Hub
@@ -851,6 +897,9 @@ sudo service docker restart
 FROM openjdk:8-jre
 WORKDIR /app
 COPY project-1.0.0.jar .
+# CMD java -jar -Dspring.profiles.active=dev project-1.0.0.jar
+# CMD java -jar project-1.0.0.jar --spring.profiles.active=dev
+# ENTRYPOINT ["java", "-jar", "project-1.0.0.jar", "--spring.profiles.active=prod"]
 CMD java -jar project-1.0.0.jar
 EXPOSE 8080
 ```
@@ -884,6 +933,9 @@ docker run --name tomcat \
 	-e TZ=Asia/Shanghai  \ 
 	# 将当前目录下的test挂载到/usr/local/tomcat/webapps/test
 	-v $PWD/test:/usr/local/tomcat/webapps/test \
+	# -e JAVA_OPTS='-Denable.scheduled=true' \
+	# 设定生效的profiles
+	-e JAVA_OPTS='-Dspring.profiles.active=dev' \
 	-d tomcat
 ```
 

@@ -15,6 +15,7 @@ sidebar: auto
 **参考资料：**
 
 - [Spring Cloud iToken 源码](https://gitlab.com/springclouditoken)
+- <a href="../microservice/springcloudnetflix.html" target="_blank">Spring Cloud Netflix 笔记</a>
 
 
 
@@ -28,8 +29,6 @@ sidebar: auto
 
 ## v1.0 开发环境搭建
 
-### 初始化项目
-
 ​	　首先，在[GitLab](https://gitlab.com/)创建`springcloud-itoken`**项目组**，然后在项目组中新建私有的`Spring Cloud`项目，并将`springcloud-itoken`项目组中的项目拉取到本地。
 
 ```shell
@@ -42,19 +41,15 @@ itoken-zipkin			分布式链路追踪
 itoken-zuul	    		分布式路由网关
 ```
 
-​	　接着，初始化这六个项目，项目初始化配置参加<a href="./itoken-init.html" target="_blank">这里</a>。初始化完成后，依次启动项目，验证本地是否可以正常启动。然后，修改`respo`配置文件中的`localhost`为`项目部署IP`。
+​	　接着，初始化这六个项目，项目初始化配置参考<a href="./itoken-init.html" target="_blank">这里</a>。初始化完成后，依次启动项目，验证本地是否可以正常启动。然后，修改`respo`配置文件中的`localhost`为`项目部署IP`，准备将项目部署到远程服务器上。
+
+​	　接下来，以`itoken-dependencies`、`itoken-config`和`itoken-eureka`项目为例，尝试着使用**手动**的方式，将项目部署到远程服务器上。完成后，还需要通过`GitLab CI`的方式，将`itoken`项目**持续集成到远程服务器**上，参考<a href="../microservice/cicd.html#gitlab-ci" target="_blank">这里</a>。
 
 
 
-### 服务远程部署
+### itoken-dependencies
 
-​	　第一步，先以`itoken-dependencies`和`itoken-config`项目为例，尝试着使用**手动**的方式，将项目部署到远程服务器上。
-
-
-
-（1）将`itoken-dependencies`项目**打包到Nexus私服**
-
-​	　首先，在`itoken-dependencies`项目中的`pom.xml`中新增如下配置，参考<a href="../microservice/nexus.html#打包项目到私服" target="_blank">这里</a>进行配置。
+​	　首先，需要将`itoken-dependencies`项目**打包到Nexus私服**，在`pom.xml`中新增如下配置，参考<a href="../microservice/nexus.html#打包项目到私服" target="_blank">这里</a>进行配置。
 
 ```xml
 <!--打包项目到私服-->
@@ -78,9 +73,9 @@ itoken-zuul	    		分布式路由网关
 
 
 
-（2）定制`itoken-config`项目镜像
+### itoken-config
 
-​	　首先，在`itoken-config`项目中的`pom.xml`中新增如下配置，用于从`Nexus Repository`下载`itoken-dependencies`等依赖，参考加<a href="../microservice/nexus.html#配置代理仓库" target="_blank">这里</a>进行配置。然后，将更新后的代码提交到Git仓库。
+​	　首先，在`itoken-config`项目中的`pom.xml`中新增如下配置，用于从`Nexus Repository`下载`itoken-dependencies`等依赖，参考<a href="../microservice/nexus.html#配置代理仓库" target="_blank">这里</a>进行配置，修改完成后将变更提交到Git仓库。特别的，**`itoken`所有的项目都需要这样改动，后面的项目不在赘述**。
 
 ```xml
 <!--依赖管理-->
@@ -123,19 +118,9 @@ git clone git@gitlab.com:springclouditoken/itoken-config.git
 
 # 打包itoken-config项目
 mvn clean package 
+
 # 进入target目录
 cd target
-# 运行Jar
-java -jar itoken-config-1.0.0-SNAPSHOT.jar
-```
-
-​	　访问`http://101.43.15.250:8888/itoken-admin/dev/main`，若可以获取配置，则表明`itoken-config`项目已经成功部署了。
-
-![image-20211129201115526](./images/image-20211129201115526.png)
-
-​	　接下来，还需要编写`Dockerfile`，进行定制镜像。
-
-```shell
 # 新建部署目录
 mkdir docker
 # 移动jar包到部署目录
@@ -156,13 +141,30 @@ EXPOSE 8888
 docker build -t sh086/itoken-config .
 ```
 
+​	　编写`itoken-config`项目的`docker-compose.yml`文件，再运行`docker-compose up -d`命令启动项目。
+
+```yaml
+version: '3.1'
+services:
+  itoken-config:
+    image: sh086/itoken-config
+    restart: always
+    container_name: itoken_config
+    ports:
+      - 8888:8888
+```
+
+​	　访问`http://101.43.15.250:8888/itoken-admin/dev/main`，若可以获取配置，则表明`itoken-config`项目已经成功部署了。
+
+![image-20211129201115526](./images/image-20211129201115526.png)
 
 
-（3）定制`itoken-eureka`项目镜像
 
-​	　由于Eureka采用集群部署，所以要先增加`itoken-eureka-dev.yml`配置文件的`defaultZone`节点，完成后，提交到GitLab。
+### itoken-eureka
 
-```yaml{9}
+​	　由于Eureka采用**集群**部署，所以要先增加`itoken-eureka-dev.yml`配置文件的`defaultZone`节点，完成后提交变更到GitLab。
+
+```yaml{14}
 server:
   port: 8761
 
@@ -179,7 +181,7 @@ eureka:
       defaultZone: http://${eureka.instance.hostname}:8761/eureka/,http://${eureka.instance.hostname}:8762/eureka/
 ```
 
-​	　接着，在`itoken-eureka`项目的`pom.xml`新增`Nexus Repository`配置并提交Git。然后，依据如下步骤完成`eureka`镜像定制。
+​	　然后，先在`itoken-eureka`项目的`pom.xml`新增`Nexus Repository`配置并提交Git，再根据如下步骤完成`eureka`镜像定制。
 
 ```shell
 # 进入itoken目录
@@ -213,23 +215,6 @@ EXPOSE 8761
 docker build -t sh086/itoken-eureka .
 ```
 
-
-
-（4）编写`docker-compose.yml`文件
-
-​	　编写`itoken-config`项目的`docker-compose.yml`文件。
-
-```yaml
-version: '3.1'
-services:
-  itoken-config:
-    image: sh086/itoken-config
-    restart: always
-    container_name: itoken_config
-    ports:
-      - 8888:8888
-```
-
 ​	　接下来，编写`itoken-eureka`项目的`docker-compose.yml`文件。
 
 ```yaml
@@ -250,19 +235,9 @@ services:
       - 8762:8761
 ```
 
-​	　然后，先启动`itoken-config`项目，然后再启动`itoken-eureka`项目，启动成功后，访问`8761`端口或者`8762`端口，都可正常访问Eureka。特别的，由于Eureka是集群模式，故端口都是`8761`的。
+​	　最后，启动`itoken-eureka`项目，启动成功后，访问`8761`端口或者`8762`端口，都可正常访问Eureka。特别的，由于Eureka是集群模式，故端口展示的都是`8761`。
 
 ![image-20211130002107774](./images/image-20211130002107774.png)
-
-
-
-### 持续集成与部署
-
-​	　第二步，再以`itoken-dependencies`和`itoken-config`项目为例，尝试着通过`DevOps`的方式，将项目部署到远程服务器上。
-
-
-
-
 
 
 
