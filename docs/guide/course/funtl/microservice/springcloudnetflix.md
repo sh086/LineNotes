@@ -13,10 +13,9 @@ sidebar: auto
 **参考资料：**
 
 - [Spring Cloud版本](https://spring.io/projects/spring-cloud/)
-- [Hystrix属性配置参数](https://github.com/Netflix/Hystrix/wiki/Configuration)
-- [阿波罗配置中心](https://github.com/xwzpp/apollo-1)
+- <a href="../project/itoken-springcloudnetflix.html" target="_blank">Spring Cloud Itoken项目实战</a>
 
-  
+
 
 ## 简介
 
@@ -482,7 +481,7 @@ public class IndexController {
 }
 ```
 
-​	　至此，服务提供者已经配置完成。启动两个`springcloud-service-provider`实例，再次刷新[服务注册中心页面](http://127.0.0.1:8761/)，即可看见服务已经注册成功了。
+​	　至此，服务提供者已经配置完成。[启动](../framework/idea.html#jar部署)两个`springcloud-service-provider`实例，再次刷新[服务注册中心页面](http://127.0.0.1:8761/)，即可看见服务已经注册成功了。
 
 ![image-20211122151645228](./images/image-20211122151645228.png)
 
@@ -796,7 +795,7 @@ This Service Provider port is : 8763
 
 ​	　为了保证其高可用，单个服务通常会**集群部署**。由于网络原因或者自身的原因，服务并不能保证 100% 可用，如果单个服务出现问题，调用这个服务就会出现**线程阻塞**，此时若有大量的请求涌入，`Servlet` 容器的线程资源会被消耗完毕，导致服务瘫痪。
 
-​	　服务与服务之间的依赖性，故障会传播，会对整个微服务系统造成灾难性的严重后果，这就是服务故障的 **“雪崩”** 效应。为了解决这个问题，业界提出了**熔断器模型**。**`Hystrix`** 就是 `Spring Cloud  Netflix`提供的熔断器组件。
+​	　服务与服务之间的依赖性，故障会传播，会对整个微服务系统造成灾难性的严重后果，这就是服务故障的 **“雪崩”** 效应。为了解决这个问题，业界提出了**熔断器模型**。`Hystrix`就是 `Spring Cloud  Netflix`提供的熔断器组件。
 
 ​	　在微服务架构中，一个请求需要调用多个服务是非常常见的，较底层的服务如果出现故障，会导致连锁故障。当对特定的服务的调用的不可用达到一个阀值（Hystrix 是 **5 秒 20 次**） 熔断器将会被打开。熔断器打开后，为了避免连锁故障，通过 `fallback` 方法可以直接返回一个固定值。
 
@@ -969,7 +968,7 @@ public class HystrixDashboardConfiguration {
 }
 ```
 
-​	　至此，`Hystrix Dashboard`仪表盘已经配置完成了。先访问 `http://localhost:8765/hystrix` ，然后，在`cluster`输入`http://localhost:8765/hystrix.stream`，点击 `Monitor Stream`按钮，即可进入监控页面。`Hystrix Dashboard` 界面监控参数：
+​	　至此，`Hystrix Dashboard`仪表盘已经配置完成了。先访问 `http://localhost:8765/hystrix` ，然后，在`cluster`输入`http://localhost:8765/hystrix.stream`，点击 `Monitor Stream`按钮，即可进入监控页面。`Hystrix Dashboard` 界面监控参数详见[这里](https://github.com/Netflix/Hystrix/wiki/Configuration)。
 
 
 
@@ -1330,9 +1329,9 @@ This Service Provider port is : 8762
 
 ## 分布式配置中心
 
-​	　在分布式系统中，由于**服务数量巨多**，为了方便**服务配置文件统一管理**，**实时更新**，所以需要分布式配置中心组件。
+​	　在分布式系统中，由于**服务数量巨多**，为了方便**服务配置文件统一管理**，**实时更新**，所以需要分布式配置中心组件。常见的**分布式配置中心组件**有 `Spring Cloud Config` 和[阿波罗配置中心](https://github.com/xwzpp/apollo-1)。
 
-​	　**分布式配置中心组件** `Spring Cloud Config` ，支持配置服务放在**配置服务的内存中**（即本地），也支持放在**远程 Git 仓库**中。有`Config Server` 和 `Config Client`两个角色。
+​	　`Spring Cloud Config` 支持配置服务放在**配置服务的内存中**（即本地），也支持放在**远程 Git 仓库**中，具有`Config Server` 和 `Config Client`两个角色。
 
 
 
@@ -1414,7 +1413,7 @@ spring:
     name: springcloud-config
   cloud:
     config:
-      label: master # 配置仓库的分支,必须有master为主分支
+      label: master # 配置仓库的分支
       server:
         git:
           # 配置 Git 仓库地址
@@ -1438,7 +1437,7 @@ eureka:
 
 ​	　配置服务器的默认端口为 `8888`，如果修改了默认端口，则`spring.cloud.config.uri`仓库地址必须在`bootstrap.yml`中配置，因为 `bootstrap` 开头的配置文件会被优先加载和配置。
 
-​	　另外，还需要在`GitHub`中新建`spring-cloud-config`项目，然后，切换到`master`分支，新建`respo`目录，将`service-feign`项目中的配置文件按照如下名称上传到项目中。
+​	　另外，还需要在`GitHub`中新建`spring-cloud-config`项目，然后，切换到`master`分支。接着，新建`respo`目录，将`service-feign`项目中的配置文件按照如下名称上传到项目中。
 
 ```shell
 service-feign-dev.yml  # feign测试环境配置，port 为 8765
@@ -1464,6 +1463,8 @@ http://localhost:8888/service-feign-dev/master              # XML格式
 http://localhost:8888/service-feign-dev.yml                 # YAML格式
 http://localhost:8888/master/service-feign-dev.yml          # YAML格式
 ```
+
+​	　注意，若是`GitHub`仓库，`springcloud-config`需要是`public`，且分支必须包含`master`才行；但若是`GitLab`仓库，则不需要这样。
 
 
 
@@ -1517,9 +1518,7 @@ java -jar project.jar --spring.profiles.active=prod
 
 
 
-## 服务追踪
-
-### 服务链路追踪
+## 服务链路追踪
 
 ​	　微服务架对外暴露的一个接口，可能需要很多个服务协同才能完成这个接口功能，如果链路上任何一个服务出现问题或者网络超时，都会形成导致接口调用失败。随着业务的不断扩张，服务之间互相调用会越来越复杂。
 
@@ -1553,7 +1552,7 @@ java -jar project.jar --spring.profiles.active=prod
 
 :::
 
-
+### Zipkin Service
 
 ​	　首先，新建服务链路追踪`springcloud-zipKin`项目。
 
@@ -1673,7 +1672,11 @@ management:
         auto-time-requests: false
 ```
 
-​	　至此，Zipkin服务端已经配置完成。接下来，需要在**所有需要被追踪的项目**（**除了 `dependencies` 项目外都需要被追踪，包括 Eureka Server**） 中增加 `spring-cloud-starter-zipkin` 依赖。
+
+
+### Zipkin Client
+
+​	　首先，需要在**所有需要被追踪的项目**（**除了 `dependencies` 项目外都需要被追踪，包括 Eureka Server**） 中增加 `spring-cloud-starter-zipkin` 依赖。
 
 ```xml
 <dependency>
@@ -1706,11 +1709,15 @@ http://127.0.0.1:8769/api/two/?token=token
 
 
 
-### Spring Boot Admin
+## Spring Boot Admin
 
 ​	　随着开发周期的推移，项目会不断变大，切分出的服务也会越来越多，这时一个个的微服务构成了错综复杂的系统。对于各个微服务系统的健康状态、会话数量、并发数、服务资源、延迟等度量信息的收集就成为了一个挑战。
 
-​	　`Spring Boot Admin` 微服务是监控管理系统，具有 `Spring Boot Admin Server` 和 `Spring Boot Admin Client`两个角色。首先，新建微服务监控管理`springcloud-admin`项目。
+​	　`Spring Boot Admin` 微服务是监控管理系统，具有 `Spring Boot Admin Server` 和 `Spring Boot Admin Client`两个角色。
+
+### Admin Server
+
+​	　首先，新建微服务监控管理`springcloud-admin`项目。
 
 ```xml{21-28}
 <?xml version="1.0" encoding="UTF-8"?>
@@ -1732,7 +1739,7 @@ http://127.0.0.1:8769/api/two/?token=token
     <name>springcloud-admin</name>
 
     <dependencies>
-        <!-- Spring Boot Begin -->
+        <!-- Spring Boot Admin Begin -->
         <dependency>
             <groupId>org.jolokia</groupId>
             <artifactId>jolokia-core</artifactId>
@@ -1741,7 +1748,7 @@ http://127.0.0.1:8769/api/two/?token=token
             <groupId>de.codecentric</groupId>
             <artifactId>spring-boot-admin-starter-server</artifactId>
         </dependency>
-        <!-- Spring Boot End -->
+        <!-- Spring Boot Admin End -->
 
         <!-- Spring Cloud Begin -->
         <dependency>
@@ -1783,7 +1790,7 @@ http://127.0.0.1:8769/api/two/?token=token
 </dependency>
 ```
 
-​	　通过 `@EnableAdminServer` 注解开启 Admin 功能
+​	　通过 `@EnableAdminServer` 注解开启 `SpringCloud Admin Server`功能。
 
 ```java{8}
 import de.codecentric.boot.admin.server.config.EnableAdminServer;
@@ -1813,7 +1820,7 @@ spring:
 server:
   port: 8084
 
-#  Spring Boot Admin Server 的相关配置
+# 对Spring Boot Admin Server进行监控
 management:
   endpoint:
     health:
@@ -1833,11 +1840,14 @@ eureka:
 
 ![image-20211123121245489](./images/image-20211123121245489.png)
 
-​	　至此， `Spring Boot Admin Server`已经配置完成了。接下来，需要在**所有需要被监控的项目**（**除了 `dependencies` 项目外都需要被监控，包括 Eureka Server**） 中增加 `Spring Boot Admin` 相关依赖。
 
-​	　以`springcloud-service-feign`为例，首先，在`springcloud-service-feign`中引入依赖。
+
+### Admin Client
+
+​	　首先，需要在**所有需要被监控的项目**（**除了 `dependencies` 项目外都需要被监控，包括 Eureka Server**） 中增加 `Spring Boot Admin Client ` 相关依赖（`Admin Server `项目已配置监控，无需引入该依赖 ）。以`springcloud-service-feign`为例，首先，在`springcloud-service-feign`中引入依赖。
 
 ```xml
+<!-- Spring Boot Admin Begin -->
 <dependency>
     <groupId>org.jolokia</groupId>
     <artifactId>jolokia-core</artifactId>
@@ -1846,6 +1856,7 @@ eureka:
     <groupId>de.codecentric</groupId>
     <artifactId>spring-boot-admin-starter-client</artifactId>
 </dependency>
+<!-- Spring Boot Admin End -->
 ```
 
 ​	　`Spring Boot Admin Client` 相关依赖包需要托管到`dependencies` 项目中，再次刷新依赖。
@@ -1863,11 +1874,24 @@ eureka:
 ​	　然后，在`application.yml`中新增配置。
 
 ```yaml
+# Spring Boot Admin Server 地址
 spring:
   boot:
     admin:
       client:
         url: http://localhost:8084
+
+#  Spring Boot Admin Server 的相关配置
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        # include: health,info 监控指定数据
+        # include: "*" 监控全部数据，多用于业务应用中
+        include: "*"
 ```
 
 ​	　先启动`springcloud-config`，然后依次启动`springcloud-eureka`、`springcloud-admin`等项目。打开浏览器访问 `http://localhost:8084` 界面显示如下，至此说明监控中心搭建成功。
@@ -1882,8 +1906,8 @@ spring:
 
 ```shell
 @EnableEurekaServer      # 表明这是一个Eureka服务端
-@EnableEurekaClient      # 消费者客户端注册到Eureka
-@EnableDiscoveryClient   # 服务提供者客户端注册到Eureka
+@EnableEurekaClient      # 服务提供者客户端注册到Eureka
+@EnableDiscoveryClient   # 消费者客户端注册到Eureka
 @EnableFeignClients      # 开启Feign功能
 @EnableHystrix           # Ribbon启动熔断器
 @EnableHystrixDashboard  # 开启 Hystrix 仪表盘功能

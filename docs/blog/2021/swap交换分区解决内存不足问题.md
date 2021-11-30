@@ -24,7 +24,7 @@ dd if=/dev/zero of=/mnt/ice.swap bs=1M count=1024
 sudo chmod 600 /mnt/ice.swap
 
 # 将文件设置为交换分区文件
-mkswap /mnt/ice/swap
+mkswap /mnt/ice.swap
 # 启用交换分区文件
 swapon /mnt/ice.swap
 

@@ -3,11 +3,46 @@ sidebar: auto
 ---
 # Git工作流
 
-​	　Git 是一个开源的**分布式版本控制**系统，Git工作流分为**集中式工作流**、**功能分支工作流**、**GitFlow工作流**、**Forking工作流**，前三种都是以中央仓库作为所有开发者的交互中心，而Forking工作流具有私有仓库（开发者拥有）和正式仓库（项目维护者拥有）两种。
+​	　Git工作流分为**集中式工作流**、**功能分支工作流**、**GitFlow工作流**、**Forking工作流**，前三种都是以中央仓库作为所有开发者的交互中心，而Forking工作流具有私有仓库（开发者拥有）和正式仓库（项目维护者拥有）两种。
 
 ​	　集中式工作流，只用到 master 这一个分支，所有修改都提交到master分支上，仅设用于1 ~ 2人的开发团队，否则极易导致代码冲突。
 
 ​	　功能分支工作流，开发者需要**为各个新功能新建一个专门的功能分支来开发**，而不是都提交到 master 分支上。这个隔离不仅可以使得开发者在各自的功能上开发而不互相影响，还保证了master 主分支代码的可靠性，另外，也便于在新功能集成到master 主分支前，用 `Pull Requests` 的方式讨论变更。
+
+
+
+## Git简介
+
+​	　Git 是一个开源的**分布式版本控制**系统，常用的Git命令如下。
+
+```shell
+# 常用Git命令
+git init          # 创建新的 Git 仓库
+git clone [url]   # 拷贝一个 Git 仓库到本地
+git add           # 将该文件添加到缓存
+git status        # 查看在你上次提交之后是否有修改
+
+git diff          # 查看已缓存的改动
+git diff --cached # 查看已缓存的改动
+git diff HEAD     # 查看已缓存的与未缓存的所有改动
+git diff --stat   # 显示摘要
+
+# 设置用户名密码
+git config --global user.name 'yourname'
+git config --global user.email youremail
+
+git commit -m 'update message'  # 将缓存区内容添加到仓库中
+git reset HEAD -- <filename>    # 取消已缓存的内容
+
+# 将远程存储库中的更改合并到当前分支中
+# 等效于 git fetch + git merge
+git pull <远程主机名> <远程分支名>:<本地分支名>
+# 将本地分支的修改，推送到远程主机
+git push <远程主机名> <本地分支名>:<远程分支名>
+
+git tag -a v1.0.0    # 给最新一次提交打上v1.0.0的标签
+git tag              # 查看所有标签
+```
 
 
 
@@ -219,36 +254,4 @@ git merge FETCH_HEAD
 git push origin master
 ```
 
-
-
-## 附录
-
-```shell
-# 常用Git命令
-git init          # 创建新的 Git 仓库
-git clone [url]   # 拷贝一个 Git 仓库到本地
-git add           # 将该文件添加到缓存
-git status        # 查看在你上次提交之后是否有修改
-
-git diff          # 查看已缓存的改动
-git diff --cached # 查看已缓存的改动
-git diff HEAD     # 查看已缓存的与未缓存的所有改动
-git diff --stat   # 显示摘要
-
-# 设置用户名密码
-git config --global user.name 'yourname'
-git config --global user.email youremail
-
-git commit -m 'update message'  # 将缓存区内容添加到仓库中
-git reset HEAD -- <filename>    # 取消已缓存的内容
-
-# 将远程存储库中的更改合并到当前分支中
-# 等效于 git fetch + git merge
-git pull <远程主机名> <远程分支名>:<本地分支名>
-# 将本地分支的修改，推送到远程主机
-git push <远程主机名> <本地分支名>:<远程分支名>
-
-git tag -a v1.0.0    # 给最新一次提交打上v1.0.0的标签
-git tag              # 查看所有标签
-```
 

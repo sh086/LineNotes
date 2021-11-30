@@ -5,6 +5,11 @@ sidebar: auto
 
 ​	　GitLab是一个开源的**项目和代码托管平台**，可通过 Web 界面浏览源代码，**管理缺陷和注释**，以及管理团队对仓库的访问，另外，也非常易于浏览提交过的版本并提供一个文件历史库。
 
+**参考资料：**
+
+- [GitFlow工作流](../topic/gitflow.html)
+- [Gitlab官网](https://gitlab.com/)
+
 
 
 ## 快速开始
@@ -35,7 +40,7 @@ services:
         - /usr/local/docker/gitlab/logs:/var/log/gitlab
 ```
 
-​	　接着，运行启动命令`docker compose up -d`，执行完成后，再访问`http://ip:8080`即可进入GitLab页面，设置完管理员初始密码后，就可通过`root`账号登录了。
+​	　接着，运行启动命令`docker-compose up -d`，执行完成后，再访问`http://ip:8080`即可进入GitLab页面，设置完管理员初始密码后，就可通过`root`账号登录了。
 
 ​	　但是使用时请不要直接通过 root 用户操作，需要先创建用户，然后**通过创建的用户操作**，如果你是管理员还需要为其他开发人员分配账户。
 
@@ -43,7 +48,7 @@ services:
 
 
 
-## GitLab配置
+## 使用GitLab仓库
 
 ### SHH免密登录
 
@@ -104,3 +109,6 @@ transaction-logs
 **/classes/
 ```
 
+
+
+## GitLab Runner

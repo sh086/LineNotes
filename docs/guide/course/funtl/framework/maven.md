@@ -10,6 +10,8 @@ sidebar: auto
 
 ## 快速开始
 
+### Win安装
+
 ::: warning 环境准备
 确保JDK 为1.8 及以上版本，并已设置JAVA_HOME 环境变量
 :::
@@ -42,6 +44,74 @@ Java version: 1.8.0_161, vendor: Oracle Corporation
 Java home: E:\JDK\JDK8\jre
 Default locale: zh_CN, platform encoding: GBK
 OS name: "windows 10", version: "10.0", arch: "amd64", family: "windows"
+```
+
+
+
+### Linux安装
+
+（1）安装JDK
+
+​	　 首先，在[官网](https://www.oracle.com/java/technologies/downloads/#java8)下载安装包`jdk-8u311-linux-x64.tar.gz`，然后上传到Linux上。
+
+```shell
+# 进入安装目录
+cd /usr/local
+# 解压安装包
+tar -zxvf jdk-8u311-linux-x64.tar.gz
+# 重命名
+mv jdk1.8.0_311 jdk8
+# 在 /etc/profile 文件尾部追加
+export JAVA_HOME=/usr/local/jdk8
+export PATH=$JAVA_HOME/bin:$PATH
+# 生效配置
+source /etc/profile
+```
+
+
+
+（2）安装Maven
+
+```shell
+# 进入安装目录
+cd /usr/local
+# 下载maven安装包
+wget https://mirrors.huaweicloud.com/apache/maven/binaries/apache-maven-3.2.2-bin.tar.gz
+# 解压安装包
+tar -zxvf apache-maven-3.2.2-bin.tar.gz
+# 重命名
+mv apache-maven-3.2.2 maven
+# 在 /etc/profile 文件尾部追加
+export MAVEN_HOME=/usr/local/maven
+export PATH=$MAVEN_HOME/bin:$PATH
+# 生效配置
+source /etc/profile
+# 验证是否安装成功
+mvn -v
+```
+
+
+
+（3）修改Maven配置
+
+​	　 首先，在`conf/settings.xml`配置文件中修改镜像地址。
+
+```xml
+<mirror>  
+	<id>alimaven</id>
+	<name>aliyun maven</name>
+	<url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+	<mirrorOf>central</mirrorOf>
+</mirror>
+```
+
+​	　 接着，在`conf/settings.xml`配置文件中修改本地仓库地址。
+
+```shell
+# 首先，新建本地Maven仓库目录
+mkdir -p /usr/local/maven/repo
+# 然后，修改本地仓库地址
+<localRepository>/usr/local/maven/repo</localRepository>
 ```
 
 
@@ -202,4 +272,19 @@ mvn clean              # 调用maven-clean-plugin删除根目录下target目录
 # 站点生命周期
 mvn site               # 生成项目文档
 ```
+
+
+
+## 附录
+
+（1）管理第三方依赖
+
+- 方法一：每个模块单独管理，放在`webapp`的`lib`中。
+- 方法二：[使用maven-install-plugin插件统一管理](../myshop/myshop-ssm.html#手动依赖管理)
+- 方法三：[使用Nexu管理](../microservice/nexus.html)（推荐）
+
+  
+
+（2）生成代码
+- 方式一：[使用tk.mybatis自动生成代码](../microservice/springboot.html#自动完成代码)
 

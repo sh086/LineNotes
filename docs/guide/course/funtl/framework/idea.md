@@ -146,6 +146,6 @@ JRebel							  热部署插件
 
 ![image-20211122125951092](./images/image-20211122125951092.png)
 
-​	　多实例启动后，可以在`Services`中管理。
+​	　多实例启动后，点击菜单栏`Views -> Tool Windows -> Services`，可以在`Services`中管理。
 
 ![image-20211122130400779](./images/image-20211122130400779.png)

@@ -3,6 +3,16 @@ sidebar: auto
 ---
 # 微服务简介
 
+**文档：**
+
+- [微服务从设计到部署](https://docshome.gitbook.io/microservices/)
+- [重构-改善既有代码的设计](http://gdut_yy.gitee.io/doc-refact2/)
+- [Java Cloud With Dubbo](https://github.com/topsale/book-java-cloud-dubbo)
+- 研磨设计模式
+- 架构即未来
+
+
+
 ## 微服务模式
 
 ### 走进单体地狱

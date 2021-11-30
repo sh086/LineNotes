@@ -63,13 +63,9 @@ curl -L https://raw.githubusercontent.com/docker/compose/1.8.0\
 
 
 
-docker rm $(docker ps -aq)
-
-docker rmi $(docker image ls -q)
-
 ### Hello World
 
-（1）新建文件夹，在该目录中编写 `app.py` 文件
+1、新建文件夹，在该目录中编写 `app.py` 文件
 
 ```python
 from flask import Flask
@@ -81,8 +77,8 @@ redis = Redis(host='redis', port=6379)
 
 @app.route('/')
 def hello():
-    count = redis.incr('hits')
-    return 'Hello World! 该页面已被 {} 访问 {} 次。\n'.format(socket.gethostname(),count)
+   count = redis.incr('hits')
+   return 'Hello World! 该页面已被 {} 访问 {} 次。\n'.format(socket.gethostname(),count)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0",port=80, debug=True)
@@ -90,7 +86,11 @@ if __name__ == "__main__":
 
 
 
-（2）编写 `Dockerfile` 文件
+2、编写 `docker-compose.yml` 文件
+
+（1）通过`build`构建镜像
+
+​	　 首先，编写`Dockerfile`文件。
 
 ```dockerfile
 FROM python:3.6-alpine
@@ -101,11 +101,9 @@ EXPOSE 80
 CMD ["python", "app.py"]
 ```
 
+​	　 然后，编写 `docker-compose.yml` 文件。
 
-
-（3）编写 `docker-compose.yml` 文件
-
-```yaml
+```yaml{4}
 version: '3'
 services:
   web:
@@ -116,9 +114,24 @@ services:
     image: "redis:alpine"
 ```
 
+（2）通过`image`启动镜像
+
+​	　首先，通过`docker build -t python-hello .` 构建镜像，然后在 `docker-compose.yml` 中就直接使用该镜像。
+
+```yaml
+version: '3'
+services:
+  web:
+    image: python-hello
+    ports:
+     - "8080:80"
+  redis:
+    image: "redis:alpine"
+```
 
 
-（3）运行 compose 项目
+
+3、运行 compose 项目
 
 ```shell
 # 后台启动
@@ -370,7 +383,17 @@ Hello World! 该页面已被 3751442cefd4 访问 12 次。
 
 ### 常用指令说明
 
-（1）镜像构建指令
+（1）version指令
+
+​	　version指令，指定 compose 文件的版本。compose 文件格式有3个版本,分别为`1`、 `2.x` 和 `3.x`。目前主流的为 `3.x` 其支持 `docker 1.13.0` 及其以上的版本。
+
+```yaml
+version: '3.1'           # 指定 compose 文件的版本
+```
+
+
+
+（2）镜像构建指令
 
 ​	　image 指令，用于指定服务的镜像名称或镜像 ID。如果镜像在本地不存在，`Compose` 将会尝试拉取这个镜像。
 
@@ -401,7 +424,7 @@ webapp:
 
 
 
-（2）端口指令
+（3）端口指令
 
 ​	　ports指令，用于**暴露容器端口给宿主机**。 `YAML` 会自动解析 `xx:yy` 这种数字格式为 `60 进制`，若容器端口小于 60 并且没放到引号里，可能会得到错误结果。为避免出现这种问题，建议**数字串都采用引号包括起来的字符串格式**。
 
@@ -422,7 +445,7 @@ expose:
 
 
 
-（3）volumes指令
+（4）volumes指令
 
 ​	　volumes指令，用于指定数据卷所挂载路径设置，支持相对路径。
 
@@ -435,7 +458,27 @@ volumes:
 
 
 
-（4）环境变量指令
+（5）depends_on指令
+
+​	　depends_on 指令，用于定义容器启动顺序。
+
+```yaml
+services:
+  web:
+    build: .
+    # redis 和 db 服务在 web 启动前启动
+    depends_on:
+      - db      
+      - redis  
+ redis:
+   image: redis
+ db:
+   image: postgres
+```
+
+
+
+（6）环境变量指令
 
 ​	　environment指令，用于设置环境变量。只给定名称的变量会自动获取运行 Compose 主机上对应变量的值，可以用来防止泄露不必要的数据。
 
@@ -470,7 +513,26 @@ PROG_ENV=development
 
 
 
-（5）command指令
+（7）deploy指令
+
+​	　deploy指令，指定与部署和运行服务相关的配置。
+
+```yaml
+redis:
+    image: redis:alpine
+    deploy:
+     resources:             # 资源限制
+        limits:             # 设置容器的资源限制
+           cpus: '0.5'      # 设置该容器最多只能使用 50% 的 CPU 
+           memory: 50M      # 设置该容器最多只能使用 50M 的内存空间 
+        reservations:       # 设置为容器预留的系统资源(随时可用)
+           cpus: '0.2'      # 为该容器保留 20% 的 CPU
+           memory: 20M     # 为该容器保留 20M 的内存空间
+```
+
+
+
+（7）command指令
 
 ​	　command指令，用于覆盖容器启动后默认执行的命令。
 
@@ -480,7 +542,7 @@ command: echo "hello world"
 
 
 
-（6）logging指令
+（8）logging指令
 
 ​	　logging指令，用于配置日志选项，目前支持三种日志驱动类型。
 
@@ -635,5 +697,4 @@ services:
     volumes:
       - ./data:/var/lib/mysql
 ```
-
 

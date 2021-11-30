@@ -235,9 +235,9 @@ docker image rm $(docker image ls -q -f before=mongo:3.2)
 
 # 删除一个镜像
 docker rmi [image ID or NAMES]
-# 删除所有镜像
+# 删除所有没有容器运行的镜像
 docker rmi $(docker images -q)
-# 强制删除所有镜像
+# 强制删除所有没有容器运行的镜像
 docker rmi -r $(docker images -q)
 # 删除所有虚悬镜像
 docker rmi $(docker images -q -f dangling=true)
@@ -261,8 +261,10 @@ docker image ls -f dangling=true
 REPOSITORY     TAG          IMAGE ID            CREATED             SIZE
 <none>         <none>       00285df0df87        5 days ago          342 MB
 
-# 清理虚悬镜像
+# 清理虚悬镜像（会有交互）
 docker image prune
+# 删除所有虚悬镜像
+docker rmi $(docker images -q -f dangling=true)
 ```
 
 
@@ -679,7 +681,7 @@ docker logs [container ID or NAMES]
 
 # 删除容器
 docker rm [container ID or NAMES]
-# 删除所有容器 
+# 删除所有未正在运行的容器 
 docker rm $(docker ps -a -q)
 ```
 
@@ -749,8 +751,14 @@ docker login -u 用户名 -p 密码
 # 注销
 docker logout
 
+# 标记本地镜像并指向目标仓库
+# 方式一：在构建的时候标记 (建议) 
+docker build -t username/ubuntu .
+
+# 方式二：通过tag标记已有版本号
 # 语法格式
 docker tag IMAGE[:TAG] [REGISTRY_HOST[:REGISTRY_PORT]/]REPOSITORY[:TAG]
+# ip:port/ubuntu 默认最新版 <==>  ip:port/ubuntu:latest 
 # 将镜像 ubuntu:17.10 标记为  username/ubuntu:17.10
 docker tag ubuntu:17.10 username/ubuntu:17.10
 
@@ -784,13 +792,16 @@ docker run -d \
     -p 5000:5000 \
     -v /opt/data/registry:/var/lib/registry \
     registry
-    
+
 # 标记本地镜像并指向目标仓库
-# 标记版本号：ip:port/image_name:tag
-docker tag ubuntu 127.0.0.1:5000/ubuntu:latest
+# 方式一：在构建的时候标记 (建议) 
+docker build -t 127.0.0.1:5000/ubuntu .
+# 方式二：通过tag标记已有版本号
+# ip:port/ubuntu 默认最新版 <==>  ip:port/ubuntu:latest 
+docker tag ubuntu 127.0.0.1:5000/ubuntu
 
 # 上传标记的镜像
-docker push 127.0.0.1:5000/ubuntu:latest
+docker push 127.0.0.1:5000/ubuntu
 
 # 查看仓库中的镜像
 curl 127.0.0.1:5000/v2/_catalog
@@ -798,7 +809,7 @@ curl 127.0.0.1:5000/v2/_catalog
 curl 127.0.0.1:5000/v2/ubuntu/tags/list
 
 # 拉取镜像
-docker pull 127.0.0.1:5000/ubuntu:latest
+docker pull 127.0.0.1:5000/ubuntu
 ```
 
 ​	　若内网地址作为私有仓库地址（非127.0.0.1本地地址），Docker 是默认不允许以非 `HTTPS` 方式推送镜像，可以通过 Docker 的配置选项来取消这个限制。
@@ -837,11 +848,11 @@ sudo service docker restart
 （1）JAR包
 
 ```dockerfile
-FROM openjdk:8
+FROM openjdk:8-jre
 WORKDIR /app
 COPY project-1.0.0.jar .
+CMD java -jar project-1.0.0.jar
 EXPOSE 8080
-CMD java -jar -Dserver.port=8080 ./project-1.0.0.jar
 ```
 
 
@@ -856,8 +867,8 @@ COPY project-1.0.0.war .
 RUN mkdir ROOT \
 	&& unzip -o project-1.0.0.war -d api \
 	&& rm -rf project-1.0.0.war
-EXPOSE 8080
 CMD ["catalina.sh","run"]
+EXPOSE 8080
 ```
 
 

@@ -25,7 +25,7 @@ const funtl = [
         collapsable: false,
         children: [
             ['myshop/','MyShop实战'],
-            ['itoken/','微服务实战之iToken'],
+            ['project/itoken-springcloudnetflix.md','微服务实战之iToken'],
         ]
     },
 ]

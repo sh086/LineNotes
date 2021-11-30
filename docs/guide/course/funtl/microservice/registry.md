@@ -7,6 +7,13 @@ sidebar: auto
 
 
 
+**参考资料：**
+
+- <a href="./docker.html#docker仓库" target="_blank">Docker仓库笔记</a>
+- [Docker Hub官网](https://hub.docker.com/)
+
+
+
 ## 快速开始
 
 ​	　通过Docker 来可以安装和运行 Registry，安装成功后就可以使用 docker 命令行工具对 registry 做各种操作了。建议也同步安装 `Docker Registry WebUI`。首先，编辑`docker-compose.yml`文件。
@@ -38,7 +45,7 @@ services:
       - ENV_DOCKER_REGISTRY_PORT=5000           # Registry部署PORT
 ```
 
-​	　Docker Registry私服支持**浏览器访问**和**终端访问**。
+​	　接着，运行启动命令`docker-compose up -d`启动。Docker Registry私服支持**浏览器访问**和**终端访问**。
 
 ```shell
 # 浏览器访问Registry
@@ -88,20 +95,32 @@ Insecure Registries:
 
 ​	　以 ubuntu 为例，将测试镜像上传到Docker私服。
 
+（1）上传自定义镜像
+
 ```shell
 # 标记本地镜像并指向目标仓库
-# 标记版本号：ip:port/image_name:tag
-docker tag ubuntu 192.168.75.133:5000/ubuntu:latest
+# 方式一：在构建的时候标记 (建议) 
+docker build -t 192.168.75.133:5000/ubuntu .
+
+# 方式二：通过tag标记已有版本号
+# ip:port/ubuntu 默认最新版 <==>  ip:port/ubuntu:latest 
+docker tag ubuntu 192.168.75.133:5000/ubuntu
 
 # 上传标记的镜像
-docker push 192.168.75.133:5000/ubuntu:latest
+docker push 192.168.75.133:5000/ubuntu
+```
 
+
+
+（2）拉取自定义镜像
+
+```shell
 # 查看仓库中的镜像
 curl 192.168.75.133:5000/v2/_catalog
 # 查看指定镜像
 curl 192.168.75.133:5000/v2/ubuntu/tags/list
 
 # 拉取镜像
-docker pull 192.168.75.133:5000/ubuntu:latest
+docker pull 192.168.75.133:5000/ubuntu
 ```
 
