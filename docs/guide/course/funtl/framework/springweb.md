@@ -281,7 +281,10 @@ private Student student;
 * 方式一：使用 @Value 注解完成属性注入时，类中无需 setter
 */
 @Value("passWd")
-private String passWd;
+private String passWd; //注入字符串passWd
+
+@Value("${spring.profiles.active}")
+private String active; // 注入YML配置中的值
 
 /**
 * 方式二：若属性有 setter，则也可将其加到 setter 上

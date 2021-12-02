@@ -2,7 +2,7 @@
 sidebar: auto
 ---
 
-# CI/CD
+# GitLab CI
 
 ​	　**持续集成**（`Continuous integration`，简称 `CI`）是指频繁地（一天多次）将代码集成到主干。开发人员提交了新代码之后，**自动进行构建、（单元）测试**，这样可以**快速发现错误**，并**防止分支大幅偏离主干**。`GitLab Runner`提供了持续集成的解决方案（开发使用）。
 
@@ -84,7 +84,43 @@ sidebar: auto
 
 
 
-## GitLab CI
+### 流水线与作业
+
+​	　一次 `Pipeline` 相当于**一次构建任务**，里面可以包含多个流程，如安装依赖、运行测试、编译、部署测试服务器、部署生产服务器等流程。任何提交或者 Merge Request 的合并都可以触发 Pipeline。
+
+```text
++------------------+  trigger  +----------------+
+|   Commit / MR    +---------->+    Pipeline    |
++------------------+           +----------------+
+```
+
+​	　`Stages` 表示**构建阶段**，一次 Pipeline 可以定义多个 Stages，**所有 Stages 会按照顺序运行**，即当一个 Stage 完成后，下一个 Stage 才会开始；只有当所有 Stages 完成后，该构建任务 (Pipeline) 才会成功；如果任何一个 Stage 失败，那么后面的 Stages 不会执行，该构建任务 (Pipeline) 失败。
+
+```text
++--------------------------------------------------------+
+|  Pipeline                                              |
+|                                                        |
+|  +-----------+     +------------+      +------------+  |
+|  |  Stage 1  |---->|   Stage 2  |----->|   Stage 3  |  |
+|  +-----------+     +------------+      +------------+  |
++--------------------------------------------------------+
+```
+
+​	　`Jobs` 表示构建工作，表示**某个 Stage 里面执行的工作**。我们可以在 Stages 里面定义多个 Jobs，**同 Stage 中的 Jobs 会并行执行**；相同 Stage 中的 Jobs 都执行成功时，该 Stage 才会成功；如果任何一个 Job 失败，那么该 Stage 失败，即该构建任务 (Pipeline) 失败。
+
+```text
++------------------------------------------+
+|  Stage 1                                 |
+|                                          |
+|  +---------+  +---------+  +---------+   |
+|  |  Job 1  |  |  Job 2  |  |  Job 3  |   |
+|  +---------+  +---------+  +---------+   |
++------------------------------------------+
+```
+
+
+
+## 快速开始
 
 ​	　`GitLab CI` 用于管理各个项目的构建状态；`GitLab Runner`用于执行持续构建，可以安装到不同的机器上，使得构建任务运行期间并不会影响到 GitLab 的性能。
 
@@ -92,7 +128,7 @@ sidebar: auto
 
 ### GitLab Runnber
 
-​	　使用Docker安装`GitLab Runnber`。首先，按照如下结构新建文件及目录。
+​	　在此，我们使用Docker安装`GitLab Runnber`。首先，按照如下结构新建文件及目录。
 
 ```shell
 --/usr/local/docker
@@ -228,7 +264,23 @@ shell
 
 ![image-20211201023948903](./images/image-20211201023948903.png)
 
+​	　进入`gitlab-ci`容器后，还可以运行如下命令，查询相关信息。
 
+```shell
+# 删除注册信息
+gitlab-ci-multi-runner unregister --name "名称"
+# 查看注册列表
+gitlab-ci-multi-runner list
+```
+
+​	　另外，为保证能够正常集成，可能还需要新增`ssh密钥`、将`gitlab-runner` 账户加入 `root 组`等操作。
+
+```shell
+# 安装完 GitLab Runner 后系统会增加一个 gitlab-runner 账户，需要将它加进 root 组
+gpasswd -a gitlab-runner root
+# 新增ssh密钥
+ssh-keygen -t rsa -C "你在 GitLab 上的邮箱地址"
+```
 
 
 
@@ -250,73 +302,6 @@ test:
 ​	　将测试脚本提交到GitLab，稍等片刻，即可查看运行结果。每次触发`CI`的时候，`GitLab Runner`都会拉取最新代码到项目部署目录下。
 
 ![image-20211201062443568](./images/image-20211201062443568.png)
-
-
-
-::: details gitlab-ci模板脚本
-
-```yaml
-stages:
-  - install_deps
-  - test
-  - build
-  - deploy_test
-  - deploy_production
-
-cache:
-  key: ${CI_BUILD_REF_NAME}
-  paths:
-    - node_modules/
-    - dist/
-
-# 安装依赖
-install_deps:
-  stage: install_deps
-  only:
-    - develop
-    - master
-  script:
-    - npm install
-
-# 运行测试用例
-test:
-  stage: test
-  only:
-    - develop
-    - master
-  script:
-    - npm run test
-
-# 编译
-build:
-  stage: build
-  only:
-    - develop
-    - master
-  script:
-    - npm run clean
-    - npm run build:client
-    - npm run build:server
-
-# 部署测试服务器
-deploy_test:
-  stage: deploy_test
-  only:
-    - develop
-  script:
-    - pm2 delete app || true
-    - pm2 start app.js --name app
-
-# 部署生产服务器
-deploy_production:
-  stage: deploy_production
-  only:
-    - master
-  script:
-    - bash scripts/deploy/deploy.sh
-```
-
-::: 
 
 
 
@@ -388,7 +373,7 @@ ENV APP_VERSION 1.0.0-SNAPSHOT
 
 RUN mkdir /app
 COPY itoken-config-$APP_VERSION.jar /app/app.jar
-ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "/app/app.jar", "--spring.profiles.active=prod"]
+ENTRYPOINT ["java", "-jar", "/app/app.jar", "--spring.profiles.active=prod"]
 EXPOSE 8888
 ```
 
@@ -434,20 +419,10 @@ services:
     networks:
       - config_network
 
-# 需要指定默认网络，否则
+# 需要指定默认网络，否则在down时，会提示错误
 networks:
   config_network:
 ```
-
-
-
-## Jenkins
-
-### Docker安装
-
-
-
-### Jenkins实践
 
 
 
@@ -460,5 +435,75 @@ networks:
 curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-ci-multi-runner/script.deb.sh | sudo bash
 sudo apt-get update
 sudo apt-get install gitlab-ci-multi-runner
+```
+
+
+
+### gitlab-ci模板
+
+​	　模板中的配置把把一次 `Pipeline` 分成五个阶段，分别是安装依赖(install_deps)、运行测试(test)、编译(build)、部署测试服务器(deploy_test)、部署生产服务器(deploy_production)。
+
+```yaml
+# 定义构建阶段，这里只有一个阶段 deploy
+stages:
+  - install_deps
+  - test
+  - build
+  - deploy_test
+  - deploy_production
+
+cache:
+  key: ${CI_BUILD_REF_NAME}
+  paths:
+    - node_modules/
+    - dist/
+
+# 安装依赖
+install_deps:
+  stage: install_deps
+  # 只有当 develop 分支有提交的时候才会触发相关的 Jobs
+  only:
+    - develop
+    - master
+  # 需要执行的 shell 脚本
+  script:
+    - npm install
+
+# 运行测试用例
+test:
+  stage: test
+  only:
+    - develop
+    - master
+  script:
+    - npm run test
+
+# 编译
+build:
+  stage: build
+  only:
+    - develop
+    - master
+  script:
+    - npm run clean
+    - npm run build:client
+    - npm run build:server
+
+# 部署测试服务器
+deploy_test:
+  stage: deploy_test
+  only:
+    - develop
+  script:
+    - pm2 delete app || true
+    - pm2 start app.js --name app
+
+# 部署生产服务器
+deploy_production:
+  stage: deploy_production
+  only:
+    - master
+  script:
+    - bash scripts/deploy/deploy.sh
 ```
 

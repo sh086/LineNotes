@@ -208,6 +208,17 @@ sonatype/nexus3
 
 
 
+（3）访问SonatypeOutreach超时
+
+```shell
+com.sonatype.nexus.plugins.outreach.internal.outreach.SonatypeOutreach 
+- Could not download page bundle javax.net.ssl.SSLException: Read timed out
+```
+
+​	　登录账号，打开 `System` --> `Capabilities` ，将 `Outreach:Management` 禁用即可。
+
+
+
 ### POM配置
 
 ​	　本地运行，只需将仓库依赖都添加到`dependencies`项目即可。

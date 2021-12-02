@@ -22,22 +22,25 @@ sidebarDepth: 0
         <td rowspan="3" align="center"><b>云计算服务</b></td>    
         <td rowspan="1">Iass</td>
         <td align="center"><a href="./linux.html" target="_blank">Linux</a></td> 
-		<td align="center"><a href="./docker.html" target="_blank">Docker</a></td>
-        <td colspan="6" align="center">
+		<td  colspan="2" align="center"><a href="./docker.html" target="_blank">Docker</a></td>
+        <td colspan="5" align="center">
             <a href="./compose.html" target="_blank">Docke Compose</a>
         </td>
     </tr>
     <tr>
     	<td>PaaS</td>
         <td align="center"><a href="./gitlab.html" target="_blank">GitLab</a></td>
-        <td  colspan="2" align="center">
+        <td  colspan="1" align="center">
            <a href="./nexus.html" target="_blank">Nexus</a></td>  
         </td> 
-        <td  colspan="2" align="center">
+        <td  colspan="1" align="center">
            <a href="./registry.html" target="_blank">Registry</a></td> 
         </td> 
-        <td  colspan="3" align="center">
-           <a href="./cicd.html" target="_blank">CI/CD</a></td>
+        <td  colspan="1" align="center">
+           <a href="./jenkins.html" target="_blank">Jenkins</a></td>
+        </td>
+        <td  colspan="4" align="center">
+           <a href="./cicd.html" target="_blank">GitLab CI</a></td>
         </td>
     </tr>
     <tr>
@@ -52,7 +55,7 @@ sidebarDepth: 0
     </tr>
     <tr>
     	<td rowspan="6"  align="center"><b>微服务1.0</b></td>
-    	<td rowspan="3">主流</td> 
+    	<td rowspan="3">Main</td> 
     	<td rowspan="4" align="center">
     	    <a href="./springboot.html" target="_blank">SpringBoot</a>
     	</td>
@@ -77,7 +80,7 @@ sidebarDepth: 0
     	</td>
     </tr>
     <tr>
-    	<td>非主流</td> 
+    	<td >Non</td> 
     	<td colspan="6" align="center">
     	    <a href="./springcloudalibabadubbo.html" target="_blank">Spring Cloud Alibaba Dubbo</a>
     	</td>

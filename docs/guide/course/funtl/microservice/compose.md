@@ -620,7 +620,7 @@ y|Y|yes|Yes|YES|n|N|no|No|NO|true|True|TRUE|false|False|FALSE|on|On|ON|off|Off|O
 
 ## Compose实战
 
-### SpringBoot模板
+### SpringBoot应用
 
 ```yml
 version: '3.1'
@@ -633,6 +633,9 @@ services:
       - 8080:8080
     environment:
       TZ: Asia/Shanghai
+      # 设定spring.profiles.active，前提是使用ENTRYPOINTz
+      # SPRING_PROFILES_ACTIVE: dev
+  
   nginx:
     image: nginx
     container_name: nginx
@@ -649,7 +652,7 @@ services:
 
 
 
-### Tomcat模板
+### Tomcat应用
 
 ```yml
 version: '3.1'
@@ -668,7 +671,7 @@ services:
 
 
 
-### MySQL模板
+### MySQL应用
 
 （1）部署MySQL5
 

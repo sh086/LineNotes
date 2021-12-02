@@ -527,7 +527,7 @@ ENTRYPOINT ["dockerize", "-timeout", "5m", "-wait", "tcp://192.168.75.128:8888",
 ​	　场景二，处理应用运行前和容器 `CMD` 无关的预处理工作。
 
 ```dockerfile
-# 脚本会根据传入的参数执行不同的操作
+# 执行自定义脚本，脚本可以根据传入的参数执行不同的操作
 ENTRYPOINT ["docker-entrypoint.sh"]
 # 传入参数id
 docker run -it redis id
@@ -889,24 +889,71 @@ sudo service docker restart
 
 ​	　可以通过Dockerfile将**项目定制为镜像**的方式进行项目部署。但是，这里建议采用**数据卷**的方式来运行项目。
 
-### 项目镜像定制
+### SpringBoot应用
 
-（1）JAR包
+（1）使用`ENTRYPOINT`作为启动命令（推荐）
+
+​	　使用`ENTRYPOINT`作为启动命令，可以在`docker run`命令中**动态设定**启动参数。
+
+```dockerfile
+FROM openjdk:8-jre
+WORKDIR /app
+COPY project-1.0.0.jar .
+# 不建议写死
+# ENTRYPOINT ["java", "-jar", "project-1.0.0.jar", "--spring.profiles.active=dev"]
+# ENTRYPOINT ["java", "-jar","-Dspring.profiles.active=dev" ,"project-1.0.0.jar"]
+ENTRYPOINT ["java", "-jar", "project-1.0.0.jar"]
+EXPOSE 8080
+```
+
+​	　执行构建命令后，执行启动命令如下，`spring.profiles.active`可动态传入。
+
+```shell{5,13}
+# 写法一，传递环境变量，就是系统的环境变量
+docker run --name App -p 8080:8080 \
+	--restart always  \
+	-e TZ=Asia/Shanghai  \
+	-e spring.profiles.active=dev
+	-d App
+
+# 写法二，追加的参数
+docker run --name App -p 8080:8080 \
+	--restart always  \
+	-e TZ=Asia/Shanghai  \
+	-d App \
+	--spring.profiles.active=dev
+```
+
+
+
+（2）使用CMD作为启动命令
+
+​	　使用`CMD`作为启动命令，只能在`Dockerfile`中设置启动时的**固定参数**。
 
 ```dockerfile
 FROM openjdk:8-jre
 WORKDIR /app
 COPY project-1.0.0.jar .
 # CMD java -jar -Dspring.profiles.active=dev project-1.0.0.jar
-# CMD java -jar project-1.0.0.jar --spring.profiles.active=dev
-# ENTRYPOINT ["java", "-jar", "project-1.0.0.jar", "--spring.profiles.active=prod"]
-CMD java -jar project-1.0.0.jar
+CMD java -jar project-1.0.0.jar --spring.profiles.active=dev
 EXPOSE 8080
+```
+
+​	　执行构建命令后，执行启动命令如下。
+
+```shell
+docker run --name App \
+    -p 8080:8080 \
+	--restart always  \
+	-e TZ=Asia/Shanghai  \ 
+	-d App
 ```
 
 
 
-（2）WAR包
+### Tomcat应用
+
+​	　使用`CMD`作为启动命令，可以通过`Tomcat`设置`JAVA_OPTS`动态传入参数，也可直接修改YML配置修改参数。但是，仍推荐使用`ENTRYPOINT`作为启动命令。
 
 ```dockerfile
 FROM tomcat:8.5.32
@@ -920,11 +967,7 @@ CMD ["catalina.sh","run"]
 EXPOSE 8080
 ```
 
-
-
-### 启动应用
-
-（1）启动Tomcat
+​	　执行启动命令如下。
 
 ```shell
 docker run --name tomcat \
@@ -934,14 +977,13 @@ docker run --name tomcat \
 	# 将当前目录下的test挂载到/usr/local/tomcat/webapps/test
 	-v $PWD/test:/usr/local/tomcat/webapps/test \
 	# -e JAVA_OPTS='-Denable.scheduled=true' \
-	# 设定生效的profiles
-	-e JAVA_OPTS='-Dspring.profiles.active=dev' \
+	# -e JAVA_OPTS='-Dspring.profiles.active=dev' \
 	-d tomcat
 ```
 
 
 
-（2）启动Mysql
+### Mysql应用
 
 ```shell
 docker run -p 3306:3306 --name mysql \
@@ -956,7 +998,9 @@ docker run -p 3306:3306 --name mysql \
 
 
 
-（3）传输文件
+## 附录
+
+（1）传输文件
 
 ```shell
 # 从容器复制文件到主机
