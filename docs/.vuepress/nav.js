@@ -5,6 +5,7 @@ module.exports = [
     // {text: 'Smart', link: ''},
     {text: 'Media', link: '/media/'},
     {text: 'Quantity', link: '/quantity/'},
-    {text: 'Project', link: '/project/'},
+    // {text: 'Project', link: '/project/'},
+    {text: 'Group', link: '/project/'},
     // {text: 'WorkFlow', link: '/workflow/'}
 ];

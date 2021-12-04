@@ -6,7 +6,7 @@ module.exports = {
     port: '8001',
     base:'/college/',
     themeConfig: {
-        repo: 'https://github.com/sh086/college',
+        repo: 'https://github.com/sh086/',
         nav: nav,//导航栏
         sidebar: sidebar,//自动生产导航栏
         sidebarDepth: 2,//sidebar的最大深度

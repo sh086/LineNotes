@@ -79,107 +79,9 @@ public class IndexController {
 
 
 
-## Application
+## SpringBoot注解
 
-### YML配置
-
-​	　 `application.properties` 或 `application.yml`，是SpringBoot的全局的配置文件，详细用法参见[这里](https://docs.spring.io/spring-boot/docs/2.0.2.RELEASE/reference/html/common-application-properties.html)。
-
-```yaml
-server:
-  port: 9090                # 默认的启动端口为 8080 修改为 9090
-  servlet:
-    context-path: /boot     # 默认的访问路径为  /   修改为 boot
-
-# 默认情况下，Spring Boot 使用 Logback 作为日志框架
-logging:
-  file:
-    name: ./logs/log..log
-  level:
-    root: info
-    org.mybatis: info
-    org.springframework: info
-    org.springframework.jdbc: info
-    com.shooter.funtl.springboot: debug
-```
-
-
-
-### POM文件
-
-​	　 `pom.xml`是Spring Boot的项目管理和依赖配置文件。
-
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>com.shooter.funtl</groupId>
-    <artifactId>springboot</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>springboot</name>
-    <description>Demo project for Spring Boot</description>
-
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.2.6.RELEASE</version>
-        <relativePath/> <!-- lookup parent from repository -->
-    </parent>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>1.8</java.version>
-    </properties>
-
-    <dependencies>
-        <!--SpringBoot START-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <!--SpringBoot END-->
-        
-         <!--Common Utils END-->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
-         <!--Common Utils END-->
-
-    </dependencies>
-
-    <build>
-        <!-- 资源文件配置 -->
-        <!-- 默认Jar打包时不会将资源文件打包的 -->
-        <resources>
-            <resource>
-                <directory>src/main/java</directory>
-                <excludes>
-                    <exclude>**/*.java</exclude>
-                </excludes>
-            </resource>
-            <resource>
-                <directory>src/main/resources</directory>
-            </resource>
-        </resources>
-    </build>
-</project>
-```
-
-
-
-### SpringBoot注解
-
-（1）@SpringBootApplication注解
+### @SpringBootApplication
 
 ```java
 // 数据源的自动配置
@@ -188,7 +90,25 @@ logging:
 
 
 
-### SpringBootTest
+### @Configuration
+
+​	　@Configuration用于定义配置类，定义的配置类可以替换xml文件，一般和@Bean注解联合使用。
+
+```java
+// @Configuration注解主要标注在某个类上，相当于xml配置文件中的<beans>
+@Configuration
+public class MockConfiguration{
+    // @Bean注解主要标注在某个方法上，相当于xml配置文件中的<bean>
+ 	@Bean
+ 	public MockService mockService(){
+    	return new MockServiceImpl();
+  	}
+}
+```
+
+
+
+### @SpringBootTest
 
 ​	　在`HttpTests`中新建单元测试用例，用于测试 `http://localhost:8080`是否可以正常访问。
 
@@ -210,44 +130,6 @@ public class HttpTests {
         assertThat(response.getBody(), equalTo("Hello Spring Boot"));
     }
 }
-```
-
-
-
-### 自定义 Banner
-
-​	　可以在`src/main/resources` 目录下新建一个 `banner.txt`，来自定义Spring Boot默认的启动图案。
-
-```shell
-# 常用属性设置
-${AnsiColor.BRIGHT_RED}           # 设置控制台中输出内容的颜色
-${spring-boot.version}            # Spring Boot 的版本号,如2.2.6.RELEASE
-${spring-boot.formatted-version}  # 格式化后的 ${spring-boot.version}
-${application.version}            # 用来获取 MANIFEST.MF 文件中的版本号
-${application.formatted-version}  # 格式化后的 ${application.version} 版本信息
-
-////////////////////////////////////////////////////////////////////
-//                          _ooOoo_                               //
-//                         o8888888o                              //
-//                         88" . "88                              //
-//                         (| ^_^ |)                              //
-//                         O\  =  /O                              //
-//                      ____/`---'\____                           //
-//                    .'  \\|     |//  `.                         //
-//                   /  \\|||  :  |||//  \                        //
-//                  /  _||||| -:- |||||-  \                       //
-//                  |   | \\\  -  /// |   |                       //
-//                  | \_|  ''\---/''  |   |                       //
-//                  \  .-\__  `-`  ___/-. /                       //
-//                ___`. .'  /--.--\  `. . ___                     //
-//              ."" '<  `.___\_<|>_/___.'  >'"".                  //
-//            | | :  `- \`.;`\ _ /`;.`/ - ` : | |                 //
-//            \  \ `-.   \_ __\ /__ _/   .-` /  /                 //
-//      ========`-.____`-.___\_____/___.-`____.-'========         //
-//                           `=---='                              //
-//      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        //
-//            佛祖保佑       永不宕机     永无BUG                  //
-////////////////////////////////////////////////////////////////////
 ```
 
 
@@ -705,6 +587,8 @@ public class MyBatisTests {
 
 ### pom.xml
 
+​	　 `pom.xml`是Spring Boot的项目管理和依赖配置文件。
+
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" 
@@ -779,11 +663,13 @@ public class MyBatisTests {
         </dependency>
         <!--Mybatis END-->
 
+        <!--Utils START-->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
+        <!--Utils END-->
 
     </dependencies>
 
@@ -848,13 +734,15 @@ public class MyBatisTests {
 
 ### application.yml
 
+​	　SpringBoot的**全局的配置文件**有`bootstrap`和`application`。**bootstrap会早于application启动**，在Spring Cloud中多使用bootstrap配置，配置时常用的是`YML`语法，参见[这里](https://docs.spring.io/spring-boot/docs/2.0.2.RELEASE/reference/html/common-application-properties.html)。
+
 ```yaml
-
 server:
-  port: 8080
+  port: 8080                # 默认的启动端口为 8080 修改为 9090
   servlet:
-    context-path: /
+    context-path: /         # 默认的访问路径为  /
 
+# 默认情况下，Spring Boot 使用 Logback 作为日志框架
 logging:
   file:
     name: ./logs/log..log
@@ -888,5 +776,43 @@ spring:
 mybatis:
   type-aliases-package: com.shooter.funtl.springboot.entity
   mapper-locations: classpath:mapper/*.xml
+```
+
+
+
+### banner
+
+​	　可以在`src/main/resources` 目录下新建一个 `banner.txt`，来自定义`Spring Boot`默认的启动图案。
+
+```shell
+# 常用属性设置
+${AnsiColor.BRIGHT_RED}           # 设置控制台中输出内容的颜色
+${spring-boot.version}            # Spring Boot 的版本号,如2.2.6.RELEASE
+${spring-boot.formatted-version}  # 格式化后的 ${spring-boot.version}
+${application.version}            # 用来获取 MANIFEST.MF 文件中的版本号
+${application.formatted-version}  # 格式化后的 ${application.version} 版本信息
+
+////////////////////////////////////////////////////////////////////
+//                          _ooOoo_                               //
+//                         o8888888o                              //
+//                         88" . "88                              //
+//                         (| ^_^ |)                              //
+//                         O\  =  /O                              //
+//                      ____/`---'\____                           //
+//                    .'  \\|     |//  `.                         //
+//                   /  \\|||  :  |||//  \                        //
+//                  /  _||||| -:- |||||-  \                       //
+//                  |   | \\\  -  /// |   |                       //
+//                  | \_|  ''\---/''  |   |                       //
+//                  \  .-\__  `-`  ___/-. /                       //
+//                ___`. .'  /--.--\  `. . ___                     //
+//              ."" '<  `.___\_<|>_/___.'  >'"".                  //
+//            | | :  `- \`.;`\ _ /`;.`/ - ` : | |                 //
+//            \  \ `-.   \_ __\ /__ _/   .-` /  /                 //
+//      ========`-.____`-.___\_____/___.-`____.-'========         //
+//                           `=---='                              //
+//      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        //
+//            佛祖保佑       永不宕机     永无BUG                  //
+////////////////////////////////////////////////////////////////////
 ```
 

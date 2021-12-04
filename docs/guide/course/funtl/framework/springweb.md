@@ -213,7 +213,7 @@ public class UserServiceImpl implements UserService {
 
 ### Bean标注注解
 
-​	　SpringWeb通过在类上声明如下四个注解，来指定`class`与`bean`之间关系的注解， `value` 属性用于指定该 `bean` 的 `id` 值，同样的这些`class`不能是抽象类或者接口。
+​	　SpringWeb通过在类上声明如下四个注解，来表明`class`与`bean`之间的对应关系；通过 `value` 属性，指定该 `bean` 的 `id` 值。另外，这些注解不能标注于抽象类或者接口上，因为Spring会自动将这些注解标注的类进行**对象实例化**。
 
 ```
 - @Component：用于 Component 或者 class 实现类进行注解
@@ -226,14 +226,14 @@ public class UserServiceImpl implements UserService {
 
 ```java
 /**
-* 相当于（建议）
+* 标注这是一个Mapper（建议）
 * <bean id = "userDao" class="com.shooter.funtl.module.dao.impl.UserDaoImpl"/>
 * */
 @Repository
 public class UserDaoImpl implements UserDao {}
 
 /**
-* 相当于
+* 标注这是一个Mapper
 * <bean id = "userDaoTest" class="com.shooter.funtl.module.dao.impl.UserDaoImpl"/>
 * */
 @Repository(value = "userDaoTest")
@@ -244,59 +244,60 @@ public class UserDaoImpl implements UserDao {}
 
 ### bean实例注入
 
+​	　可以通过如下注解，将**已经实例化的对象注入到属性中**，如`@Autowired`和`@Resource`多用于**对象的自动装配**，`@Value`和`@PostConstruct`多用于**属性的初始化**。
+
 ```java
-- @Autowired: 按类型自动装配Bean，可用于属性、方法或者构造器。
-- @Resource: 按beanId(可由name属性指定)自动装配，可用于属性、方法或者构造器。
+- @Autowired: 默认采用按类型自动装配Bean，可用于属性、方法或者构造器。
+- @Resource: 默认采用按beanId自动装配，可用于属性、方法或者构造器。
 - @Value：该注解的 value 属性用于指定要注入的值，可用于属性、方法或者构造器。
 - @PostConstruct：在方法上使用 @PostConstruct 相当于初始化，会在构造器之前调用。
 ```
 
-​	　`@Autowired`和`@Resource`多用于**对象的自动装配**，`@Value`和`@PostConstruct`多用于**属性的初始化**。示例代码如下：
+
+
+（1）对象自动装配
 
 ```java
 /**
-* @Autowired根据类型装配
-* 方式一：使用该注解完成属性注入时，类中无需 setter
-* 说明：Student类已经使用@Component注解进行标注了
+* @Autowired根据类型装配，类名相同需使用@Qualifier区分
 */
 @Autowired
 private Student student;
 
 /**
-* 方式二：若属性有 setter，则也可将其加到 setter 上
-*/
-@Autowired
-public void setStudent(Student student) {
-    this.student = student;
-}
-=======================================
-/**
-* @Resource根据beanId装配
+* @Resource根据beanId装配，beanId可以由name自定义
 */
 @Resource(name="student")
 private Student student;
-=======================================
-/**
-* @Value初始化入参passWd值为：passWd
-* 方式一：使用 @Value 注解完成属性注入时，类中无需 setter
-*/
+```
+
+
+
+（2）属性的初始化
+
+```java
+//注入字符串passWd
 @Value("passWd")
-private String passWd; //注入字符串passWd
+private String passWd;
 
+// 注入YML配置中的值
 @Value("${spring.profiles.active}")
-private String active; // 注入YML配置中的值
+private String active;
 
-/**
-* 方式二：若属性有 setter，则也可将其加到 setter 上
-*/
+// 默认传入字符串passWd
 @Value("passWd")
 public void setPassWd(String passWd) {
     this.passWd = passWd;
 }
-=======================================
-/**
-* 在方法上使用 @PostConstruct 相当于初始化
-*/
+
+// 注释于方法，默认传入Student对象初始化
+@Autowired
+public void setStudent(Student student) {
+    this.student = student;
+}
+
+// 注释于方法，用于初始化不能被@Autowired初始化的类
+// 调用顺序：Constructor(构造方法) -> @Autowired -> @PostConstruct
 @PostConstruct
 public void setPassWd() {
     this.passWd = "passWd";
