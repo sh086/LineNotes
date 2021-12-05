@@ -734,7 +734,23 @@ public class MyBatisTests {
 
 ### application.yml
 
-​	　SpringBoot的**全局的配置文件**有`bootstrap`和`application`。**bootstrap会早于application启动**，在Spring Cloud中多使用bootstrap配置，配置时常用的是`YML`语法，参见[这里](https://docs.spring.io/spring-boot/docs/2.0.2.RELEASE/reference/html/common-application-properties.html)。
+（1）全局的配置文件生效顺序
+
+​	　若存在全局的配置文件不生效的情况，建议改成`bootstrap.properties`尝试一下。
+
+```properties
+# Spring Boot全局的配置文件生效顺序
+bootstrap.properties（最高优先级，建议使用）
+bootstrap.yml
+application.properties
+application.yml
+```
+
+
+
+（2）YML配置示例
+
+​	　常用的是`YML`语法，参见[这里](https://docs.spring.io/spring-boot/docs/2.0.2.RELEASE/reference/html/common-application-properties.html)。
 
 ```yaml
 server:

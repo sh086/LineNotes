@@ -235,25 +235,13 @@ mkdir -p /usr/local/maven/repo
 # 语法格式
 mvn [plugin-name]:[goal-name]
 
-# 示例
-mvn source:jar           # 源码打包
-mvn source:jar-no-fork   # 源码打包
-mvn tomcat:run	         # 通过maven命令将web项目发布到Tomcat
-```
+# 源码打包
+mvn source:jar
+mvn source:jar-no-fork
 
+# 通过maven命令将web项目发布到Tomcat
+mvn tomcat:run
 
-
-### Maven生命周期
-
-​	　 Maven有三类生命周期：用于生成描述项目`javadoc`文档的`siteLifeCycle`（站点生命周期）、用于构建项目应用的`defaultLifeCycle`（默认生命周期)、用于项目清理的`cleanLifeCycle`（清理生命周期）
-
-​	　 这三类生命周期间相互独立、互不影响，在一类生命周期之内，执行后面的命令，前面的操作也会自动执行。特别的，`defaultLifeCycle`生命周期由以下几个阶段组成：
-
-![img](./images/maven-package.png)
-
-
-
-```shell
 # 默认生命周期
 # 编译
 mvn compile            # 调用maven-compile-plugin编译源码到target目录下
@@ -275,16 +263,80 @@ mvn site               # 生成项目文档
 
 
 
+### Maven生命周期
+
+​	　 Maven有三类生命周期：用于生成描述项目`javadoc`文档的`siteLifeCycle`（站点生命周期）、用于构建项目应用的`defaultLifeCycle`（默认生命周期)、用于项目清理的`cleanLifeCycle`（清理生命周期）
+
+​	　 这三类生命周期间相互独立、互不影响，在一类生命周期之内，执行后面的命令，前面的操作也会自动执行。特别的，`defaultLifeCycle`生命周期由以下几个阶段组成：
+
+![img](./images/maven-package.png)
+
+
+
+
+
 ## 附录
 
+### Maven实践
+
 （1）管理第三方依赖
-
 - 方法一：每个模块单独管理，放在`webapp`的`lib`中。
-- 方法二：[使用maven-install-plugin插件统一管理](../myshop/myshop-ssm.html#手动依赖管理)
-- 方法三：[使用Nexu管理](../microservice/nexus.html)（推荐）
+- 方法二：[使用maven-install-plugin插件统一管理至某个单独的项目](../myshop/myshop-ssm.html#手动依赖管理)
+- 方法三：[使用Nexu管理第三方依赖](../microservice/nexus.html)（推荐）
 
-  
 
-（2）生成代码
-- 方式一：[使用tk.mybatis自动生成代码](../microservice/springboot.html#自动完成代码)
+（2）自动生成代码
+- [使用tk.mybatis自动生成代码](../microservice/springboot.html#自动完成代码)
+- 使用mybatisPlus自动生成代码
+
+（3）多环境配置
+- IDEA 启动设定 Profile
+- Spring Boot Profile
+- [Maven Profile](#Maven Profile)
+- [Nacos Config Profile](../microservice/springcloudalibaba.html#nacos-config-test)
+
+（4）部署文件打包
+- 使用mvn命令打包（package、install、deploy）
+- [通过Maven Assembly 插件打包](../microservice/springcloudalibaba.html#maven-assembly)
+
+
+
+### Maven Profile
+
+```xml
+<profiles>
+    <profile>
+        <!--不同环境Profile的唯一id-->
+        <id>dev</id>
+        <properties>
+            <!--profiles.active是自定义的字段，自定义字段可以有多个-->
+            <profiles.active>dev</profiles.active>
+        </properties>
+    </profile>
+    <profile>
+        <id>prod</id>
+        <properties>
+            <profiles.active>prod</profiles.active>
+        </properties>
+        <!--activation用来指定激活方式，可以根据jdk环境，环境变量，文件的存在或缺失-->
+        <activation>
+            <!--这个字段表示默认激活-->
+            <activeByDefault>true</activeByDefault>
+        </activation>
+    </profile>
+    <profile>
+        <id>test</id>
+        <properties>
+            <profiles.active>test</profiles.active>
+        </properties>
+    </profile>
+</profiles>
+```
+
+​	　 执行`mvn`打包命令，激活不同的Profile。
+
+```shell
+mvn clean package           # 默认环境，prod 被激活
+mvn clean package -Ptest    # test 环境被激活
+```
 
