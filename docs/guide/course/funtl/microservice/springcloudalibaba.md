@@ -4,22 +4,22 @@ sidebar: auto
 
 # Spring Cloud Alibaba
 
-
-
-## 简介
-
 ​	　Spring Cloud Alibaba是微服务一站式开发的**全新生态解决方案**，方便开发者通过 Spring Cloud 编程模型轻松使用**阿里开源组件**来开发分布式应用服务。
-
-​	　Spring Cloud Alibaba为我们提供了**服务限流降级**、**服务注册与发现**、**分布式配置管理**、**消息驱动能力**、**阿里云对象存储**、**分布式任务调度**等功能。版本说明参考[Spring Cloud 版本说明](https://github.com/alibaba/spring-cloud-alibaba/wiki/%E7%89%88%E6%9C%AC%E8%AF%B4%E6%98%8E#%E6%AF%95%E4%B8%9A%E7%89%88%E6%9C%AC%E4%BE%9D%E8%B5%96%E5%85%B3%E7%B3%BB%E6%8E%A8%E8%8D%90%E4%BD%BF%E7%94%A8)。
-
-
 
 **参考资料：**
 
 - [Spring Cloud Alibaba GitHub](https://github.com/alibaba/spring-cloud-alibaba/blob/master/README-zh.md)
 - [RocketMQ Example](https://github.com/alibaba/spring-cloud-alibaba/blob/master/spring-cloud-alibaba-examples/rocketmq-example/readme-zh.md)
+- [Spring Cloud 版本说明](https://github.com/alibaba/spring-cloud-alibaba/wiki/%E7%89%88%E6%9C%AC%E8%AF%B4%E6%98%8E#%E6%AF%95%E4%B8%9A%E7%89%88%E6%9C%AC%E4%BE%9D%E8%B5%96%E5%85%B3%E7%B3%BB%E6%8E%A8%E8%8D%90%E4%BD%BF%E7%94%A8)
 
 
+
+## 简介
+
+​	　Spring Cloud Alibaba为我们提供了**服务限流降级**、**服务注册与发现**、**分布式配置管理**、**消息驱动能力**、**阿里云对象存储**、**分布式任务调度**等功能。
+
+
+![image-20211206001945069](./images/image-20211206001945069.png)
 
 ## 统一的依赖管理
 
@@ -51,7 +51,7 @@ sidebar: auto
 
         <!-- Spring Settings -->
         <spring-cloud.version>Finchley.SR2</spring-cloud.version>
-        <spring-cloud-alibaba.version>0.2.1.RELEASE</spring-cloud-alibaba.version>
+        <spring-cloud-alibaba.version>0.2.2.RELEASE</spring-cloud-alibaba.version>
     </properties>
 
     <dependencyManagement>
@@ -395,7 +395,7 @@ public class NacosProviderApplication {
 }
 ```
 
-​	　在`resources`目录下新建`bootstrap.yml`，并进行如下配置。
+​	　在`resources`目录下新建`bootstrap.yaml`，并进行如下配置。
 
 ```yaml
 spring:
@@ -531,7 +531,7 @@ public class NacosConsumerApplication {
 }
 ```
 
-​	　然后，在`resources`目录下新建`bootstrap.yml`，并进行如下配置。
+​	　然后，在`resources`目录下新建`bootstrap.yaml`，并进行如下配置。
 
 ```yaml
 spring:
@@ -697,7 +697,7 @@ public class NacosConsumerFeignApplication {
 }
 ```
 
-​	　在`resources`目录下新建`bootstrap.yml`，并进行如下配置。
+​	　在`resources`目录下新建`bootstrap.yaml`，并进行如下配置。
 
 ```yaml
 spring:
@@ -873,7 +873,7 @@ public class GatewayApplication {
 }
 ```
 
-​	　在`resources`目录下新建`bootstrap.yml`，并进行如下配置。
+​	　在`resources`目录下新建`bootstrap.yaml`，并进行如下配置。
 
 ```yml{11-29}
 spring:
@@ -899,11 +899,13 @@ spring:
           uri: lb://nacos-consumer
           # 主要作用是匹配用户的请求，有很多种用法
           predicates:
+            - Path=/nacos-consumer/**
             # Method 方法谓词，这里是匹配 GET 和 POST 请求
             - Method=GET,POST
         - id: NACOS-CONSUMER-FEIGN
           uri: lb://nacos-consumer-feign
           predicates:
+            - Path=/nacos-consumer-feign/**
             - Method=GET,POST
 
 server:
@@ -1150,7 +1152,7 @@ spring:
 </dependency>
 ```
 
-​	　创建名为 `bootstrap.properties` 的配置文件并删除之前创建的 `application.yml` 配置文件。
+​	　创建名为 `bootstrap.properties` 的配置文件并删除之前创建的 `application.yaml` 配置文件。
 
 ```properties
 # 这里的应用名对应 Nacos Config 中的 Data ID，实际应用名称以配置中心的配置为准
@@ -1360,7 +1362,7 @@ services:
 java -javaagent:/path/agent/skywalking-agent.jar \
     -Dskywalking.agent.service_name=nacos-provider \
     -Dskywalking.collector.backend_service=101.43.15.250:11800 \
-    -jar yourApp.jar
+    -jar app.jar
 ```
 
 （3）Dockerfile启动

@@ -896,7 +896,7 @@ sudo service docker restart
 ​	　使用`ENTRYPOINT`作为启动命令，可以在`docker run`命令中**动态设定**启动参数。
 
 ```dockerfile
-FROM openjdk:8-jre
+FROM openjdk:8
 WORKDIR /app
 COPY project-1.0.0.jar .
 # 不建议写死
@@ -931,7 +931,7 @@ docker run --name App -p 8080:8080 \
 ​	　使用`CMD`作为启动命令，只能在`Dockerfile`中设置启动时的**固定参数**。
 
 ```dockerfile
-FROM openjdk:8-jre
+FROM openjdk:8-jr
 WORKDIR /app
 COPY project-1.0.0.jar .
 # CMD java -jar -Dspring.profiles.active=dev project-1.0.0.jar
@@ -1007,5 +1007,9 @@ docker run -p 3306:3306 --name mysql \
 sudo docker cp containerID:container_path host_path
 # 从主机复制文件到容器
 sudo docker cp host_path containerID:container_path
+
+# 示例，复制canal容器中/home/admin/canal-server/conf/canal.properties到/home/canal
+docker cp canal:/home/admin/canal-server/conf/canal.properties /home/canal
+docker cp canal:/home/admin/canal-server/conf/example/instance.properties /home/canal
 ```
 

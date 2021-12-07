@@ -114,6 +114,8 @@ JRebel							  热部署插件
 
 
 
+
+
 ## Tomcat部署
 
 ### Server
@@ -142,10 +144,24 @@ JRebel							  热部署插件
 
 ## Jar部署
 
+### 多项目导入
+
+​	　首先，打开`springcloud-alibaba`目录，然后，点击`Help -> Find Action`，输入`maven`，选择`Add Maven Projects`，依次将这些独立的项目托管到Maven即可。
+
+![image-20211207110630155](./images/image-20211207110630155.png)
+
+
+
+### 多实例启动
+
 ​	　部署Jar包时，只需允许`Application.class`启动类即可。若想多实例启动，需要勾选`Allow paraller run`选项。
 
 ![image-20211122125951092](./images/image-20211122125951092.png)
 
-​	　多实例启动后，点击菜单栏`Views -> Tool Windows -> Services`，可以在`Services`中管理。
+
+
+### Services面板
+
+​	　多实例启动后，点击菜单栏`Views -> Tool Windows -> Services`，刷新Maven，即可在`Services`中管理服务。若未能显示服务列表，请检查项目`Project Struct`配置，特别是`JDK`。
 
 ![image-20211122130400779](./images/image-20211122130400779.png)
