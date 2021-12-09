@@ -1,11 +1,7 @@
 module.exports = [
     {text: 'Blog', link: '/blog/'},
+    {text: 'Group', link: '/workflow/'},
     {text: 'Guide', link: '/guide/'},
-    // {text: 'Data', link: '/data/'},
-    // {text: 'Smart', link: ''},
     {text: 'Media', link: '/media/'},
     {text: 'Quantity', link: '/quantity/'},
-    // {text: 'Project', link: '/project/'},
-    {text: 'Group', link: '/project/'},
-    // {text: 'WorkFlow', link: '/workflow/'}
 ];

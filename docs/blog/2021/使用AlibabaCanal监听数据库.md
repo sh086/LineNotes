@@ -128,6 +128,8 @@ services:
 
 ## 消费者
 
+### springboot
+
 ​	　在服务器上新建如下部署目录结构，其中，`instance.propertie`和`canal.properties`的初始配置文件，请参照目录 或者 [这里](https://github.com/alibaba/canal/releases)。
 
 ```shell
@@ -147,11 +149,7 @@ alibaba-canal
 ---------Dockerfile
 ```
 
-
-
-### springboot
-
-​	　新建SpringBoot项目监听`canal-deployer`，首先，添加`canal`依赖到`pom.xml`。
+​	　然后，新建SpringBoot项目监听`canal-deployer`，首先，添加`canal`依赖到`pom.xml`。
 
 ```xml
 <dependency>
@@ -284,6 +282,13 @@ public class CanalClient implements InitializingBean {
 }
 ```
 
+​	　并且需要在`application.yml`中设定启动端口为`8085`。
+
+```
+server:
+  port: 8085
+```
+
 ​	　接下来，将项目打包到远程服务器，并编写`Dockerfile`文件。
 
 ```dockerfile
@@ -309,7 +314,7 @@ services:
       TZ: Asia/Shanghai
 ```
 
-​	　执行`docker-compose up -d`命令，启动项目，然后`docker logs -f synData`即可查看到数据库正在执行语句。
+​	　执行`docker-compose up -d`命令，启动项目，然后`docker logs -f synData`即可查看到数据库正在执行语句。注意，`canal-server`一定是要访问到`springboot`项目才行哦！
 
 
 
@@ -565,16 +570,16 @@ rabbitmq.deliveryMode =
 
 ### 订阅数据库表
 
-​	　可以在 `connector.subscribe` [java] 或者 `canal.instance.filter.regex` [instance.properties] 中设定设定监控表的范围。
+​	　可以在 `connector.subscribe` [`java`] 或者 `canal.instance.filter.regex` [`instance.properties`] 中设定设定监控表的范围。
 
 ```shell
 # 所有库所有表
 .*\\..*
-# # 指定库全表（库名\..*）
+# 指定库全表（库名\..*）
 test\..*
 
 # 单表（库名.表名）
-test.user  # 单表
+test.user 
 
 # 多规则组合使用
 # 库名1\..*,库名2.表名1,库名3.表名2 (逗号分隔)

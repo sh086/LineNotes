@@ -887,8 +887,6 @@ sudo service docker restart
 
 ## Docker实践
 
-​	　可以通过Dockerfile将**项目定制为镜像**的方式进行项目部署。但是，这里建议采用**数据卷**的方式来运行项目。
-
 ### SpringBoot应用
 
 （1）使用`ENTRYPOINT`作为启动命令（推荐）
@@ -896,7 +894,7 @@ sudo service docker restart
 ​	　使用`ENTRYPOINT`作为启动命令，可以在`docker run`命令中**动态设定**启动参数。
 
 ```dockerfile
-FROM openjdk:8
+FROM openjdk:8-jre
 WORKDIR /app
 COPY project-1.0.0.jar .
 # 不建议写死
@@ -906,7 +904,13 @@ ENTRYPOINT ["java", "-jar", "project-1.0.0.jar"]
 EXPOSE 8080
 ```
 
-​	　执行构建命令后，执行启动命令如下，`spring.profiles.active`可动态传入。
+​	　然后，执行构建命令，构建镜像名称为`App`。
+
+```
+docker build -t app .
+```
+
+​	　执行启动命令如下，`spring.profiles.active`可动态传入。
 
 ```shell{5,13}
 # 写法一，传递环境变量，就是系统的环境变量
@@ -931,7 +935,7 @@ docker run --name App -p 8080:8080 \
 ​	　使用`CMD`作为启动命令，只能在`Dockerfile`中设置启动时的**固定参数**。
 
 ```dockerfile
-FROM openjdk:8-jr
+FROM openjdk:8-jre
 WORKDIR /app
 COPY project-1.0.0.jar .
 # CMD java -jar -Dspring.profiles.active=dev project-1.0.0.jar
@@ -939,7 +943,13 @@ CMD java -jar project-1.0.0.jar --spring.profiles.active=dev
 EXPOSE 8080
 ```
 
-​	　执行构建命令后，执行启动命令如下。
+​	　然后，执行构建命令，构建镜像名称为`App`。
+
+```
+docker build -t app .
+```
+
+​	　执行启动命令如下。
 
 ```shell
 docker run --name App \
@@ -953,7 +963,27 @@ docker run --name App \
 
 ### Tomcat应用
 
-​	　使用`CMD`作为启动命令，可以通过`Tomcat`设置`JAVA_OPTS`动态传入参数，也可直接修改YML配置修改参数。但是，仍推荐使用`ENTRYPOINT`作为启动命令。
+​	　可以通过Dockerfile将**项目定制为镜像**的方式进行项目部署。但是，这里建议采用**数据卷**的方式来运行项目。
+
+（1）通过数据卷部署应用
+
+```shell
+docker run --name tomcat \
+    -p 8080:8080 \
+	--restart always  \
+	-e TZ=Asia/Shanghai  \ 
+	# 挂载webapps部署目录
+	-v /usr/local/docker/tomcat/webapps/ROOT:/usr/local/tomcat/webapps/ROOT
+	# 挂载API部署目录
+	-v /usr/local/docker/tomcat/api/:/usr/local/tomcat/api/
+	# 设置生效的profiles
+	-e JAVA_OPTS='-Dspring.profiles.active=dev' \
+	-d tomcat:8.5.32
+```
+
+（2）定制Tomcat应用镜像
+
+​	　使用`CMD`作为启动命令，可以通过`Tomcat`设置`JAVA_OPTS`动态传入参数。但是，仍推荐使用`ENTRYPOINT`作为启动命令。
 
 ```dockerfile
 FROM tomcat:8.5.32
@@ -977,7 +1007,7 @@ docker run --name tomcat \
 	# 将当前目录下的test挂载到/usr/local/tomcat/webapps/test
 	-v $PWD/test:/usr/local/tomcat/webapps/test \
 	# -e JAVA_OPTS='-Denable.scheduled=true' \
-	# -e JAVA_OPTS='-Dspring.profiles.active=dev' \
+	-e JAVA_OPTS='-Dspring.profiles.active=dev' \
 	-d tomcat
 ```
 

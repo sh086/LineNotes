@@ -165,3 +165,16 @@ JRebel							  热部署插件
 ​	　多实例启动后，点击菜单栏`Views -> Tool Windows -> Services`，刷新Maven，即可在`Services`中管理服务。若未能显示服务列表，请检查项目`Project Struct`配置，特别是`JDK`。
 
 ![image-20211122130400779](./images/image-20211122130400779.png)
+
+
+
+## 附录
+
+### IDEA控制台不能输入
+
+​	　默认IDEA控制台不能输入，首先，选择`Help` --> `Edit Constom VM Options`，添加如下配置后，重启IDEA即可。
+
+```
+-Deditable.java.test.console=true
+```
+

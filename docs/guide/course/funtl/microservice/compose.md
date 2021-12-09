@@ -346,7 +346,9 @@ docker-compose [options] [SERVICE=NUM...]
 docker-compose scale web=2 -d
 ```
 
-​	　另外，因为是水平拓展和负载均衡，所有，**不能将宿主机与容器端口进行绑定**，应该统一交于**负载均衡器（HAProxy）**进行负载均衡。但是要注意，**应用必须以指定`port`启动**，不能以随机端口启动；`haproxy`必须挂载到数据卷上，否则会启动失败。
+​	　另外，因为是水平拓展和负载均衡，所有，**不能将宿主机与容器端口进行绑定**，应该统一交于负载均衡器（HAProxy）进行负载均衡。
+
+​	　但是要注意，**应用必须以指定`port`启动**，不能以随机端口启动；`haproxy`必须挂载到数据卷上，否则会启动失败。
 
 ```yaml{9-16}
 version: '3'
@@ -620,21 +622,21 @@ y|Y|yes|Yes|YES|n|N|no|No|NO|true|True|TRUE|false|False|FALSE|on|On|ON|off|Off|O
 
 ## Compose实战
 
-### SpringBoot应用
+### 单实例部署
 
 ```yml
 version: '3.1'
 services:
   web:
     restart: always
-    image: app
-    container_name: app
+    image: web
+    container_name: web
     ports:
       - 8080:8080
     environment:
       TZ: Asia/Shanghai
-      # 设定spring.profiles.active，前提是使用ENTRYPOINTz
-      # SPRING_PROFILES_ACTIVE: dev
+      # 设定spring.profiles.active，前提是使用ENTRYPOINT
+      SPRING_PROFILES_ACTIVE: dev
   
   nginx:
     image: nginx
@@ -651,6 +653,67 @@ services:
 ```
 
 
+
+### 多实例单机部署
+
+```yaml
+version: '3.1'
+services:
+  web_01:
+    restart: always
+    image: web
+    container_name: web_01
+    ports:
+      - 8080:8080
+    environment:
+      TZ: Asia/Shanghai
+      SPRING_PROFILES_ACTIVE: dev
+    network_mode: "host"
+   
+   web_02:
+    restart: always
+    image: web
+    container_name: web_02
+    ports:
+      - 8081:8080
+    environment:
+      TZ: Asia/Shanghai
+      SPRING_PROFILES_ACTIVE: dev
+    network_mode: "host"
+```
+
+
+
+### 负载均衡部署
+
+```yaml
+version: '3'
+services:
+  web:
+    image: web
+    
+  redis:
+    image: "redis:alpine"
+        
+  lib: 
+    image: dockercloud/haproxy 
+    links: 
+      - web 
+    ports: 
+      - 8080:8080
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock 
+```
+
+​	　执行命令`docker-compose up --scale web=3 -d` 启动项目。
+
+
+
+### 集群部署
+
+
+
+## 附录
 
 ### Tomcat应用
 
