@@ -1992,3 +1992,15 @@ public class RocketMQApplication {
 
 ​	　然后，还需要通过`Java Agent` 服务器探针，进行应用接入，探针文件在 `apache-skywalking-apm-incubating/agent` 目录下。
 
+### Nacos配置说明
+
+（1）Nacos服务注册地址为内网IP
+
+​	　应用在Nacos注册的地址默认是Docker内局域网IP，可以通过如下方式选择固定Ip注册。
+
+```shell
+# 如果选择固定Ip注册可以配置
+spring.cloud.nacos.discovery.ip = 10.200.11.11
+spring.cloud.nacos.discovery.port = 8080
+```
+

@@ -7,9 +7,9 @@ sidebar: auto
 
 **参考资料：**
 
-- [GitFlow工作流](../topic/gitflow.html)
 - [Gitlab官网](https://gitlab.com/)
-
+- <a href="../topic/gitflow.html" target="_blank">GitFlow工作流</a>
+- <a href="./gitlabci.html" target="_blank">GitLab CI持续集成</a>
 
 
 ## 快速开始
@@ -48,7 +48,7 @@ services:
 
 
 
-## 使用GitLab仓库
+## 附录
 
 ### SHH免密登录
 
@@ -108,7 +108,3 @@ transaction-logs
 **/temp/
 **/classes/
 ```
-
-
-
-## GitLab Runner

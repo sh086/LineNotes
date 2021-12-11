@@ -50,27 +50,9 @@ OS name: "windows 10", version: "10.0", arch: "amd64", family: "windows"
 
 ### Linux安装
 
-（1）安装JDK
+​	　 Linxu上安装Maven之前，需要先安装JDK，参考[这里](../microservice/linux.html#安装java)。
 
-​	　 首先，在[官网](https://www.oracle.com/java/technologies/downloads/#java8)下载安装包`jdk-8u311-linux-x64.tar.gz`，然后上传到Linux上。
-
-```shell
-# 进入安装目录
-cd /usr/local
-# 解压安装包
-tar -zxvf jdk-8u311-linux-x64.tar.gz
-# 重命名
-mv jdk1.8.0_311 jdk8
-# 在 /etc/profile 文件尾部追加
-export JAVA_HOME=/usr/local/jdk8
-export PATH=$JAVA_HOME/bin:$PATH
-# 生效配置
-source /etc/profile
-```
-
-
-
-（2）安装Maven
+（1）安装Maven
 
 ```shell
 # 进入安装目录
@@ -92,7 +74,7 @@ mvn -v
 
 
 
-（3）修改Maven配置
+（2）修改Maven配置
 
 ​	　 首先，在`conf/settings.xml`配置文件中修改镜像地址。
 

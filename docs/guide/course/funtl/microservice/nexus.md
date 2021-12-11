@@ -219,9 +219,9 @@ com.sonatype.nexus.plugins.outreach.internal.outreach.SonatypeOutreach
 
 
 
-### POM配置
+### 配置私服地址
 
-​	　本地运行，只需将仓库依赖都添加到`dependencies`项目即可。
+​	　本地运行或者本地打包时，只需将仓库依赖都添加到`dependencies`项目即可。
 
 ```xml
 <!--打包项目到私服-->

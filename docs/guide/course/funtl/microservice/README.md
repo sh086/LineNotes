@@ -22,12 +22,9 @@ sidebarDepth: 0
         <td rowspan="3" colspan="1" align="center"><b>云计算服务</b></td>    
         <td rowspan="1">Iass</td>
         <td align="center"><a href="./linux.html" target="_blank">Linux</a></td> 
-		<td  colspan="1" align="center"><a href="./docker.html" target="_blank">Docker</a></td>
-        <td colspan="2" align="center">
+		<td  colspan="2" align="center"><a href="./docker.html" target="_blank">Docker</a></td>
+        <td colspan="3" align="center">
             <a href="./compose.html" target="_blank">Docke Compose</a>
-        </td>
-        <td colspan="2" align="center">
-            <a href="./compose.html" target="_blank">Docke实践</a>
         </td>
     </tr>
     <tr>
@@ -39,21 +36,30 @@ sidebarDepth: 0
         <td  colspan="1" align="center">
            <a href="./registry.html" target="_blank">Registry</a></td> 
         </td> 
+        <td  colspan="2" align="center">
+           <a href="./gitlabci.html" target="_blank">GitLab CI</a></td>
+        </td>
         <td  colspan="1" align="center">
            <a href="./jenkins.html" target="_blank">Jenkins</a></td>
-        </td>
-        <td  colspan="2" align="center">
-           <a href="./cicd.html" target="_blank">GitLab CI</a></td>
         </td>
     </tr>
     <tr>
     	<td>SaaS</td>
         <td ><a href="./registry.html" target="_blank">RabbitMQ</a></td> 
-        <td colspan="2" align="center">
+        <td colspan="1" align="center">
            <a href="./registry.html" target="_blank">Niginx</a></td>
     	</td>
-        <td  colspan="3" align="center">
+    	<td colspan="1" align="center">
+           <a href="./registry.html" target="_blank">Redis</a></td>
+    	</td>
+    	<td  colspan="1" align="center">
+           <a href="./registry.html" target="_blank">Solr</a>
+        </td> 
+        <td  colspan="1" align="center">
            <a href="./registry.html" target="_blank">FastDFS</a>
+        </td> 
+        <td  colspan="1" align="center">
+           <a href="./elk.html" target="_blank">ELK</a>
         </td> 
     </tr>
     <tr>
@@ -66,8 +72,8 @@ sidebarDepth: 0
     	    <a href="./springcloudnetflix.html" target="_blank">Spring Cloud Netflix</a>
     	</td>
     	<td  rowspan="4" align="center">
-    	    <a href="./registry.html" target="_blank">VueJs</a>
-    	</td>  
+    	    <a href="./devops.html">DevOps</a>
+    	</td> 
     </tr>
     <tr>
     	<td  colspan="2" align="center">
@@ -91,9 +97,8 @@ sidebarDepth: 0
 </table>
 
 
-
 **实战：**
 
-- <a href="../project/itoken-springcloudnetflix.html" target="_blank">Spring Cloud Itoken项目实战</a>
-- <a href="../myshop/myshop-springcloudalibaba.html" target="_blank">Spring Cloud Alibaba For MyShop</a>
+- [Spring Cloud iToken项目实战](../project/README_ITOKEN.html)
+- [Spring Cloud For MyShop](../project/README_MYSHOP.html)
 

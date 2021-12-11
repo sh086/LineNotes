@@ -11,41 +11,6 @@ sidebar: auto
 
 
 
-## Git简介
-
-​	　Git 是一个开源的**分布式版本控制**系统，常用的Git命令如下。
-
-```shell
-# 常用Git命令
-git init          # 创建新的 Git 仓库
-git clone [url]   # 拷贝一个 Git 仓库到本地
-git add           # 将该文件添加到缓存
-git status        # 查看在你上次提交之后是否有修改
-
-git diff          # 查看已缓存的改动
-git diff --cached # 查看已缓存的改动
-git diff HEAD     # 查看已缓存的与未缓存的所有改动
-git diff --stat   # 显示摘要
-
-# 设置用户名密码
-git config --global user.name 'yourname'
-git config --global user.email youremail
-
-git commit -m 'update message'  # 将缓存区内容添加到仓库中
-git reset HEAD -- <filename>    # 取消已缓存的内容
-
-# 将远程存储库中的更改合并到当前分支中
-# 等效于 git fetch + git merge
-git pull <远程主机名> <远程分支名>:<本地分支名>
-# 将本地分支的修改，推送到远程主机
-git push <远程主机名> <本地分支名>:<远程分支名>
-
-git tag -a v1.0.0    # 给最新一次提交打上v1.0.0的标签
-git tag              # 查看所有标签
-```
-
-
-
 ## GitFlow工作流
 
 ​	　Git工作流为不同角色提供了不同分支，并定义了分支之间如何和什么时候进行交互；GitFlow 工作流有**历史分支**（master和develop ）、**功能分支**（feature）、**发布分支**（release）、**热修复分支**（hotfix）等分支角色。
@@ -214,7 +179,7 @@ git branch -d issue-001
 
 
 
-## Forking 工作流
+## Forking工作流
 
 ​	　Forking 工作流是开源项目的理想工作流，没有使用单个服务端仓库作为『中央』代码基线，而让各个开发者都有一个**私有的服务端仓库**，开发者 push 到自己私有的服务端仓库，而只有项目维护者才能 push 到**正式仓库**。这样项目维护者可以接受任何开发者的提交，但无需给他正式代码库的写权限。
 
@@ -255,3 +220,41 @@ git push origin master
 ```
 
 
+
+## 附录
+
+### Git常用命令
+
+​	　Git 是一个开源的**分布式版本控制**系统，常用的Git命令如下。
+
+```shell
+# 常用Git命令
+git init          # 创建新的 Git 仓库
+git clone [url]   # 拷贝一个 Git 仓库到本地
+git add           # 将该文件添加到缓存
+git status        # 查看在你上次提交之后是否有修改
+
+git diff          # 查看已缓存的改动
+git diff --cached # 查看已缓存的改动
+git diff HEAD     # 查看已缓存的与未缓存的所有改动
+git diff --stat   # 显示摘要
+
+# 丢弃所有未暂存文件的改动
+git checkout . && git clean -df
+
+# 设置用户名密码
+git config --global user.name 'yourname'
+git config --global user.email youremail
+
+git commit -m 'update message'  # 将缓存区内容添加到仓库中
+git reset HEAD -- <filename>    # 取消已缓存的内容
+
+# 将远程存储库中的更改合并到当前分支中
+# 等效于 git fetch + git merge
+git pull <远程主机名> <远程分支名>:<本地分支名>
+# 将本地分支的修改，推送到远程主机
+git push <远程主机名> <本地分支名>:<远程分支名>
+
+git tag -a v1.0.0    # 给最新一次提交打上v1.0.0的标签
+git tag              # 查看所有标签
+```

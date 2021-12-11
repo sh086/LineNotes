@@ -744,7 +744,7 @@ docker rm $(docker ps -a -q)
 
 ​	　数据卷可以在容器之间共享和重用；对数据卷的修改会立马生效；对数据卷的更新，不会影响镜像。所有的文件写入操作，都应该使用数据卷。
 
-```shell{18,25}
+```shell
 # 创建一个数据卷
 docker volume create [volume_name]
 # 查看所有的数据卷
@@ -753,11 +753,21 @@ docker volume ls
 docker volume inspect [volume_name]
 # 删除数据卷
 docker volume rm [volume_name]
+
 # 清理无任何容器引用的数据卷
 docker volume prune
 # 删除所有未关联的数据卷
 docker volume rm $(docker volume ls -qf dangling=true)
 
+# 查看 web 容器的信息
+docker inspect web
+```
+
+
+
+（1）Docker写法
+
+```shell{5,12,13}
 # 方式一：使用 --mount 参数器
 # 创建一个名为 web 的容器，并挂载 数据卷 到容器的 /webapp 目录
 docker run -d -P \
@@ -770,11 +780,25 @@ docker run -d -P \
 docker run -d -P \
     --name web \
     -v [volume_name]:/wepapp \
+    --volume ./wepapp:/wepapp \
     training/webapp \
     python app.py
+```
 
-# 查看 web 容器的信息
-docker inspect web
+
+
+（2）Docker Compose写法
+
+```yaml
+# 写法一
+volumes:
+  - ./data:/var/lib/mysql
+  
+# 写法二
+volumes:
+  - mysql-data:/var/lib/mysql
+volumes:
+  mysql-data:
 ```
 
 
@@ -1006,6 +1030,7 @@ docker run --name tomcat \
 	-e TZ=Asia/Shanghai  \ 
 	# 将当前目录下的test挂载到/usr/local/tomcat/webapps/test
 	-v $PWD/test:/usr/local/tomcat/webapps/test \
+	# 传入动态参数
 	# -e JAVA_OPTS='-Denable.scheduled=true' \
 	-e JAVA_OPTS='-Dspring.profiles.active=dev' \
 	-d tomcat
@@ -1041,5 +1066,13 @@ sudo docker cp host_path containerID:container_path
 # 示例，复制canal容器中/home/admin/canal-server/conf/canal.properties到/home/canal
 docker cp canal:/home/admin/canal-server/conf/canal.properties /home/canal
 docker cp canal:/home/admin/canal-server/conf/example/instance.properties /home/canal
+```
+
+（2）开放端口命令
+
+```shell
+firewall-cmd --zone=public --add-port=8081/tcp --permanen
+firewall-cmd --reload
+firewall-cmd --zone=public --query-port=8081/tcp
 ```
 

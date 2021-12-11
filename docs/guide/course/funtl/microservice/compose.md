@@ -624,6 +624,8 @@ y|Y|yes|Yes|YES|n|N|no|No|NO|true|True|TRUE|false|False|FALSE|on|On|ON|off|Off|O
 
 ### 单实例部署
 
+​	　单实例部署，部署的容器之间相互独立。
+
 ```yml
 version: '3.1'
 services:
@@ -637,13 +639,13 @@ services:
       TZ: Asia/Shanghai
       # 设定spring.profiles.active，前提是使用ENTRYPOINT
       SPRING_PROFILES_ACTIVE: dev
-  
+
   nginx:
     image: nginx
     container_name: nginx
     restart: always
     ports:
-      - 8080:80
+      - 80:80
     environment:
       TZ: Asia/Shanghai
     volumes:
@@ -654,7 +656,11 @@ services:
 
 
 
-### 多实例单机部署
+### 多实例部署
+
+​	　多实例部署，部署的容器之间需要互相访问。
+
+（1）采用本地网络的模式实现互通
 
 ```yaml
 version: '3.1'
@@ -670,12 +676,12 @@ services:
       SPRING_PROFILES_ACTIVE: dev
     network_mode: "host"
    
-   web_02:
+   admin_01:
     restart: always
-    image: web
-    container_name: web_02
+    image: admin
+    container_name: admin_01
     ports:
-      - 8081:8080
+      - 8081:8081
     environment:
       TZ: Asia/Shanghai
       SPRING_PROFILES_ACTIVE: dev
@@ -686,30 +692,71 @@ services:
 
 ### 负载均衡部署
 
+（1）同一应用多实例单机部署，建议启动时设定启动端口
+
+```yaml
+version: '3.1'
+services:
+  web_01:
+    restart: always
+    image: web
+    container_name: web_01
+    ports:
+      - 8080:8080
+    environment:
+      TZ: Asia/Shanghai
+      # 设定spring.profiles.active，前提是使用ENTRYPOINT
+      SPRING_PROFILES_ACTIVE: dev
+      # 配置中不能有server.port否则否则不生效
+      SERVER_PORT: 8080
+   
+   web_02:
+    restart: always
+    image: web
+    container_name: web_02
+    ports:
+      - 8081:8081
+    environment:
+      TZ: Asia/Shanghai
+      # 设定spring.profiles.active，前提是使用ENTRYPOINT
+      SPRING_PROFILES_ACTIVE: dev
+      # 配置中不能有server.port否则否则不生效
+      SERVER_PORT: 8081
+```
+
+
+
+（2）统一交于负载均衡器`HAProxy`进行负载均衡
+
+​	　执行命令`docker-compose up --scale web=3 -d` 启动`3`个`web`实例，然后，访问主机的`8080`端口，经`haproxy`即可转发到不同的`web`服务。
+
 ```yaml
 version: '3'
 services:
   web:
+    restart: always
     image: web
-    
-  redis:
-    image: "redis:alpine"
+    container_name: web
+    ports:
+      - 8085:8085
+    environment:
+      TZ: Asia/Shanghai
         
   lib: 
     image: dockercloud/haproxy 
     links: 
       - web 
     ports: 
-      - 8080:8080
+      - 8080:8085
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock 
 ```
 
-​	　执行命令`docker-compose up --scale web=3 -d` 启动项目。
-
 
 
 ### 集群部署
+
+
 
 
 

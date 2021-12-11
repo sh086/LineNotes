@@ -550,21 +550,20 @@ chmod u=rwx,g+r,o+r test.txt
 （1）安装JDK
 
 ```shell
-# 解压缩
-tar -zxvf jdk-8u152-linux-x64.tar.gz
-# 创建目录
-mkdir -p /usr/local/java
-# 移动安装目录
-mv jdk1.8.0_152/ /usr/local/java/
-# 设置所有者
-chown -R root:root /usr/local/java/
+# 进入安装目录，并将JDK安装包上传到此目录下
+cd /usr/local
+# 解压安装包
+tar -zxvf jdk-8u311-linux-x64.tar.gz
+# 重命名
+mv jdk1.8.0_311 jdk8
 ```
 
 （2）配置环境变量
 
 ```shell
 # 配置系统环境变量
-vi /etc/environment
+# vi /etc/environment
+
 # 配置用户环境变量
 vi /etc/profile
 # 添加如下语句
@@ -572,7 +571,7 @@ export JAVA_HOME=/usr/local/java/jdk1.8.0_152
 export JRE_HOME=/usr/local/java/jdk1.8.0_152/jre
 export PATH=$JAVA_HOME/bin:$JAVA_HOME/jre/bin:$PATH:$HOME/bin
 # 使环境变量生效
-source 文件名
+source /etc/profile
 ```
 
 ​	　安装成功后，可以输入`java -version`，验证是否安装成功。
