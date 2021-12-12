@@ -758,9 +758,6 @@ docker volume rm [volume_name]
 docker volume prune
 # 删除所有未关联的数据卷
 docker volume rm $(docker volume ls -qf dangling=true)
-
-# 查看 web 容器的信息
-docker inspect web
 ```
 
 
@@ -799,6 +796,24 @@ volumes:
   - mysql-data:/var/lib/mysql
 volumes:
   mysql-data:
+```
+
+
+
+### 运维指令
+
+```shell
+# 查询所有网络信息
+docker network ls
+# 查看某个网络信息
+docker network inspect network_name
+# 切断容器和网络的连接
+docker network disconnect -f network_name containers_name
+# 删除网络
+docker network rm network_name
+
+# 查看 web 容器的信息
+docker inspect web
 ```
 
 

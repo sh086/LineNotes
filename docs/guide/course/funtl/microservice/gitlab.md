@@ -62,11 +62,13 @@ ssh-keygen -t rsa -C "your_email@example.com"
 
 ![Lusifer1511801884](./images/Lusifer1511801884.png)
 
-### .gitignore文件
+### Git 过滤文件
+
+（1）.gitignore文件
 
 ​	　 `.gitignore` 是过滤配置文件，主要作用是过滤不需要上传的文件，如IDE 生成的工程文件、编译后的 class 文件等。在工程目录下，新建 `.gitignore` 文件，并填入如下配置：
 
-```
+```properties
 .gradle
 *.sw?
 .#*
@@ -107,4 +109,18 @@ transaction-logs
 **/logs/
 **/temp/
 **/classes/
+```
+
+（2） .gitattributes
+
+ 	　Windows 文本文件的换行符是 `\r\n`（CRLF）、 MacOS 文本文件的换行符是 `\n`（LF）。为了使得不同系统环境的开发者能开发同一个git项目，需要通过 `.gitattributes`进行配置。
+
+```properties
+# Windows-specific files that require CRLF:
+*.bat       eol=crlf
+*.txt       eol=crlf
+
+# Unix-specific files that require LF:
+*.java      eol=lf
+*.sh        eol=lf
 ```

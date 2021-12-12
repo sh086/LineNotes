@@ -147,7 +147,7 @@ public class UserServiceTest {
 
 （2）编写单元测试类
 
-```java
+```java{6,7}
 import com.cmhb.Application;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -155,6 +155,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
+@ActiveProfiles(value="prod")
+@Transactional
+@Rollback
 @Slf4j
 public class DateTest {
     //测试方法

@@ -664,3 +664,28 @@ set global validate_password_length=1;
 
 
 
+## 附录
+
+### 环境变量配置
+
+（1）/etc/environment
+
+```properties
+PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
+
+export JAVA_HOME=/usr/local/jdk1.8.0_152
+export JRE_HOME=/usr/local/jdk1.8.0_152/jre
+export MAVEN_HOME=/usr/local/apache-maven-3.5.3
+export CLASSPATH=$CLASSPATH:$JAVA_HOME/lib:$JAVA_HOME/jre/lib:$MAVEN_HOME/bi
+```
+
+（2）/etc/profile
+
+```properties
+export JAVA_HOME=/usr/local/jdk1.8.0_152
+export JRE_HOME=/usr/local/jdk1.8.0_152/jre
+export MAVEN_HOME=/usr/local/apache-maven-3.5.3
+export CLASSPATH=$CLASSPATH:$JAVA_HOME/lib:$JAVA_HOME/jre/lib
+export PATH=$JAVA_HOME/bin:$JAVA_HOME/jre/bin:$PATH:$HOME/bin:$MAVEN_HOME/bin
+```
+

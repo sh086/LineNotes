@@ -72,7 +72,7 @@ sidebarDepth: 0
     	    <a href="./springcloudnetflix.html" target="_blank">Spring Cloud Netflix</a>
     	</td>
     	<td  rowspan="4" align="center">
-    	    <a href="./devops.html">DevOps</a>
+    	    <a href="./devops.html">VueJs</a>
     	</td> 
     </tr>
     <tr>
@@ -100,5 +100,5 @@ sidebarDepth: 0
 **实战：**
 
 - [Spring Cloud iToken项目实战](../project/README_ITOKEN.html)
-- [Spring Cloud For MyShop](../project/README_MYSHOP.html)
+- [Spring Cloud For MyShop](../project/itoken-netflix.html)
 

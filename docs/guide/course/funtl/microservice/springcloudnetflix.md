@@ -352,6 +352,8 @@ public class EurekaApplication {
 
 ​	　最后，在`resources`目录下新建`application.yml`，并进行如下配置。
 
+（1）Eureka单机配置
+
 ```yaml
 spring:
   application:
@@ -369,6 +371,36 @@ eureka:
     fetchRegistry: false          # 启用eureka服务端模式，若没有则表明是客户端
     serviceUrl:
       defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+      
+############################################################################
+# 客户端配置
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://101.43.15.250:8761/eureka/
+```
+
+（2）Eureka集群配置
+
+```yaml
+eureka:
+  instance:
+    hostname: host
+  client:
+    # 表示是否将自己注册到Eureka，因为要构建集群环境，需要将自己注册到集群，所以应该开启2
+    registerWithEureka: true
+    # 表示是否从Eureka获取注册信息，如果是单一节点，不需要同步其他Eureka节点，则可以设置为false
+    # 但如是Eureka集群，则应该设置为 true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://101.43.15.250:8761/eureka/,http://101.43.15.250:8762/eureka/
+
+############################################################################
+# 客户端配置
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://101.43.15.250:8761/eureka/,http://101.43.15.250:8762/eureka/
 ```
 
 ​	　至此，Eureka服务端注册中心已经部署完毕，打开页面`http://127.0.0.1:8761/`即可访问。
@@ -1405,7 +1437,7 @@ public class ConfigApplication {
 }
 ```
 
-​	　然后，在`resources`目录下新建`application.yml`，并进行如下配置。
+​	　然后，在`resources`目录下新建`application.yml`，配置服务器的默认端口为 `8888`，如果修改了默认端口，则`spring.cloud.config.uri`仓库地址必须在`bootstrap.*`中配置，因为 `bootstrap` 开头的配置文件会被优先加载和配置。
 
 ```yaml
 spring:
@@ -1435,9 +1467,7 @@ eureka:
       defaultZone: http://localhost:8761/eureka/
 ```
 
-​	　配置服务器的默认端口为 `8888`，如果修改了默认端口，则`spring.cloud.config.uri`仓库地址必须在`bootstrap.yml`中配置，因为 `bootstrap` 开头的配置文件会被优先加载和配置。
-
-​	　另外，还需要在`GitHub`中新建`spring-cloud-config`项目，然后，切换到`master`分支。接着，新建`respo`目录，将`service-feign`项目中的配置文件按照如下名称上传到项目中。
+​	　另外，还需要在`GitHub`中新建`spring-cloud-config`项目，然后，切换到`master`分支，注意不能是`main`分支，否则可能会出错。接着，新建`respo`目录，将`service-feign`项目中的配置文件按照如下名称上传到项目中。
 
 ```shell
 service-feign-dev.yml  # feign测试环境配置，port 为 8765
@@ -1463,8 +1493,6 @@ http://localhost:8888/service-feign-dev/master              # XML格式
 http://localhost:8888/service-feign-dev.yml                 # YAML格式
 http://localhost:8888/master/service-feign-dev.yml          # YAML格式
 ```
-
-​	　注意，若是`GitHub`仓库，`springcloud-config`需要是`public`，且分支必须包含`master`才行；但若是`GitLab`仓库，则不需要这样。
 
 
 

@@ -15,7 +15,6 @@ const funtl = [
         title: '实战',
         collapsable: false,
         children: [
-            ['microservice/devops.md','持续集成与交付'],
             ['project/README_MYSHOP.md','MyShop实战'],
             ['project/README_ITOKEN.md','微服务实战之iToken'],
         ]

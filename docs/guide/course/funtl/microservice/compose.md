@@ -624,7 +624,9 @@ y|Y|yes|Yes|YES|n|N|no|No|NO|true|True|TRUE|false|False|FALSE|on|On|ON|off|Off|O
 
 ### 单实例部署
 
-​	　单实例部署，部署的容器之间相互独立。
+（1）单实例部署，部署的容器之间**处于同一默认的网络中**，所有服务可实现互通
+
+​	　 默认网络`docker_default_network`会对所有`services`下面的服务生效，所以`services`下面的各个服务之间才能够通过`service`名称互相访问。
 
 ```yml
 version: '3.1'
@@ -656,11 +658,7 @@ services:
 
 
 
-### 多实例部署
-
-​	　多实例部署，部署的容器之间需要互相访问。
-
-（1）采用本地网络的模式实现互通
+（2）以主机模式部署，采用本地网络的模式实现互通，不建议
 
 ```yaml
 version: '3.1'
@@ -686,6 +684,79 @@ services:
       TZ: Asia/Shanghai
       SPRING_PROFILES_ACTIVE: dev
     network_mode: "host"
+```
+
+
+
+（3）为每个`compose.yml`创建自定义网络名称
+
+​	　单个机器部署多个应用时，因为`itoken_config`和`itoken-eureka`是在不同的`compose.yml`中分别启动的，所以，要指明各自的网络。
+
+​	　否则，因`itoken-eureka`和`itoken-config`是使用了默认网络，若`itoken-config`已启动，在`token-eureka`执行执行`docker-compsoe down`时，就会去删除这个默认网络，但是这个默认网络在被`itoken-config`使用，就会提示如下错误信息。
+
+```
+Network docker_default_network  Removing
+Network docker_default_network  Error
+network docker_default_network id 1cd771ba2a has active endpoints
+```
+
+​	　出现这个问题后，要先移除`docker_default_network`网络，才能再次构建，方法参见[这里](https://www.cnblogs.com/vpc123/articles/14163395.html)。然后，先在`itoken-config`指明`networks`网络。
+
+```yaml
+version: '3.1'
+services:
+  itoken-config:
+    image: sh086/itoken-config
+    restart: always
+    container_name: itoken_config
+    ports:
+      - 8888:8888
+    networks:
+      - config_network
+
+networks:
+  config_network:
+```
+
+​	　最后，在`itoken-eureka`也指明使用的网络名称，停止并删除原来的容器后，再次重启，即可发现正常`down`了。
+
+```yaml
+version: '3.1'
+services:
+  itoken-eureka:
+    image: sh086/itoken-eureka
+    restart: always
+    container_name: itoken-eureka
+    ports:
+      - 8761:8761
+    networks:
+      - eureka_network
+
+# 需要指定默认网络，否则在down时，会提示错误
+networks:
+  eureka_network:
+```
+
+
+
+（4）加入已存在的网络
+
+```yaml
+version: '3.1'
+services:
+  web_02:
+    image: web
+    restart: always
+    container_name: web_02
+    ports:
+      - 8080:8080
+    networks:
+      - web_network
+
+# 加入已存在网络
+networks:
+  web_network:
+    external: true
 ```
 
 
@@ -726,7 +797,38 @@ services:
 
 
 
-（2）统一交于负载均衡器`HAProxy`进行负载均衡
+（2）仅通过`-p`端口映射启动多个实例，不建议
+
+​	　这种启动方式，不能在服务注册与发现中心注册，因为容器内的`8761`端口号相同，只能注册`1台`。仅可用于`非SpringCloud`应用。
+
+```yaml
+version: '3.1'
+services:
+  itoken-eureka-1:
+    image: sh086/itoken-eureka
+    restart: always
+    container_name: itoken-eureka-1
+    ports:
+      - 8761:8761
+    networks:
+      - eureka_network
+
+  itoken-eureka-2:
+    image: sh086/itoken-eureka
+    restart: always
+    container_name: itoken-eureka-2
+    ports:
+      - 8762:8761
+    networks:
+      - eureka_network
+
+networks:
+  eureka_network:
+```
+
+
+
+（3）统一交于负载均衡器`HAProxy`进行负载均衡
 
 ​	　执行命令`docker-compose up --scale web=3 -d` 启动`3`个`web`实例，然后，访问主机的`8080`端口，经`haproxy`即可转发到不同的`web`服务。
 
@@ -806,9 +908,13 @@ services:
       --sql-mode="STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION,NO_ZERO_DATE,NO_ZERO_IN_DATE,ERROR_FOR_DIVISION_BY_ZERO"
     volumes:
       - mysql-data:/var/lib/mysql
+    networks:
+      - mysql_network
 
 volumes:
   mysql-data:
+networks:
+  mysql_network:
 ```
 
 ​	　特别的，Compose默认的数据卷放在`/var/lib/docker/volumes`目录下。
@@ -827,6 +933,7 @@ version: '3.1'
 services:
   db:
     image: mysql
+    container_name: mysql8
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: 123456
@@ -840,5 +947,10 @@ services:
       - 3306:3306
     volumes:
       - ./data:/var/lib/mysql
+    networks:
+      - mysql_network
+
+networks:
+ mysql_network:
 ```
 

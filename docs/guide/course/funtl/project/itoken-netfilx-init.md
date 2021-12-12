@@ -6,7 +6,7 @@ sidebar: auto
 
 ## YML配置中心
 
-​	　首先，在`itoken-config`项目下新建`respo`文件夹，用于存放项目配置。完成后，需立即将配置提交到`GitLab`代码仓库中`itoken-config`项目的的`master`分支上。
+​	　首先，在`itoken-config`项目下新建`respo`文件夹，用于存放项目配置。完成后，需立即将配置提交到`GitLab`代码仓库中`itoken-config`项目的的`master`分支上（不是`main`分支哦）。
 
 （1）新建`itoken-admin-dev.yml`配置
 
@@ -517,7 +517,7 @@ spring:
         url: http://localhost:8084
   cloud:
     config:
-      label: main
+      label: master
       server:
         git:
           # 如果使用 GitLab 作为仓库的话，git.uri 需要在结尾加上 .git，GitHub 则不用
@@ -551,7 +551,7 @@ management:
 
 ### 测试运行
 
-​	　运行`itoken-config`项目，访问`http://localhost:8888/itoken-admin/dev/main`，若可以获得配置，则表明启动成功。
+​	　运行`itoken-config`项目，访问`http://localhost:8888/itoken-admin/dev/master`，若可以获得配置，则表明启动成功。
 
 ![image-20211128220155240](./images/image-20211128220155240.png)
 
@@ -648,7 +648,7 @@ spring:
     config:
       uri: http://localhost:8888
       name: itoken-eureka
-      label: main
+      label: master
       profile: dev
 ```
 
@@ -757,7 +757,7 @@ spring:
     config:
       uri: http://localhost:8888
       name: itoken-admin
-      label: main
+      label: master
       profile: dev
 ```
 
@@ -886,7 +886,7 @@ spring:
     config:
       uri: http://localhost:8888
       name: itoken-zipkin
-      label: main
+      label: master
       profile: dev
 ```
 
@@ -997,7 +997,7 @@ spring:
     config:
       uri: http://localhost:8888
       name: itoken-zuul
-      label: main
+      label: master
       profile: dev
 ```
 

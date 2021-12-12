@@ -159,67 +159,7 @@ mvn deploy
 
 
 
-### 管理第三方依赖
-
-​	　建议在上传第三方 JAR 包时，创建单独的第三方 JAR 包管理仓库`maven-3rd`，便于管理有维护。
-
-```shell
-# 如第三方JAR包：aliyun-sdk-oss-2.2.3.jar
-mvn deploy:deploy-file 
-  -DgroupId=com.google.code.kaptcha
-  -DartifactId=kaptcha
-  -Dversion=2.3
-  -Dpackaging=jar 
-  -Dfile=./libs/kaptcha-2.3.jar
-  -Durl=http://127.0.0.1:8081/repository/maven-3rd/ 
-  -DrepositoryId=nexus-releases # 使用nexus-releases配置的用户名密码登录nexus（授权）
-```
-
-
-
-## 附录
-
-### 解决启动问题
-
-（1）数据卷目录权限问题
-
-​	　若启动时，如果出现权限问题，可以赋予数据卷目录可读可写的权限。
-
-```shell
-chmod 777 /usr/local/docker/nexus/data
-```
-
-
-
-（2）启动内存不足问题
-
-​	　`nexus3`默认启动需要`2703M`内存，若内存不足，可修改内存运行，但至少也需要`1G`左右。
-
-```shell
-docker run -d \
--e "INSTALL4J_ADD_VM_PARAMS=-Xms128m -Xmx512m \
-     -XX:MaxDirectMemorySize=512m \
-     -Djava.util.prefs.userRoot=/nexus-data/javaprefs"  \
---name nexus \
--p 8081:8081 \
--v /usr/local/docker/nexus/data:/nexus-data \
-sonatype/nexus3
-```
-
-
-
-（3）访问SonatypeOutreach超时
-
-```shell
-com.sonatype.nexus.plugins.outreach.internal.outreach.SonatypeOutreach 
-- Could not download page bundle javax.net.ssl.SSLException: Read timed out
-```
-
-​	　登录账号，打开 `System` --> `Capabilities` ，将 `Outreach:Management` 禁用即可。
-
-
-
-### 配置私服地址
+### 远程部署私服配置
 
 ​	　本地运行或者本地打包时，只需将仓库依赖都添加到`dependencies`项目即可。
 
@@ -307,4 +247,64 @@ com.sonatype.nexus.plugins.outreach.internal.outreach.SonatypeOutreach
     </repository>
 </repositories>
 ```
+
+
+
+### 管理第三方依赖
+
+​	　建议在上传第三方 JAR 包时，创建单独的第三方 JAR 包管理仓库`maven-3rd`，便于管理有维护。
+
+```shell
+# 如第三方JAR包：aliyun-sdk-oss-2.2.3.jar
+mvn deploy:deploy-file 
+  -DgroupId=com.google.code.kaptcha
+  -DartifactId=kaptcha
+  -Dversion=2.3
+  -Dpackaging=jar 
+  -Dfile=./libs/kaptcha-2.3.jar
+  -Durl=http://127.0.0.1:8081/repository/maven-3rd/ 
+  -DrepositoryId=nexus-releases # 使用nexus-releases配置的用户名密码登录nexus（授权）
+```
+
+
+
+## 附录
+
+### 解决启动问题
+
+（1）数据卷目录权限问题
+
+​	　若启动时，如果出现权限问题，可以赋予数据卷目录可读可写的权限。
+
+```shell
+chmod 777 /usr/local/docker/nexus/data
+```
+
+
+
+（2）启动内存不足问题
+
+​	　`nexus3`默认启动需要`2703M`内存，若内存不足，可修改内存运行，但至少也需要`1G`左右。
+
+```shell
+docker run -d \
+-e "INSTALL4J_ADD_VM_PARAMS=-Xms128m -Xmx512m \
+     -XX:MaxDirectMemorySize=512m \
+     -Djava.util.prefs.userRoot=/nexus-data/javaprefs"  \
+--name nexus \
+-p 8081:8081 \
+-v /usr/local/docker/nexus/data:/nexus-data \
+sonatype/nexus3
+```
+
+
+
+（3）访问SonatypeOutreach超时
+
+```shell
+com.sonatype.nexus.plugins.outreach.internal.outreach.SonatypeOutreach 
+- Could not download page bundle javax.net.ssl.SSLException: Read timed out
+```
+
+​	　登录账号，打开 `System` --> `Capabilities` ，将 `Outreach:Management` 禁用即可。
 
