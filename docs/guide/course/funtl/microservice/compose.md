@@ -885,6 +885,8 @@ services:
 
 ### MySQL应用
 
+​	　注意，这个`MYSQL_ROOT_PASSWORD`密码配置只在初始时生效，数据卷不重新建立，即使重启容器也不会重置密码。
+
 （1）部署MySQL5
 
 ```yml

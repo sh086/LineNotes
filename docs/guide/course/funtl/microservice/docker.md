@@ -1053,7 +1053,7 @@ docker run --name tomcat \
 
 
 
-### Mysql应用
+### MySql应用
 
 ```shell
 docker run -p 3306:3306 --name mysql \

@@ -8,6 +8,10 @@
 - [动态化开启定时任务](./2021/动态化开启定时任务.html)
 - [SpringBoot启用多线程](./2021/SpringBoot启用多线程.html)
 
+### Component
+- [百度文字识别](./2021/百度文字识别.html)
+- [通过接口运维数据库](./2021/通过接口运维数据库.html)
+
 ### Devops
 - [使用Alibaba canal监听数据库](./2021/使用AlibabaCanal监听数据库.html)
 - [swap交换分区解决内存不足问题](./2021/swap交换分区解决内存不足问题.html)
