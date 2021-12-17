@@ -12,20 +12,19 @@ const funtl = [
         ]
     },
     {
+        title: '专题',
+        collapsable: false,
+        children: [
+            ['topic/vue.md','Vue渐进式JavaScript框架'],
+            ['topic/springsecurityoauth2.md','Spring Security Oauth2'],
+        ]
+    },
+    {
         title: '实战',
         collapsable: false,
         children: [
             ['project/README_MYSHOP.md','MyShop实战'],
             ['project/README_ITOKEN.md','微服务实战之iToken'],
-        ]
-    },
-    {
-        title: '专题',
-        collapsable: false,
-        children: [
-            ['topic/gitflow.md','GitFlow工作流'],
-            ['topic/vue.md','Vue渐进式JavaScript框架'],
-            ['topic/springsecurityoauth2.md','Spring Security Oauth2'],
         ]
     },
 ]

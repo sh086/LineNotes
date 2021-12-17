@@ -1171,9 +1171,7 @@ Service Provider port is : 8081 from hi
 
 
 
-### Nacos Config Test
-
-（1）配置动态更新
+### 配置动态更新
 
 ​	　Nacos Config 支持**配置的动态更新**，可以使用 `spring.cloud.nacos.config.refresh.enabled=false` 来关闭动态刷新。
 
@@ -1209,7 +1207,7 @@ Hello shooter
 
 
 
-（2）Nacos Config Profiles
+### Nacos Config Profile
 
 ​	　 Spring 为我们提供了 `Profile` 功能，可以在启动的时候添加一个虚拟机参数，激活自己环境所要用的 `Profile` 。
 

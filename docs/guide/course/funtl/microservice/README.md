@@ -45,12 +45,12 @@ sidebarDepth: 0
     </tr>
     <tr>
     	<td>SaaS</td>
-        <td ><a href="./registry.html" target="_blank">RabbitMQ</a></td> 
+        <td align="center"><a href="./registry.html" target="_blank">MQ</a></td> 
         <td colspan="1" align="center">
-           <a href="./registry.html" target="_blank">Niginx</a></td>
+           <a href="./nginx.html" target="_blank">Nginx</a></td>
     	</td>
     	<td colspan="1" align="center">
-           <a href="./registry.html" target="_blank">Redis</a></td>
+           <a href="./redis.html" target="_blank">Redis</a></td>
     	</td>
     	<td  colspan="1" align="center">
            <a href="./registry.html" target="_blank">Solr</a>
@@ -63,7 +63,7 @@ sidebarDepth: 0
         </td> 
     </tr>
     <tr>
-    	<td rowspan="6"  colspan="1" align="center"><b>微服务1.0</b></td>
+    	<td rowspan="4"  colspan="1" align="center"><b>微服务1.0</b></td>
     	<td rowspan="3">Main</td> 
     	<td rowspan="4" align="center">
     	    <a href="./springboot.html" target="_blank">SpringBoot</a>

@@ -257,33 +257,40 @@ mvn site               # 生成项目文档
 
 
 
-## 附录
+## Maven实践
 
-### Maven实践
+### 管理第三方依赖
 
-（1）管理第三方依赖
 - 方法一：每个模块单独管理，放在`webapp`的`lib`中。
 - 方法二：[使用maven-install-plugin插件统一管理至某个单独的项目](../myshop/myshop-ssm.html#手动依赖管理)
 - 方法三：[使用Nexu管理第三方依赖](../microservice/nexus.html)（推荐）
 
+### 自动生成代码
 
-（2）自动生成代码
 - [使用tk.mybatis自动生成代码](../microservice/springboot.html#自动完成代码)
 - 使用mybatisPlus自动生成代码
 
-（3）多环境配置
+### 多环境配置
+
 - IDEA 启动设定 Profile
 - Spring Boot Profile
-- [Maven Profile](#Maven Profile)
-- [Nacos Config Profile](../microservice/springcloudalibaba.html#nacos-config-test)
+- [Nacos Config Profile](../microservice/springcloudalibaba.html#nacos-config-profile)
+- [Maven Profile](#maven-profile)
 
-（4）部署文件打包
+
+
+### 部署文件打包
+
 - 使用mvn命令打包（package、install、deploy）
 - [通过Maven Assembly 插件打包](../microservice/springcloudalibaba.html#maven-assembly)
 
 
 
+## 附录
+
 ### Maven Profile
+
+​	　 不仅可以通过设定`spring.profiles.active`来激活不同的`Profile`，也可以通过`Maven Profile`来激活。
 
 ```xml
 <profiles>

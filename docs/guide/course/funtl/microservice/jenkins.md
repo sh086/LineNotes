@@ -49,7 +49,7 @@ chown -R 1000 /usr/local/docker/jenkins/data
 
 
 
-### 配置Jenkins
+### Jenkins配置
 
 （1）配置 JDK & Maven
 

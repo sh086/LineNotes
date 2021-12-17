@@ -761,11 +761,41 @@ networks:
 
 
 
-### 负载均衡部署
+### 集群部署
 
-（1）同一应用多实例单机部署，建议启动时设定启动端口
+（1）通过`-p`端口映射启动多个实例，用于**组件集群部署**
 
-```yaml
+​	　这种启动方式，不能在服务注册与发现中心注册，因为容器内的`6379`端口号相同，只能注册`1台`。仅可用于`非SpringCloud`应用，如`Redis`集群部署。
+
+```yaml{7,13,20}
+version: '3.1'
+services:
+  master:
+    image: redis
+    container_name: redis-master
+    ports:
+      - 6379:6379
+
+  slave1:
+    image: redis
+    container_name: redis-slave-1
+    ports:
+      - 6380:6379
+    command: redis-server --slaveof redis-master 6379
+
+  slave2:
+    image: redis
+    container_name: redis-slave-2
+    ports:
+      - 6381:6379
+    command: redis-server --slaveof redis-master 6379
+```
+
+
+
+（2）同一应用多实例单机部署，启动时设定启动端口，用于**应用集群部署**。
+
+```yaml{8,21}
 version: '3.1'
 services:
   web_01:
@@ -797,42 +827,11 @@ services:
 
 
 
-（2）仅通过`-p`端口映射启动多个实例，不建议
+### 负载均衡部署
 
-​	　这种启动方式，不能在服务注册与发现中心注册，因为容器内的`8761`端口号相同，只能注册`1台`。仅可用于`非SpringCloud`应用。
+​	　可以交于负载均衡器`HAProxy`进行负载均衡，执行命令`docker-compose up --scale web=3 -d` 启动`3`个`web`实例，然后，访问主机的`8080`端口，经`haproxy`即可转发到不同的`web`服务。
 
-```yaml
-version: '3.1'
-services:
-  itoken-eureka-1:
-    image: sh086/itoken-eureka
-    restart: always
-    container_name: itoken-eureka-1
-    ports:
-      - 8761:8761
-    networks:
-      - eureka_network
-
-  itoken-eureka-2:
-    image: sh086/itoken-eureka
-    restart: always
-    container_name: itoken-eureka-2
-    ports:
-      - 8762:8761
-    networks:
-      - eureka_network
-
-networks:
-  eureka_network:
-```
-
-
-
-（3）统一交于负载均衡器`HAProxy`进行负载均衡
-
-​	　执行命令`docker-compose up --scale web=3 -d` 启动`3`个`web`实例，然后，访问主机的`8080`端口，经`haproxy`即可转发到不同的`web`服务。
-
-```yaml
+```yaml{8,17}
 version: '3'
 services:
   web:
@@ -853,12 +852,6 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock 
 ```
-
-
-
-### 集群部署
-
-
 
 
 

@@ -13,12 +13,12 @@ sidebarDepth: 0
 
 **指南：**
 
-<table>
+<table> 
     <tr>
         <td colspan="2" align="center"><b>工具</b></td> 
         <td colspan="2" align="center"><a href="./idea.html" target="_blank">Intellij IDEA</a></td> 
         <td align="center"><a href="./maven.html" target="_blank">Maven</a></td>
-        <td></td> 
+        <td align="center"><a href="./maven.html" target="_blank">Swagger2</a></td>
         <td></td> 
    </tr>
    <tr>
@@ -47,8 +47,12 @@ sidebarDepth: 0
     </tr>
     <tr>
         <td>组件</td>
-        <td colspan="2" align="center"><a href="./httpclient.html" target="_blank">API通讯</a></td> 
-        <td></td> 
+        <td colspan="2" align="center">
+        	<a href="./httpclient.html" target="_blank">RESTful API</a>
+        </td> 
+        <td colspan="1" align="center">
+        	<a href="./httpclient.html" target="_blank">HttpClient</a>
+        </td> 
         <td></td>  
         <td></td> 
     </tr>
