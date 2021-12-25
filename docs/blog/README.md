@@ -13,7 +13,8 @@
 - [通过接口运维数据库](./2021/通过接口运维数据库.html)
 
 ### Devops
-- [使用Alibaba canal监听数据库](./2021/使用AlibabaCanal监听数据库.html)
+- [Jmeter压力测试](./2021/Jmeter压力测试.html)
+- [使用Alibaba canal同步数据库](./2021/使用AlibabaCanal监听数据库.html)
 - [swap交换分区解决内存不足问题](./2021/swap交换分区解决内存不足问题.html)
 - [screw数据库文档生成工具](./2021/screw数据库文档生成工具.html)
 - [快速部署SkyWalking监控](./2021/快速部署SkyWalking监控.html)

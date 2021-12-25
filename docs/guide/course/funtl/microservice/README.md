@@ -72,7 +72,7 @@ sidebarDepth: 0
     	    <a href="./springcloudnetflix.html" target="_blank">Spring Cloud Netflix</a>
     	</td>
     	<td  rowspan="4" align="center">
-    	    <a href="./devops.html">VueJs</a>
+    	    <a href="./devops.html">SSO</a>
     	</td> 
     </tr>
     <tr>

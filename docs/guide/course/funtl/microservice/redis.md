@@ -10,6 +10,10 @@ sidebar: auto
 
 
 
+### 自增主键生成
+
+
+
 ## 快速开始
 
 ### Redis HA方案
@@ -56,25 +60,19 @@ Redis Sentinel集群部署
 
 
 
-### HelloRedis
-
-select 1
-
 ## Redis实践
 
 ### 数据缓存服务
 
+HelloRedis
 
+select 1
 
 ### 单点登录服务
 
-
+coicke不存放完整信息，仅存放id
 
 ### Mybatsi Redis
-
-
-
-### 自增主键生成
 
 
 

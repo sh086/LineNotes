@@ -216,18 +216,13 @@ public class IndexController {
 
 ### Thymeleaf模板
 
-​	　首先定义一个` footer.html` 代码片段。
+​	　首先，定义一个` footer.html` 代码片段。
 
 ```html
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-    <body>
-         <!--方式一：可以使用 th:fragment 选取模块-->
-         <div th:fragment="section-one">section-one</div>
-         <!--方式二：可以通过 CSS选择器 选取模块-->
-         <div id="section-two">section-two</div>
-    </body>
-</html>
+<!--方式一：可以使用 th:fragment 选取模块-->
+<footer th:fragment="section-one">section-one</footer>
+<!--方式二：可以通过 id 选取模块-->
+<footer id="section-two">section-two</footer>
 ```
 
 ​	　可以通过 `th:include` 或者 `th:replace` 属性引用到页面上。
@@ -236,7 +231,7 @@ public class IndexController {
 <!--th:include方式，引入子模块的 children，依然保留父模块的 tag-->
 <div th:include="footer :: section-one"></div>   ===>  <div>section-one</div>
 
-<!--th:replace方式，引入子模块的所有，不保留父模块的 tag-->
+<!--th:replace方式，引入子模块的所有，不保留父模块的 tag -->
 <div th:replace="footer :: #section-two"></div>  ===>  <footer>section-two</footer>
 ```
 

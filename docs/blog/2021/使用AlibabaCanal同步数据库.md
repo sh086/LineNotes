@@ -1,4 +1,4 @@
-# 使用Alibaba canal监听数据库
+# 使用Alibaba canal同步数据库
 
 ​	　`canal`是阿里开源的一个中间件，基于监听`binlog`日志去进行同步数据，用于 **MySQL 数据库增量日志解析**，提供**增量数据订阅和消费**。对业务代码没有侵入、具有实时性
 
@@ -15,7 +15,7 @@
 
 ## 生产者
 
-### mysql start
+### Mysql Start
 
 ​	　首先，查看MySql是否已经启用了`binlog`模式，显示 `ON` 表示开启。
 
@@ -59,7 +59,7 @@ FLUSH PRIVILEGES;
 
 
 
-### canal-server
+### Canal Server
 
 ​	　首先，在配置文件`instance.properties`中，配置MySQL数据库相关信息。
 
@@ -128,7 +128,7 @@ services:
 
 ## 消费者
 
-### springboot
+### SpringBoot
 
 ​	　在服务器上新建如下部署目录结构，其中，`instance.propertie`和`canal.properties`的初始配置文件，请参照目录 或者 [这里](https://github.com/alibaba/canal/releases)。
 

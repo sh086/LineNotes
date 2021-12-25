@@ -71,44 +71,46 @@ services:
 
 ​	　虚拟主机是一种特殊的软硬件技术，它可以**将网络上的每一台计算机分成多个虚拟主机**，**每个虚拟主机可以独立对外提供 www 服务**，这样就可以**实现一台主机对外提供多个 web 服务**，每个虚拟主机之间是独立的，互不影响的。
 
-​	　通过 Nginx 可以实现虚拟主机的配置，Nginx 支持三种类型的虚拟主机配置，基于 IP 的虚拟主机、基于域名的虚拟主机、基于端口的虚拟主机。
+​	　通过 Nginx 可以实现虚拟主机的配置，**每个 server 就是一个虚拟主机**。Nginx 支持三种类型的虚拟主机配置，基于 IP 的虚拟主机、基于域名的虚拟主机、基于端口的虚拟主机。
 
-```properties{18,31}
-# CPU内核数量
-worker_processes  1;
-events {
-    # 一个子线程下的连接数
-    worker_connections  1024;
-}
+（1）基于域名的虚拟主机配置
 
-http {
-    include       mime.types;
-    default_type  application/octet-stream;
-    sendfile        on;
-    keepalive_timeout  65;
-    
-    # 基于端口的虚拟主机配置,每个 server 就是一个虚拟主机
-    server {
-        # 配置监听端口
-        listen       80;
-        server_name  192.168.75.145;
-        location / {
-	        # 使用 root 指令指定虚拟主机目录,即网页存放目录
-            root   /usr/share/nginx/wwwroot/;
-	        # 指定欢迎页面，按从左到右顺序查找
-            index  index.html index.htm;
-        }
-
-    }
-    
-    # 基于域名的虚拟主机配置
-    server {
+```properties
+# web服务1
+server {
         listen       80;
         server_name  admin.web.itoken.funtl.com;
-        location / {
-            root   /usr/share/nginx/wwwroot/;
-            index  index.html index.htm;
-        }
+        location /admin {
+        root   /usr/share/admin/wwwroot/;
+        index  index.html index.htm;
+    }
+}
+
+# web服务2
+server {
+        listen       80;
+        server_name  customer.web.itoken.funtl.com;
+        location /customer {
+        root   /usr/share/customer/wwwroot/;
+        index  index.html index.htm;
+    }
+}
+```
+
+
+
+（2）基于端口的虚拟主机配置
+
+```properties
+server {
+    # 配置监听端口
+    listen       80;
+    server_name  192.168.75.145;
+    location /system {
+        # 使用 root 指令指定虚拟主机目录,即网页存放目录
+        root   /usr/share/system/wwwroot/;
+        # 指定欢迎页面，按从左到右顺序查找
+        index  index.html index.htm;
     }
 }
 ```
@@ -117,54 +119,24 @@ http {
 
 ### 反向代理
 
-```properties{18-20,33,35}
-user  nginx;
-worker_processes  1;
-
-events {
-    worker_connections  1024;
+```properties
+# 配置一个代理即 tomcat1 服务器
+# upstream 配置中的名称不可以有下划线("_")
+upstream tomcatServer1 {
+    # 可使用 IP:port 或者 域名 配置代理
+	server 192.168.75.145:9090;
 }
 
-http {
-    include       mime.types;
-    default_type  application/octet-stream;
-
-    sendfile        on;
-
-    keepalive_timeout  65;
-	
-	# 配置一个代理即 tomcat1 服务器
-	# upstream 配置中的名称不可以有下划线("_")
-	upstream tomcatServer1 {
-		server 192.168.75.145:9090;
-	}
-
-	# 配置一个代理即 tomcat2 服务器
-	upstream tomcatServer2 {
-		server 192.168.75.145:9091;
-	}
-
-	# 配置一个虚拟主机
-	server {
-		listen 80;
-		server_name admin.service.itoken.funtl.com;
-		location / {
-				# 域名 admin.service.itoken.funtl.com 的请求全部转发到 tomcat_server1 即 tomcat1 服务上
-				proxy_pass http://tomcatServer1;
-				# 欢迎页面，按照从左到右的顺序查找页面
-				index index.jsp index.html index.htm;
-		}
-	}
-
-	server {
-		listen 80;
-		server_name admin.web.itoken.funtl.com;
-		location / {
-			# 域名 admin.web.itoken.funtl.com 的请求全部转发到 tomcat_server2 即 tomcat2 服务上
-			proxy_pass http://tomcatServer2;
-			index index.jsp index.html index.htm;
-		}
-	}
+# 配置一个虚拟主机
+server {
+    listen 80;
+    server_name admin.service.itoken.funtl.com;
+    location / {
+        # 域名 admin.service.itoken.funtl.com 的请求全部转发到tomcatServer1上
+        proxy_pass http://tomcatServer1;
+        # 欢迎页面，按照从左到右的顺序查找页面
+        index index.jsp index.html index.htm;
+    }
 }
 ```
 
@@ -173,6 +145,96 @@ http {
 ### 负载均衡
 
 ​	　Nginx 作为负载均衡服务器，用户请求先到达 Nginx ，再由 Nginx 根据负载配置将请求转发至 Tomcat 服务器。从而扩展网络设备和服务器的带宽、增加吞吐量、加强网络数据处理能力、提高网络的灵活性和可用性。
+
+​	　Nginx支持同时设置多组的负载均衡，用来给不用的server来使用。
+
+（1）轮询（默认）
+
+​	　每个请求按时间顺序逐一分配到不同的后端服务器，如果后端服务器down掉，能自动剔除。
+
+```properties
+# upstream 定义负载均衡设备的 Ip及设备状态 
+upstream myServer {
+    server 192.168.75.145:9090;
+    server 192.168.75.145:9091;
+}
+```
+
+（2）weight
+
+​	　指定轮询几率，weight和访问比率成正比。默认为 1 ,weight 越大，负载的权重就越大。用于后端服务器性能不均的情况。
+
+```properties
+# upstream 定义负载均衡设备的 Ip及设备状态 
+upstream myServer {
+    server 192.168.75.145:9090 weight=10;
+    server 192.168.75.145:9091 weight=10;
+    server 192.168.75.145:9092;
+}
+
+ # down：表示当前的 server 暂时不参与负载
+		server 127.0.0.1:9090 down;
+        # backup：其它所有的非backup机器,down或者忙的时候，才会请求backup机器
+        server 127.0.0.1:7070 backup;
+        # max_fails：允许请求失败的次数,默认为1,当超过最大次数时，返回 proxy_next_upstream 模块定义的错误
+        # fail_timeout：max_fails次失败后，暂停的时间
+        server 127.0.0.1:18080 max_fails=10 fail_timeout=60s;  
+```
+
+（3）ip_hash
+	　**每个请求按访问ip的hash结果分配**，这样每个访客固定访问一个后端服务器，可以解决session的问题。
+
+```properties
+# upstream 定义负载均衡设备的 Ip及设备状态 
+upstream myServer {
+    ip_hash;
+    server 192.168.75.145:9090;
+    server 192.168.75.145:9091;
+}
+```
+
+
+
+（4）fair（第三方）
+	　按后端服务器的响应时间来分配请求，响应时间短的优先分配。
+
+```properties
+# upstream 定义负载均衡设备的 Ip及设备状态 
+upstream myServer {
+    server server1.linuxany.com;
+    server server2.linuxany.com;
+    fair;
+}
+```
+
+
+**5、url_hash（第三方）
+**
+按访问url的hash结果来分配请求，使每个url定向到同一个后端服务器，后端服务器为缓存时比较有效。
+
+例：在upstream中加入hash语句，server语句中不能写入weight等其他的参数，hash_method是使用的hash算法
+
+复制代码代码如下:
+
+
+upstream backend {
+server squid1:3128;
+server squid2:3128;
+hash $request_uri;
+hash_method crc32;
+}
+\#定义负载均衡设备的Ip及设备状态
+upstream backend{
+ip_hash;
+server 127.0.0.1:9090 down;
+server 127.0.0.1:8080 weight=2;
+server 127.0.0.1:6060;
+server 127.0.0.1:7070 backup;
+}
+
+
+
+
 
 ```properties
 user  nginx;
@@ -193,15 +255,28 @@ http {
 	upstream myServer {
 	    # down：表示当前的 server 暂时不参与负载
 		server 127.0.0.1:9090 down;
-		# weight：默认为 1 weight 越大，负载的权重就越大
+		# weight：默认为 1 ,weight 越大，负载的权重就越大
         server 127.0.0.1:8080 weight=2;
         server 127.0.0.1:6060;
-        # backup：其它所有的非 backup 机器 down 或者忙的时候，请求 backup 机器。所以这台机器压力会最轻
+        # backup：其它所有的非backup机器,down或者忙的时候，才会请求backup机器
         server 127.0.0.1:7070 backup;
-        # max_fails：允许请求失败的次数默认为 1 当超过最大次数时，返回 proxy_next_upstream 模块定义的错误
+        # max_fails：允许请求失败的次数,默认为1,当超过最大次数时，返回 proxy_next_upstream 模块定义的错误
         # fail_timeout：max_fails次失败后，暂停的时间
         server 127.0.0.1:18080 max_fails=10 fail_timeout=60s;    
 	}
+	
+	upstream backend {
+ip_hash;
+server 192.168.0.14:88;
+server 192.168.0.15:80;
+}
+	
+	upstream backend {
+        server squid1:3128;
+        server squid2:3128;
+        hash $request_uri;
+        hash_method crc32;
+    }
 
 	server {
 		listen 80;
@@ -222,26 +297,28 @@ http {
 
 ```properties
 user  nginx;
+# CPU内核数量
 worker_processes  auto;
 
 error_log  /var/log/nginx/error.log notice;
 pid        /var/run/nginx.pid;
 
 events {
+    # 一个子线程下的连接数
     worker_connections  1024;
 }
 
 http {
     include       /etc/nginx/mime.types;
     default_type  application/octet-stream;
+    sendfile        on;
+    keepalive_timeout  65;
 
     log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
                       '$status $body_bytes_sent "$http_referer" '
                       '"$http_user_agent" "$http_x_forwarded_for"';
 
     access_log  /var/log/nginx/access.log  main;
-    sendfile        on;
-    keepalive_timeout  65;
 
     server {
 		listen       80;

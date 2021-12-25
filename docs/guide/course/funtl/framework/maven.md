@@ -235,7 +235,7 @@ mvn package -Dmaven.test.skip=true # 只打包不测试（跳过测试）
 # 打包 -> 本地仓库
 mvn install            # 打包到本地仓库，解决本地多个项目公用一个jar包的问题
 # 打包 -> Maven仓库
-mvn deploy             # 打包到远程Maven仓库,以让其它开发人员与项目共享
+mvn deploy             # 打包到远程Maven仓库,以让其它开发人员与项目共享           
 
 # 清理生命周期
 mvn clean              # 调用maven-clean-plugin删除根目录下target目录
@@ -265,10 +265,14 @@ mvn site               # 生成项目文档
 - 方法二：[使用maven-install-plugin插件统一管理至某个单独的项目](../myshop/myshop-ssm.html#手动依赖管理)
 - 方法三：[使用Nexu管理第三方依赖](../microservice/nexus.html)（推荐）
 
+
+
 ### 自动生成代码
 
 - [使用tk.mybatis自动生成代码](../microservice/springboot.html#自动完成代码)
 - 使用mybatisPlus自动生成代码
+
+
 
 ### 多环境配置
 
@@ -281,12 +285,60 @@ mvn site               # 生成项目文档
 
 ### 部署文件打包
 
-- 使用mvn命令打包（package、install、deploy）
+- [使用mvn命令打包](#maven-package)
 - [通过Maven Assembly 插件打包](../microservice/springcloudalibaba.html#maven-assembly)
 
 
 
 ## 附录
+
+### Maven Package
+
+（1）Maven打包命令
+
+```shell
+# 打包 -> 当前目录
+mvn package            # 打包根目录下的目录，web项目打成war包，java项目打成jar包
+mvn package -Dmaven.test.skip=true # 只打包不测试（跳过测试）
+# 打包 -> 本地仓库
+mvn install            # 打包到本地仓库，解决本地多个项目公用一个jar包的问题
+# 打包 -> Maven仓库
+mvn deploy             # 打包到远程Maven仓库,以让其它开发人员与项目共享     
+```
+
+（2）默认仅打包class文件，需要引入`spring-boot-maven-plugin`插件，将依赖的`jar包`也打包
+
+```xml
+ <build>
+     <plugins>
+         <plugin>
+             <groupId>org.springframework.boot</groupId>
+             <artifactId>spring-boot-maven-plugin</artifactId>
+         </plugin>
+     </plugins>
+</build> 
+```
+
+（3）默认资源文件不会打包，需要指明资源文件进行打包
+
+```xml
+<build>
+     <!-- 资源文件配置 -->
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
+</build>
+```
+
+
 
 ### Maven Profile
 

@@ -59,7 +59,7 @@ Spring Boot + Spring Cloud Alibaba + Dubbo  # 非主流
 ```
 - 计算引擎：Hadoop、Spark
 - 数据仓库：Hive、ElasticSearch、Hbase + Phoneix
-- ETL：Spoon、Kettle
+- ETL数据清洗：Spoon、Kettle
 - 流式计算：Storm、Flink、Blink
 - 数据可视化：PowerBI
 - 运维：Linux、Docker
@@ -79,5 +79,4 @@ Spring Boot + Spring Cloud Alibaba + Dubbo  # 非主流
 - Python：Web、爬虫、运维
 - 区块链：Hyperledger、Ethereum
 ```
-
 
