@@ -160,29 +160,35 @@ upstream myServer {
 }
 ```
 
+
+
 （2）weight
 
-​	　指定轮询几率，weight和访问比率成正比。默认为 1 ,weight 越大，负载的权重就越大。用于后端服务器性能不均的情况。
+​	　指定轮询几率，weight和访问比率成正比，用于后端服务器性能不均的情况。
 
 ```properties
 # upstream 定义负载均衡设备的 Ip及设备状态 
 upstream myServer {
     server 192.168.75.145:9090 weight=10;
     server 192.168.75.145:9091 weight=10;
+    # 默认为 1 ,weight 越大，负载的权重就越大
     server 192.168.75.145:9092;
+    
+    # down：表示当前的 server 暂时不参与负载
+    server 127.0.0.1:9090 down;
+    # backup：其它所有的非backup机器,down或者忙的时候，才会请求backup机器
+    server 127.0.0.1:7070 backup;
+    # max_fails：允许请求失败的次数,默认为1,当超过最大次数时，返回 proxy_next_upstream 模块定义的错误
+    # fail_timeout：max_fails次失败后，暂停的时间
+    server 127.0.0.1:18080 max_fails=10 fail_timeout=60s;  
 }
-
- # down：表示当前的 server 暂时不参与负载
-		server 127.0.0.1:9090 down;
-        # backup：其它所有的非backup机器,down或者忙的时候，才会请求backup机器
-        server 127.0.0.1:7070 backup;
-        # max_fails：允许请求失败的次数,默认为1,当超过最大次数时，返回 proxy_next_upstream 模块定义的错误
-        # fail_timeout：max_fails次失败后，暂停的时间
-        server 127.0.0.1:18080 max_fails=10 fail_timeout=60s;  
 ```
 
+
+
 （3）ip_hash
-	　**每个请求按访问ip的hash结果分配**，这样每个访客固定访问一个后端服务器，可以解决session的问题。
+
+​	　**每个请求按访问ip的hash结果分配**，这样每个访客固定访问一个后端服务器，可以解决session的问题。
 
 ```properties
 # upstream 定义负载均衡设备的 Ip及设备状态 
@@ -196,100 +202,33 @@ upstream myServer {
 
 
 （4）fair（第三方）
-	　按后端服务器的响应时间来分配请求，响应时间短的优先分配。
+
+​	　按后端服务器的响应时间来分配请求，**响应时间短的优先分配**。
 
 ```properties
 # upstream 定义负载均衡设备的 Ip及设备状态 
 upstream myServer {
+    fair;
     server server1.linuxany.com;
     server server2.linuxany.com;
-    fair;
 }
 ```
 
 
-**5、url_hash（第三方）
-**
-按访问url的hash结果来分配请求，使每个url定向到同一个后端服务器，后端服务器为缓存时比较有效。
 
-例：在upstream中加入hash语句，server语句中不能写入weight等其他的参数，hash_method是使用的hash算法
+（5）url_hash（第三方）
 
-复制代码代码如下:
-
-
-upstream backend {
-server squid1:3128;
-server squid2:3128;
-hash $request_uri;
-hash_method crc32;
-}
-\#定义负载均衡设备的Ip及设备状态
-upstream backend{
-ip_hash;
-server 127.0.0.1:9090 down;
-server 127.0.0.1:8080 weight=2;
-server 127.0.0.1:6060;
-server 127.0.0.1:7070 backup;
-}
-
-
-
-
+​	　按访问url的hash结果来分配请求，**使每个url定向到同一个后端服务器**，后端服务器为**缓存**时比较有效。
 
 ```properties
-user  nginx;
-worker_processes  1;
-
-events {
-    worker_connections  1024;
-}
-
-http {
-    include       mime.types;
-    default_type  application/octet-stream;
-    sendfile        on;
-    keepalive_timeout  65;
-	
-	# 定义负载均衡设备的 Ip及设备状态 
-	# upstream：每个设备的状态
-	upstream myServer {
-	    # down：表示当前的 server 暂时不参与负载
-		server 127.0.0.1:9090 down;
-		# weight：默认为 1 ,weight 越大，负载的权重就越大
-        server 127.0.0.1:8080 weight=2;
-        server 127.0.0.1:6060;
-        # backup：其它所有的非backup机器,down或者忙的时候，才会请求backup机器
-        server 127.0.0.1:7070 backup;
-        # max_fails：允许请求失败的次数,默认为1,当超过最大次数时，返回 proxy_next_upstream 模块定义的错误
-        # fail_timeout：max_fails次失败后，暂停的时间
-        server 127.0.0.1:18080 max_fails=10 fail_timeout=60s;    
-	}
-	
-	upstream backend {
-ip_hash;
-server 192.168.0.14:88;
-server 192.168.0.15:80;
-}
-	
-	upstream backend {
-        server squid1:3128;
-        server squid2:3128;
-        hash $request_uri;
-        hash_method crc32;
-    }
-
-	server {
-		listen 80;
-		server_name nginx.funtl.com;
-		location / {
-			proxy_pass http://myServer;
-			index index.jsp index.html index.htm;
-		}
-	}
+upstream backend {
+    hash $request_uri;
+    server server1.linuxany.com;
+    server server2.linuxany.com;
 }
 ```
 
-
+​	　特别的，**在upstream中加入hash语句，server语句中不能写入weight等其他的参数**，hash_method是使用的hash算法
 
 ## 附录
 
