@@ -1,8 +1,10 @@
 # JSON字符串与属性名不匹配问题
 
+​	　若使用的是`jackson`，可以通过`@JsonProperty`注解来设定序列化属性名；若是`fastjson`，可以通过`@JSONField`来设定序列化属性名。另外，也可以通过原生的新增的`set方法`和`get方法`设定。
 
+## jackson中设定序列化属性名
 
-## @JsonProperty
+### @JsonProperty
 
 ​	　首先，引入`pom.xml`依赖。
 
@@ -25,7 +27,7 @@ public class User {
 }
 ```
 
-​	　测试用例如下：
+### 测试用例
 
 ```java
 //将实体类转换成字符串
@@ -36,7 +38,9 @@ val user = new ObjectMapper().readValue(jsonStr, User.class)
 
 
 
-## @JSONField
+## fastjson中设定序列化属性名
+
+### @JSONField
 
 ​	　首先，引入`pom.xml`依赖。
 
@@ -59,7 +63,7 @@ public class User {
 }
 ```
 
-​	　测试用例如下：
+### 测试用例
 
 ```java
 //将实体类转换成字符串
@@ -70,7 +74,9 @@ val user = JSON.parseObject(str, User.class);
 
 
 
-## getter和setter
+## 原生方法
+
+### getter和setter
 
 ```java
 public class User {
@@ -89,7 +95,7 @@ public class User {
 }
 ```
 
-​	　测试用例如下:
+### 测试用例
 
 ```java
 //将实体类转换成字符串

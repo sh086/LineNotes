@@ -1,4 +1,6 @@
-# 使用构建者模式简化配置代码
+# @Builder构建者模式
+
+​	　可以通过`@Builder`注解，使用构建者模式简化配置代码，优点是简洁，缺点是扩展性很差。
 
 **参考资料：**
 
@@ -7,10 +9,6 @@
 
 
 ## @Builder注解
-
-​	　构建者模式屏蔽了基础的配置，优点是简洁，缺点是扩展性很差。
-
-### CodeGenerator
 
 ​	　若`CodeGenerator`配置类，有很多属性需要进行配置，建议采用**构建者模式简化配置代码**。
 
@@ -51,7 +49,7 @@ public class CodeGenerator {
 
 
 
-### 测试用例
+## 测试用例
 
 ```java{6,7}
 @SpringBootTest
@@ -73,7 +71,7 @@ mysql.com.shooter.驼峰命名
 
 
 
-### CodeGenerator.class
+## 源码分析
 
 ​	　首先，创建一个名为 `CodeGeneratorBuilder`的内部静态类，包含目标类中的**所有的属性**和未初始化的 final 字段、一个无参的**默认构造函数**、可以根据设置的值进行创建实体对象的`build()方法` 以及 方法名与该参数名相同的  `setter 方法`并且返回值是构建器本身（便于链式调用）。
 
@@ -121,70 +119,4 @@ public class CodeGenerator {
 }
 ```
 
-
-
-## 自定义Builder
-
-### CodeGeneratorBuilder
-
-​	　首先，新建`CodeGeneratorBuilder`构建者类。
-
-```java
-package com.shooter.quickstart.mybatisplus.common.mybatis.builder;
-
-import lombok.val;
-
-/**
-* 构建者模式
-*/
-public class CodeGeneratorBuilder {
-
-    private CodeGenerator codeGenerator;
-
-    public CodeGeneratorBuilder(CodeGenerator codeGenerator){
-        this.codeGenerator = codeGenerator;
-    }
-
-    public static CodeGeneratorBuilder create(String datasource){
-        val codeGenerator = new CodeGenerator();
-        codeGenerator.setDatasource(datasource);
-        return new CodeGeneratorBuilder(codeGenerator);
-    }
-
-    public CodeGeneratorBuilder packageConfig(String packageConfig){
-        codeGenerator.setPackageConfig(packageConfig);
-        return this;
-    }
-
-    public  CodeGeneratorBuilder strategyConfig(String strategyConfig){
-        codeGenerator.setStrategyConfig(strategyConfig);
-        return this;
-    }
-
-    public void execute(){
-        codeGenerator.execute();
-    }
-}
-```
-
-### 测试用例
-
-​	　然后，编写测试用例测试`CodeGeneratorBuilder`是否可以正常构建。
-
-```java
-@SpringBootTest
-public class CodeGeneratorTest {
-    @Test
-    public void testBuilder(){
-        CodeGeneratorBuilder.create("mysql").packageConfig("com.shooter")
-                .strategyConfig("驼峰命名").execute();
-    }
-}
-```
-
-输出结果：
-
-```shell
-mysql.com.shooter.驼峰命名
-```
 
