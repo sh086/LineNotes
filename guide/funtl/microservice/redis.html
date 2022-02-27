@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Redis | 学习笔记</title>
+    <meta name="generator" content="VuePress 1.8.1">
+    <link rel="icon" href="/college/favicon.ico">
+    <meta name="description" content="导航页">
+    
+    <link rel="preload" href="/college/assets/css/0.styles.c426f59e.css" as="style"><link rel="preload" href="/college/assets/js/app.d3495dbb.js" as="script"><link rel="preload" href="/college/assets/js/2.28767f38.js" as="script"><link rel="preload" href="/college/assets/js/68.e9bdda67.js" as="script"><link rel="prefetch" href="/college/assets/js/10.280f32c3.js"><link rel="prefetch" href="/college/assets/js/11.1ccac21a.js"><link rel="prefetch" href="/college/assets/js/12.24944379.js"><link rel="prefetch" href="/college/assets/js/13.fc6a4e0f.js"><link rel="prefetch" href="/college/assets/js/14.9a219029.js"><link rel="prefetch" href="/college/assets/js/15.a80a6c8e.js"><link rel="prefetch" href="/college/assets/js/16.7bb15652.js"><link rel="prefetch" href="/college/assets/js/17.0694dc32.js"><link rel="prefetch" href="/college/assets/js/18.65c2d10a.js"><link rel="prefetch" href="/college/assets/js/19.54241cc8.js"><link rel="prefetch" href="/college/assets/js/20.05c9827a.js"><link rel="prefetch" href="/college/assets/js/21.458ac789.js"><link rel="prefetch" href="/college/assets/js/22.34a55beb.js"><link rel="prefetch" href="/college/assets/js/23.3d34f5a9.js"><link rel="prefetch" href="/college/assets/js/24.1b7ffbc2.js"><link rel="prefetch" href="/college/assets/js/25.606d610c.js"><link rel="prefetch" href="/college/assets/js/26.39fb2218.js"><link rel="prefetch" href="/college/assets/js/27.beb372c2.js"><link rel="prefetch" href="/college/assets/js/28.44817cda.js"><link rel="prefetch" href="/college/assets/js/29.b8af7a64.js"><link rel="prefetch" href="/college/assets/js/3.1226a60d.js"><link rel="prefetch" href="/college/assets/js/30.4af99483.js"><link rel="prefetch" href="/college/assets/js/31.b1ec1c4a.js"><link rel="prefetch" href="/college/assets/js/32.1eb63f97.js"><link rel="prefetch" href="/college/assets/js/33.ea485ff8.js"><link rel="prefetch" href="/college/assets/js/34.6859c41f.js"><link rel="prefetch" href="/college/assets/js/35.70449eff.js"><link rel="prefetch" href="/college/assets/js/36.c21e479c.js"><link rel="prefetch" href="/college/assets/js/37.e9a1a944.js"><link rel="prefetch" href="/college/assets/js/38.42721fe5.js"><link rel="prefetch" href="/college/assets/js/39.2a027d1d.js"><link rel="prefetch" href="/college/assets/js/4.b6423ca0.js"><link rel="prefetch" href="/college/assets/js/40.24442899.js"><link rel="prefetch" href="/college/assets/js/41.47831929.js"><link rel="prefetch" href="/college/assets/js/42.64b85c3d.js"><link rel="prefetch" href="/college/assets/js/43.5ec30671.js"><link rel="prefetch" href="/college/assets/js/44.6242f2d3.js"><link rel="prefetch" href="/college/assets/js/45.d0bb556d.js"><link rel="prefetch" href="/college/assets/js/46.75c7ea15.js"><link rel="prefetch" href="/college/assets/js/47.83a071bf.js"><link rel="prefetch" href="/college/assets/js/48.9bf39db0.js"><link rel="prefetch" href="/college/assets/js/49.7a34a3f2.js"><link rel="prefetch" href="/college/assets/js/5.187e7441.js"><link rel="prefetch" href="/college/assets/js/50.86098b36.js"><link rel="prefetch" href="/college/assets/js/51.cc81fc23.js"><link rel="prefetch" href="/college/assets/js/52.336a42d3.js"><link rel="prefetch" href="/college/assets/js/53.dc7b2c05.js"><link rel="prefetch" href="/college/assets/js/54.a5cee7c2.js"><link rel="prefetch" href="/college/assets/js/55.58bee1e4.js"><link rel="prefetch" href="/college/assets/js/56.6bfbb2c5.js"><link rel="prefetch" href="/college/assets/js/57.8a2689bf.js"><link rel="prefetch" href="/college/assets/js/58.9360689a.js"><link rel="prefetch" href="/college/assets/js/59.9a6fd911.js"><link rel="prefetch" href="/college/assets/js/6.00891a93.js"><link rel="prefetch" href="/college/assets/js/60.28cca29c.js"><link rel="prefetch" href="/college/assets/js/61.e45efcb8.js"><link rel="prefetch" href="/college/assets/js/62.d760484f.js"><link rel="prefetch" href="/college/assets/js/63.2f8f1516.js"><link rel="prefetch" href="/college/assets/js/64.76d9a110.js"><link rel="prefetch" href="/college/assets/js/65.90ab31c2.js"><link rel="prefetch" href="/college/assets/js/66.dd0a6828.js"><link rel="prefetch" href="/college/assets/js/67.c6172031.js"><link rel="prefetch" href="/college/assets/js/69.7a5868ba.js"><link rel="prefetch" href="/college/assets/js/7.dd7e2265.js"><link rel="prefetch" href="/college/assets/js/70.4ebfb899.js"><link rel="prefetch" href="/college/assets/js/71.f5211aa4.js"><link rel="prefetch" href="/college/assets/js/72.23780b08.js"><link rel="prefetch" href="/college/assets/js/73.c4e371d2.js"><link rel="prefetch" href="/college/assets/js/74.89a13891.js"><link rel="prefetch" href="/college/assets/js/75.4832ce93.js"><link rel="prefetch" href="/college/assets/js/76.0e8b76bf.js"><link rel="prefetch" href="/college/assets/js/77.7c67075d.js"><link rel="prefetch" href="/college/assets/js/78.2914febf.js"><link rel="prefetch" href="/college/assets/js/79.b19c9448.js"><link rel="prefetch" href="/college/assets/js/8.626a1f2b.js"><link rel="prefetch" href="/college/assets/js/80.1f9d66a8.js"><link rel="prefetch" href="/college/assets/js/81.52d6bc6d.js"><link rel="prefetch" href="/college/assets/js/82.b0f45bb6.js"><link rel="prefetch" href="/college/assets/js/83.6cf1e3f8.js"><link rel="prefetch" href="/college/assets/js/84.ee43cbe5.js"><link rel="prefetch" href="/college/assets/js/85.691a9656.js"><link rel="prefetch" href="/college/assets/js/86.3f0a3d24.js"><link rel="prefetch" href="/college/assets/js/87.0fc9402a.js"><link rel="prefetch" href="/college/assets/js/88.923dfb7c.js"><link rel="prefetch" href="/college/assets/js/89.0098e70e.js"><link rel="prefetch" href="/college/assets/js/9.bbef8bf7.js"><link rel="prefetch" href="/college/assets/js/90.0969d3e2.js"><link rel="prefetch" href="/college/assets/js/91.fcec1ae2.js"><link rel="prefetch" href="/college/assets/js/92.c786fabb.js"><link rel="prefetch" href="/college/assets/js/93.02cc0b15.js"><link rel="prefetch" href="/college/assets/js/94.6a72b4a9.js"><link rel="prefetch" href="/college/assets/js/95.f8d09951.js"><link rel="prefetch" href="/college/assets/js/96.df2b26dc.js">
+    <link rel="stylesheet" href="/college/assets/css/0.styles.c426f59e.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/college/" class="home-link router-link-active"><!----> <span class="site-name">学习笔记</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/college/blog/" class="nav-link">
+  Blog
+</a></div><div class="nav-item"><a href="/college/guide/" class="nav-link router-link-active">
+  Guide
+</a></div> <a href="https://github.com/sh086/" target="_blank" rel="noopener noreferrer" class="repo-link">
+    GitHub
+    <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="/college/blog/" class="nav-link">
+  Blog
+</a></div><div class="nav-item"><a href="/college/guide/" class="nav-link router-link-active">
+  Guide
+</a></div> <a href="https://github.com/sh086/" target="_blank" rel="noopener noreferrer" class="repo-link">
+    GitHub
+    <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></nav>  <ul class="sidebar-links"><li><section class="sidebar-group depth-0"><p class="sidebar-heading open"><span>Redis</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/college/guide/funtl/microservice/redis.html#快速开始" class="sidebar-link">快速开始</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/college/guide/funtl/microservice/redis.html#redis-ha方案" class="sidebar-link">Redis HA方案</a></li><li class="sidebar-sub-header"><a href="/college/guide/funtl/microservice/redis.html#redis-sentinel集群部署" class="sidebar-link">Redis Sentinel集群部署</a></li></ul></li><li><a href="/college/guide/funtl/microservice/redis.html#redis实践" class="sidebar-link">Redis实践</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/college/guide/funtl/microservice/redis.html#helloredis" class="sidebar-link">HelloRedis</a></li><li class="sidebar-sub-header"><a href="/college/guide/funtl/microservice/redis.html#数据缓存服务" class="sidebar-link">数据缓存服务</a></li><li class="sidebar-sub-header"><a href="/college/guide/funtl/microservice/redis.html#mybatsi-redis" class="sidebar-link">Mybatsi Redis</a></li></ul></li><li><a href="/college/guide/funtl/microservice/redis.html#附录" class="sidebar-link">附录</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/college/guide/funtl/microservice/redis.html#sentinel-conf" class="sidebar-link">sentinel.conf</a></li></ul></li></ul></section></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><h1 id="redis"><a href="#redis" class="header-anchor">#</a> Redis</h1> <p>​	　Redis 是用 C 语言开发的一个开源的高性能键值对（key-value）数据库。它通过提供多种键值数据类型来适应不同场景下的存储需求，应用场景如下：</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>- 缓存（数据查询、短连接、新闻内容、商品内容等等）
+-分布式集群架构中的 session 分离
+聊天室的在线好友列表
+任务队列（秒杀、抢购、12306 等等）
+应用排行榜
+网站访问统计
+数据过期处理（可以精确到毫秒）
+（1）生成自增Id
+
+​	　通常可以使用`redis`完成高并发下`id`的自增，使用年月日时分秒毫秒`yyyyMMddHHmmsss` + 由redis生成的自增数字。
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br></div></div><h2 id="快速开始"><a href="#快速开始" class="header-anchor">#</a> 快速开始</h2> <h3 id="redis-ha方案"><a href="#redis-ha方案" class="header-anchor">#</a> Redis HA方案</h3> <p>新建docker-compose.yml ，搭建Redis HA高可用部署方案。</p> <div class="language-yaml line-numbers-mode"><pre class="language-yaml"><code><span class="token key atrule">version</span><span class="token punctuation">:</span> <span class="token string">'3.1'</span>
+<span class="token key atrule">services</span><span class="token punctuation">:</span>
+  <span class="token key atrule">master</span><span class="token punctuation">:</span>
+    <span class="token key atrule">image</span><span class="token punctuation">:</span> redis
+    <span class="token key atrule">container_name</span><span class="token punctuation">:</span> redis<span class="token punctuation">-</span>master
+    <span class="token key atrule">ports</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> 6379<span class="token punctuation">:</span><span class="token number">6379</span>
+
+  <span class="token key atrule">slave1</span><span class="token punctuation">:</span>
+    <span class="token key atrule">image</span><span class="token punctuation">:</span> redis
+    <span class="token key atrule">container_name</span><span class="token punctuation">:</span> redis<span class="token punctuation">-</span>slave<span class="token punctuation">-</span><span class="token number">1</span>
+    <span class="token key atrule">ports</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> 6380<span class="token punctuation">:</span><span class="token number">6379</span>
+    <span class="token comment"># 声明是从节点,局域网内可以通过名子互相访问</span>
+    <span class="token key atrule">command</span><span class="token punctuation">:</span> redis<span class="token punctuation">-</span>server <span class="token punctuation">-</span><span class="token punctuation">-</span>slaveof redis<span class="token punctuation">-</span>master 6379
+
+  <span class="token key atrule">slave2</span><span class="token punctuation">:</span>
+    <span class="token key atrule">image</span><span class="token punctuation">:</span> redis
+    <span class="token key atrule">container_name</span><span class="token punctuation">:</span> redis<span class="token punctuation">-</span>slave<span class="token punctuation">-</span><span class="token number">2</span>
+    <span class="token key atrule">ports</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> 6381<span class="token punctuation">:</span><span class="token number">6379</span>
+    <span class="token comment"># 声明是从节点,局域网内可以通过名子互相访问</span>
+    <span class="token key atrule">command</span><span class="token punctuation">:</span> redis<span class="token punctuation">-</span>server <span class="token punctuation">-</span><span class="token punctuation">-</span>slaveof redis<span class="token punctuation">-</span>master 6379
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br></div></div><h3 id="redis-sentinel集群部署"><a href="#redis-sentinel集群部署" class="header-anchor">#</a> Redis Sentinel集群部署</h3> <p>Redis Sentinel集群部署</p> <p>推荐使用sential</p> <p>高可用必须有集群，集群至少一主两从，备用节点会从主节点同步数据</p> <h2 id="redis实践"><a href="#redis实践" class="header-anchor">#</a> Redis实践</h2> <h3 id="helloredis"><a href="#helloredis" class="header-anchor">#</a> HelloRedis</h3> <h3 id="数据缓存服务"><a href="#数据缓存服务" class="header-anchor">#</a> 数据缓存服务</h3> <h3 id="mybatsi-redis"><a href="#mybatsi-redis" class="header-anchor">#</a> Mybatsi Redis</h3> <h2 id="附录"><a href="#附录" class="header-anchor">#</a> 附录</h2> <h3 id="sentinel-conf"><a href="#sentinel-conf" class="header-anchor">#</a> sentinel.conf</h3> <div class="language-properties line-numbers-mode"><pre class="language-properties"><code><span class="token comment"># Example sentinel.conf</span>
+
+<span class="token comment"># *** IMPORTANT ***</span>
+<span class="token comment">#</span>
+<span class="token comment"># By default Sentinel will not be reachable from interfaces different than</span>
+<span class="token comment"># localhost, either use the 'bind' directive to bind to a list of network</span>
+<span class="token comment"># interfaces, or disable protected mode with &quot;protected-mode no&quot; by</span>
+<span class="token comment"># adding it to this configuration file.</span>
+<span class="token comment">#</span>
+<span class="token comment"># Before doing that MAKE SURE the instance is protected from the outside</span>
+<span class="token comment"># world via firewalling or other means.</span>
+<span class="token comment">#</span>
+<span class="token comment"># For example you may use one of the following:</span>
+<span class="token comment">#</span>
+<span class="token comment"># bind 127.0.0.1 192.168.1.1</span>
+<span class="token comment">#</span>
+<span class="token comment"># protected-mode no</span>
+
+<span class="token comment"># port &lt;sentinel-port&gt;</span>
+<span class="token comment"># The port that this sentinel instance will run on</span>
+<span class="token attr-name">port</span> <span class="token attr-value">26379</span>
+
+<span class="token comment"># sentinel announce-ip &lt;ip&gt;</span>
+<span class="token comment"># sentinel announce-port &lt;port&gt;</span>
+<span class="token comment">#</span>
+<span class="token comment"># The above two configuration directives are useful in environments where,</span>
+<span class="token comment"># because of NAT, Sentinel is reachable from outside via a non-local address.</span>
+<span class="token comment">#</span>
+<span class="token comment"># When announce-ip is provided, the Sentinel will claim the specified IP address</span>
+<span class="token comment"># in HELLO messages used to gossip its presence, instead of auto-detecting the</span>
+<span class="token comment"># local address as it usually does.</span>
+<span class="token comment">#</span>
+<span class="token comment"># Similarly when announce-port is provided and is valid and non-zero, Sentinel</span>
+<span class="token comment"># will announce the specified TCP port.</span>
+<span class="token comment">#</span>
+<span class="token comment"># The two options don't need to be used together, if only announce-ip is</span>
+<span class="token comment"># provided, the Sentinel will announce the specified IP and the server port</span>
+<span class="token comment"># as specified by the &quot;port&quot; option. If only announce-port is provided, the</span>
+<span class="token comment"># Sentinel will announce the auto-detected local IP and the specified port.</span>
+<span class="token comment">#</span>
+<span class="token comment"># Example:</span>
+<span class="token comment">#</span>
+<span class="token comment"># sentinel announce-ip 1.2.3.4</span>
+
+<span class="token comment"># dir &lt;working-directory&gt;</span>
+<span class="token comment"># Every long running process should have a well-defined working directory.</span>
+<span class="token comment"># For Redis Sentinel to chdir to /tmp at startup is the simplest thing</span>
+<span class="token comment"># for the process to don't interfere with administrative tasks such as</span>
+<span class="token comment"># unmounting filesystems.</span>
+<span class="token attr-name">dir</span> <span class="token attr-value">/tmp</span>
+
+<span class="token comment"># sentinel monitor &lt;master-name&gt; &lt;ip&gt; &lt;redis-port&gt; &lt;quorum&gt;</span>
+<span class="token comment">#</span>
+<span class="token comment"># Tells Sentinel to monitor this master, and to consider it in O_DOWN</span>
+<span class="token comment"># (Objectively Down) state only if at least &lt;quorum&gt; sentinels agree.</span>
+<span class="token comment">#</span>
+<span class="token comment"># Note that whatever is the ODOWN quorum, a Sentinel will require to</span>
+<span class="token comment"># be elected by the majority of the known Sentinels in order to</span>
+<span class="token comment"># start a failover, so no failover can be performed in minority.</span>
+<span class="token comment">#</span>
+<span class="token comment"># Slaves are auto-discovered, so you don't need to specify slaves in</span>
+<span class="token comment"># any way. Sentinel itself will rewrite this configuration file adding</span>
+<span class="token comment"># the slaves using additional configuration options.</span>
+<span class="token comment"># Also note that the configuration file is rewritten when a</span>
+<span class="token comment"># slave is promoted to master.</span>
+<span class="token comment">#</span>
+<span class="token comment"># Note: master name should not include special characters or spaces.</span>
+<span class="token comment"># The valid charset is A-z 0-9 and the three characters &quot;.-_&quot;.</span>
+<span class="token attr-name">sentinel</span> <span class="token attr-value">monitor mymaster 127.0.0.1 6379 2</span>
+
+<span class="token comment"># sentinel auth-pass &lt;master-name&gt; &lt;password&gt;</span>
+<span class="token comment">#</span>
+<span class="token comment"># Set the password to use to authenticate with the master and slaves.</span>
+<span class="token comment"># Useful if there is a password set in the Redis instances to monitor.</span>
+<span class="token comment">#</span>
+<span class="token comment"># Note that the master password is also used for slaves, so it is not</span>
+<span class="token comment"># possible to set a different password in masters and slaves instances</span>
+<span class="token comment"># if you want to be able to monitor these instances with Sentinel.</span>
+<span class="token comment">#</span>
+<span class="token comment"># However you can have Redis instances without the authentication enabled</span>
+<span class="token comment"># mixed with Redis instances requiring the authentication (as long as the</span>
+<span class="token comment"># password set is the same for all the instances requiring the password) as</span>
+<span class="token comment"># the AUTH command will have no effect in Redis instances with authentication</span>
+<span class="token comment"># switched off.</span>
+<span class="token comment">#</span>
+<span class="token comment"># Example:</span>
+<span class="token comment">#</span>
+<span class="token comment"># sentinel auth-pass mymaster MySUPER--secret-0123passw0rd</span>
+
+<span class="token comment"># sentinel down-after-milliseconds &lt;master-name&gt; &lt;milliseconds&gt;</span>
+<span class="token comment">#</span>
+<span class="token comment"># Number of milliseconds the master (or any attached slave or sentinel) should</span>
+<span class="token comment"># be unreachable (as in, not acceptable reply to PING, continuously, for the</span>
+<span class="token comment"># specified period) in order to consider it in S_DOWN state (Subjectively</span>
+<span class="token comment"># Down).</span>
+<span class="token comment">#</span>
+<span class="token comment"># Default is 30 seconds.</span>
+<span class="token attr-name">sentinel</span> <span class="token attr-value">down-after-milliseconds mymaster 30000</span>
+
+<span class="token comment"># sentinel parallel-syncs &lt;master-name&gt; &lt;numslaves&gt;</span>
+<span class="token comment">#</span>
+<span class="token comment"># How many slaves we can reconfigure to point to the new slave simultaneously</span>
+<span class="token comment"># during the failover. Use a low number if you use the slaves to serve query</span>
+<span class="token comment"># to avoid that all the slaves will be unreachable at about the same</span>
+<span class="token comment"># time while performing the synchronization with the master.</span>
+<span class="token attr-name">sentinel</span> <span class="token attr-value">parallel-syncs mymaster 1</span>
+
+<span class="token comment"># sentinel failover-timeout &lt;master-name&gt; &lt;milliseconds&gt;</span>
+<span class="token comment">#</span>
+<span class="token comment"># Specifies the failover timeout in milliseconds. It is used in many ways:</span>
+<span class="token comment">#</span>
+<span class="token comment"># - The time needed to re-start a failover after a previous failover was</span>
+<span class="token comment">#   already tried against the same master by a given Sentinel, is two</span>
+<span class="token comment">#   times the failover timeout.</span>
+<span class="token comment">#</span>
+<span class="token comment"># - The time needed for a slave replicating to a wrong master according</span>
+<span class="token comment">#   to a Sentinel current configuration, to be forced to replicate</span>
+<span class="token comment">#   with the right master, is exactly the failover timeout (counting since</span>
+<span class="token comment">#   the moment a Sentinel detected the misconfiguration).</span>
+<span class="token comment">#</span>
+<span class="token comment"># - The time needed to cancel a failover that is already in progress but</span>
+<span class="token comment">#   did not produced any configuration change (SLAVEOF NO ONE yet not</span>
+<span class="token comment">#   acknowledged by the promoted slave).</span>
+<span class="token comment">#</span>
+<span class="token comment"># - The maximum time a failover in progress waits for all the slaves to be</span>
+<span class="token comment">#   reconfigured as slaves of the new master. However even after this time</span>
+<span class="token comment">#   the slaves will be reconfigured by the Sentinels anyway, but not with</span>
+<span class="token comment">#   the exact parallel-syncs progression as specified.</span>
+<span class="token comment">#</span>
+<span class="token comment"># Default is 3 minutes.</span>
+<span class="token attr-name">sentinel</span> <span class="token attr-value">failover-timeout mymaster 180000</span>
+
+<span class="token comment"># SCRIPTS EXECUTION</span>
+<span class="token comment">#</span>
+<span class="token comment"># sentinel notification-script and sentinel reconfig-script are used in order</span>
+<span class="token comment"># to configure scripts that are called to notify the system administrator</span>
+<span class="token comment"># or to reconfigure clients after a failover. The scripts are executed</span>
+<span class="token comment"># with the following rules for error handling:</span>
+<span class="token comment">#</span>
+<span class="token comment"># If script exits with &quot;1&quot; the execution is retried later (up to a maximum</span>
+<span class="token comment"># number of times currently set to 10).</span>
+<span class="token comment">#</span>
+<span class="token comment"># If script exits with &quot;2&quot; (or an higher value) the script execution is</span>
+<span class="token comment"># not retried.</span>
+<span class="token comment">#</span>
+<span class="token comment"># If script terminates because it receives a signal the behavior is the same</span>
+<span class="token comment"># as exit code 1.</span>
+<span class="token comment">#</span>
+<span class="token comment"># A script has a maximum running time of 60 seconds. After this limit is</span>
+<span class="token comment"># reached the script is terminated with a SIGKILL and the execution retried.</span>
+
+<span class="token comment"># NOTIFICATION SCRIPT</span>
+<span class="token comment">#</span>
+<span class="token comment"># sentinel notification-script &lt;master-name&gt; &lt;script-path&gt;</span>
+<span class="token comment"># </span>
+<span class="token comment"># Call the specified notification script for any sentinel event that is</span>
+<span class="token comment"># generated in the WARNING level (for instance -sdown, -odown, and so forth).</span>
+<span class="token comment"># This script should notify the system administrator via email, SMS, or any</span>
+<span class="token comment"># other messaging system, that there is something wrong with the monitored</span>
+<span class="token comment"># Redis systems.</span>
+<span class="token comment">#</span>
+<span class="token comment"># The script is called with just two arguments: the first is the event type</span>
+<span class="token comment"># and the second the event description.</span>
+<span class="token comment">#</span>
+<span class="token comment"># The script must exist and be executable in order for sentinel to start if</span>
+<span class="token comment"># this option is provided.</span>
+<span class="token comment">#</span>
+<span class="token comment"># Example:</span>
+<span class="token comment">#</span>
+<span class="token comment"># sentinel notification-script mymaster /var/redis/notify.sh</span>
+
+<span class="token comment"># CLIENTS RECONFIGURATION SCRIPT</span>
+<span class="token comment">#</span>
+<span class="token comment"># sentinel client-reconfig-script &lt;master-name&gt; &lt;script-path&gt;</span>
+<span class="token comment">#</span>
+<span class="token comment"># When the master changed because of a failover a script can be called in</span>
+<span class="token comment"># order to perform application-specific tasks to notify the clients that the</span>
+<span class="token comment"># configuration has changed and the master is at a different address.</span>
+<span class="token comment"># </span>
+<span class="token comment"># The following arguments are passed to the script:</span>
+<span class="token comment">#</span>
+<span class="token comment"># &lt;master-name&gt; &lt;role&gt; &lt;state&gt; &lt;from-ip&gt; &lt;from-port&gt; &lt;to-ip&gt; &lt;to-port&gt;</span>
+<span class="token comment">#</span>
+<span class="token comment"># &lt;state&gt; is currently always &quot;failover&quot;</span>
+<span class="token comment"># &lt;role&gt; is either &quot;leader&quot; or &quot;observer&quot;</span>
+<span class="token comment"># </span>
+<span class="token comment"># The arguments from-ip, from-port, to-ip, to-port are used to communicate</span>
+<span class="token comment"># the old address of the master and the new address of the elected slave</span>
+<span class="token comment"># (now a master).</span>
+<span class="token comment">#</span>
+<span class="token comment"># This script should be resistant to multiple invocations.</span>
+<span class="token comment">#</span>
+<span class="token comment"># Example:</span>
+<span class="token comment">#</span>
+<span class="token comment"># sentinel client-reconfig-script mymaster /var/redis/reconfig.sh</span>
+
+<span class="token comment"># SECURITY</span>
+<span class="token comment">#</span>
+<span class="token comment"># By default SENTINEL SET will not be able to change the notification-script</span>
+<span class="token comment"># and client-reconfig-script at runtime. This avoids a trivial security issue</span>
+<span class="token comment"># where clients can set the script to anything and trigger a failover in order</span>
+<span class="token comment"># to get the program executed.</span>
+
+<span class="token attr-name">sentinel</span> <span class="token attr-value">deny-scripts-reconfig yes</span>
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br><span class="line-number">47</span><br><span class="line-number">48</span><br><span class="line-number">49</span><br><span class="line-number">50</span><br><span class="line-number">51</span><br><span class="line-number">52</span><br><span class="line-number">53</span><br><span class="line-number">54</span><br><span class="line-number">55</span><br><span class="line-number">56</span><br><span class="line-number">57</span><br><span class="line-number">58</span><br><span class="line-number">59</span><br><span class="line-number">60</span><br><span class="line-number">61</span><br><span class="line-number">62</span><br><span class="line-number">63</span><br><span class="line-number">64</span><br><span class="line-number">65</span><br><span class="line-number">66</span><br><span class="line-number">67</span><br><span class="line-number">68</span><br><span class="line-number">69</span><br><span class="line-number">70</span><br><span class="line-number">71</span><br><span class="line-number">72</span><br><span class="line-number">73</span><br><span class="line-number">74</span><br><span class="line-number">75</span><br><span class="line-number">76</span><br><span class="line-number">77</span><br><span class="line-number">78</span><br><span class="line-number">79</span><br><span class="line-number">80</span><br><span class="line-number">81</span><br><span class="line-number">82</span><br><span class="line-number">83</span><br><span class="line-number">84</span><br><span class="line-number">85</span><br><span class="line-number">86</span><br><span class="line-number">87</span><br><span class="line-number">88</span><br><span class="line-number">89</span><br><span class="line-number">90</span><br><span class="line-number">91</span><br><span class="line-number">92</span><br><span class="line-number">93</span><br><span class="line-number">94</span><br><span class="line-number">95</span><br><span class="line-number">96</span><br><span class="line-number">97</span><br><span class="line-number">98</span><br><span class="line-number">99</span><br><span class="line-number">100</span><br><span class="line-number">101</span><br><span class="line-number">102</span><br><span class="line-number">103</span><br><span class="line-number">104</span><br><span class="line-number">105</span><br><span class="line-number">106</span><br><span class="line-number">107</span><br><span class="line-number">108</span><br><span class="line-number">109</span><br><span class="line-number">110</span><br><span class="line-number">111</span><br><span class="line-number">112</span><br><span class="line-number">113</span><br><span class="line-number">114</span><br><span class="line-number">115</span><br><span class="line-number">116</span><br><span class="line-number">117</span><br><span class="line-number">118</span><br><span class="line-number">119</span><br><span class="line-number">120</span><br><span class="line-number">121</span><br><span class="line-number">122</span><br><span class="line-number">123</span><br><span class="line-number">124</span><br><span class="line-number">125</span><br><span class="line-number">126</span><br><span class="line-number">127</span><br><span class="line-number">128</span><br><span class="line-number">129</span><br><span class="line-number">130</span><br><span class="line-number">131</span><br><span class="line-number">132</span><br><span class="line-number">133</span><br><span class="line-number">134</span><br><span class="line-number">135</span><br><span class="line-number">136</span><br><span class="line-number">137</span><br><span class="line-number">138</span><br><span class="line-number">139</span><br><span class="line-number">140</span><br><span class="line-number">141</span><br><span class="line-number">142</span><br><span class="line-number">143</span><br><span class="line-number">144</span><br><span class="line-number">145</span><br><span class="line-number">146</span><br><span class="line-number">147</span><br><span class="line-number">148</span><br><span class="line-number">149</span><br><span class="line-number">150</span><br><span class="line-number">151</span><br><span class="line-number">152</span><br><span class="line-number">153</span><br><span class="line-number">154</span><br><span class="line-number">155</span><br><span class="line-number">156</span><br><span class="line-number">157</span><br><span class="line-number">158</span><br><span class="line-number">159</span><br><span class="line-number">160</span><br><span class="line-number">161</span><br><span class="line-number">162</span><br><span class="line-number">163</span><br><span class="line-number">164</span><br><span class="line-number">165</span><br><span class="line-number">166</span><br><span class="line-number">167</span><br><span class="line-number">168</span><br><span class="line-number">169</span><br><span class="line-number">170</span><br><span class="line-number">171</span><br><span class="line-number">172</span><br><span class="line-number">173</span><br><span class="line-number">174</span><br><span class="line-number">175</span><br><span class="line-number">176</span><br><span class="line-number">177</span><br><span class="line-number">178</span><br><span class="line-number">179</span><br><span class="line-number">180</span><br><span class="line-number">181</span><br><span class="line-number">182</span><br><span class="line-number">183</span><br><span class="line-number">184</span><br><span class="line-number">185</span><br><span class="line-number">186</span><br><span class="line-number">187</span><br><span class="line-number">188</span><br><span class="line-number">189</span><br><span class="line-number">190</span><br><span class="line-number">191</span><br><span class="line-number">192</span><br><span class="line-number">193</span><br><span class="line-number">194</span><br><span class="line-number">195</span><br><span class="line-number">196</span><br><span class="line-number">197</span><br><span class="line-number">198</span><br><span class="line-number">199</span><br><span class="line-number">200</span><br><span class="line-number">201</span><br><span class="line-number">202</span><br><span class="line-number">203</span><br><span class="line-number">204</span><br></div></div></div> <footer class="page-edit"><!----> <div class="last-updated"><span class="prefix">Last update time：:</span> <span class="time">2/27/2022, 9:54:01 PM</span></div></footer> <!----> </main></div><div class="global-ui"><!----></div></div>
+    <script src="/college/assets/js/app.d3495dbb.js" defer></script><script src="/college/assets/js/2.28767f38.js" defer></script><script src="/college/assets/js/68.e9bdda67.js" defer></script>
+  </body>
+</html>
