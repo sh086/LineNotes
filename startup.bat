@@ -14,6 +14,7 @@ if  "%1"=="-init" (
    npm run build
    ::进入生成的文件夹
    cd ./docs/.vuepress/dist/
+   
    copy ..\bin\push.sh . /y
    push.sh %2
    cd ..\..\..\

@@ -24,21 +24,41 @@
 
 
 
+### AOP
 
-## Component
+- [支持访问多个URL路径前缀](./2022/支持访问多个URL路径前缀.md)
+- [Mybatis加密解密插件]()
+
+
+
+## Notes
+
+### Component
+
+- [通过接口运维数据库](./2021/通过接口运维数据库.html)
+- [使用Alibaba canal同步数据库](./2021/使用AlibabaCanal同步数据库.html)
+- [screw数据库文档生成工具](./2021/screw数据库文档生成工具.html)
+
+### SDK
+
 - [百度文字识别](./2021/百度文字识别.html)
 
 
 
 ## Devops
 
+### 构建与部署
+
 - [在jar包中打包lib目录](./2022/在jar包中打包lib目录.md)
-- [通过接口运维数据库](./2021/通过接口运维数据库.html)
+
+
+
+### 自动化测试
+
 - [Jmeter压力测试](./2021/Jmeter压力测试.html)
-- [使用Alibaba canal同步数据库](./2021/使用AlibabaCanal同步数据库.html)
-- [swap交换分区解决内存不足问题](./2021/swap交换分区解决内存不足问题.html)
-- [screw数据库文档生成工具](./2021/screw数据库文档生成工具.html)
+
+
+
+### 监控优化
+
 - [快速部署SkyWalking监控](./2021/快速部署SkyWalking监控.html)
-
-
-
