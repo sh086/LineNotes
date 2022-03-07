@@ -8,17 +8,19 @@
 
 ### 自定义组件
 
-
-
-### 业务代码
-
-- [支持访问多个URL路径前缀](./business/支持访问多个URL路径前缀.md)
+- [支持访问多个URL路径前缀](./develop/支持访问多个URL路径前缀.md)
 
 
 
-## 学习
+### 自动化运维
 
-### 开源框架
+- [在jar包中打包lib目录](./devops/在jar包中打包lib目录.md)
+
+
+
+## 指南
+
+### 面试宝典
 
 
 
@@ -26,17 +28,24 @@
 
 
 
-## 自动化运维
+### 开源框架
 
-### 开发环境搭建
-
-
-
-### 自动化测试
-
+- [未完成 - Lombok代码简化工具](./develop/Lombok代码简化工具.md)
+- [SpringBoot MockMvc单元测试]
+- [未完成 - ==、equal与hashcode](./develop/==、equal与hashcode.md)
+- [JSON字符串与对象属性名不匹配](./develop/JSON字符串与对象属性名不匹配.md)
 
 
-### BUG修复
+
+## 附录
+
+- [持续更新中 - Java基础知识点](./bugfix/Java基础知识点.md)
+- [持续更新中 - Linux运维小技巧](./bugfix/Linux运维小技巧.md)
+- [持续更新中 - Bugfix排查日志](./bugfix/Bugfix排查日志.md)
+
+
+
+
 
 
 
