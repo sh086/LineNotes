@@ -70,6 +70,9 @@ public class UrlFilter implements Filter {
                 return getRewriteUrl(httpRequest.getRequestURI());
             }
 
+            /**
+            * 调用 getRequestURI()方法重新拼接RequestURL
+            */
             @Override
             public StringBuffer getRequestURL() {
                 return new StringBuffer(getScheme() + "://" + getServerName() + ":" + getServerPort() + getRequestURI());
@@ -86,6 +89,8 @@ public class UrlFilter implements Filter {
 
             /**
              * 请求路径重写逻辑
+             * @param  原请求路径
+             * @return 重写后的请求路径
              * */
             private String getRewriteUrl(String requestURI) {
                 if (requestURI.contains("/api/")) {

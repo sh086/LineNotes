@@ -11,3 +11,11 @@ cd /proc/11712
 ls –ail
 ```
 
+## 防火墙开放端口
+
+```shell
+firewall-cmd --zone=public --add-port=9000/tcp --permanen
+firewall-cmd --reload
+firewall-cmd --zone=public --query-port=9000/tcp
+```
+

@@ -1,28 +1,10 @@
-# Lombok代码简化工具
+# Lombok注解
 
-
-
-## Lombok表达式
-
-### val
-
-```java
-// val 用在局部变量前面,可以根据赋值的类型确定变量类型
-val i = 0;
-val user = new USer();;
-
-// 相当于如下代码
-int i = 0;
-User user = new USer();
-```
-
-
-
-## Lombok注解
+## 简化代码
 
 ### @NonNull
 
-```java
+```java{13-15}
 /**
 * @NonNull，用于方法参数，会自动在方法内对该参数进行是否为空的校验
 * 如果为空，则抛出NullPointerException（也可配置成抛出IllegalArgumentException）
@@ -45,12 +27,11 @@ public void test(@NonNull User user) {
 
 ### @Cleanup
 
-```java
-@Test
+```java{27,34-38}
 public void testCleanup() throws IOException {
     String path =  System.getProperty("user.dir");
     /**
-    * @Cleanup 用在局部变量之前，在当前变量范围内执行完毕后，自动生成try-finally清理资源
+    * @Cleanup 用在局部变量之前，在当前变量范围内执行完毕后，自动生成try-finally并清理资源
     **/
     @Cleanup
     InputStream in = new FileInputStream(path+"/pom.xml");
@@ -93,9 +74,11 @@ public void testCleanup() throws IOException {
 }
 ```
 
+
+
 ### @SneakyThrows
 
-```java
+```java{12}
 /**
 * @SneakyThrows：自动抛受检异常，而无需显式在方法上使用throws语句
 */
@@ -113,6 +96,90 @@ public void testCleanup() throws IOException {
 ```
 
 
+
+## 构造器注解
+
+### @AllArgsConstructor
+
+```java{16-21}
+/**
+* @AllArgsConstructor:创建带有每个成员变量参数的构造函数
+*/
+@AllArgsConstructor
+public class User {
+    private String name;
+    
+    private Integer age;
+    
+    private final Integer sex;
+    
+    /**
+    * @AllArgsConstructor相当于这个构造函数
+    * 注意，这个构造函数与@AllArgsConstructor是不能共存的
+    */
+    public User(String nama,Integer age,Integer sex){
+        super();
+        this.name = name;
+        this.age = age;
+        this.sex = sex;
+    }
+}
+```
+
+### @RequiredArgsConstructor
+
+```java{16-19}
+/**
+* @RequiredArgsConstructor:创建带有每个 final成员变量参数的构造函数
+*/
+@AllArgsConstructor
+public class User {
+    private String name;
+    
+    private Integer age;
+    
+    private final Integer sex;
+    
+    /**
+    * @RequiredArgsConstructor相当于这个构造函数
+    * 注意，这个构造函数与@RequiredArgsConstructor是不能共存的
+    */
+    public User(Integer sex){
+        super();
+        this.sex = sex;
+    }
+}
+```
+
+### @NoArgsConstructor
+
+```java{17-19}
+/**
+* @NoArgsConstructor:若自定义构造器后，可通过该注解创建一个没有参数的构造器
+*/
+@NoArgsConstructor
+public class User {
+    private String name;
+    
+    private Integer age;
+    
+    // 使用@NoArgsConstructor修饰的不能有final成员变量，因为无法初始化，所以会报错
+    // private final Integer sex;
+    
+    /**
+    * @NoArgsConstructor相当于定义了这个构造函数
+    * 注意，这个构造函数与@NoArgsConstructor是不能共存的
+    */
+    public User(){
+        super();
+    }
+}
+
+```
+
+
+
+## 类方法重写
 
 ### @Getter和@Setter
 
@@ -138,92 +205,13 @@ public class User {
 }
 ```
 
-### @AllArgsConstructor
-
-（1）@AllArgsConstructor
-
-```java
-/**
-* @AllArgsConstructor:创建带有每个成员变量参数的构造函数
-*/
-@AllArgsConstructor
-public class User {
-    private String name;
-    
-    private Integer age;
-    
-    private final Integer sex;
-    
-    /**
-    * @AllArgsConstructor相当于这个构造函数
-    * 注意，这个构造函数与@AllArgsConstructor是不能共存的
-    */
-    public User(String nama,Integer age,Integer sex){
-        super();
-        this.name = name;
-        this.age = age;
-        this.sex = sex;
-    }
-}
-```
-
-（2）RequiredArgsConstructor
-
-```java
-/**
-* @RequiredArgsConstructor:创建带有每个 final成员变量参数的构造函数
-*/
-@AllArgsConstructor
-public class User {
-    private String name;
-    
-    private Integer age;
-    
-    private final Integer sex;
-    
-    /**
-    * @RequiredArgsConstructor相当于这个构造函数
-    * 注意，这个构造函数与@RequiredArgsConstructor是不能共存的
-    */
-    public User(Integer sex){
-        super();
-        this.sex = sex;
-    }
-}
-```
-
-（3）NoArgsConstructor
-
-```java
-/**
-* @NoArgsConstructor:若自定义构造器后，可通过该注解创建一个没有参数的构造器
-*/
-@NoArgsConstructor
-public class User {
-    private String name;
-    
-    private Integer age;
-    
-    // 使用@NoArgsConstructor修饰的不能有final成员变量，因为无法初始化，所以会报错
-    // private final Integer sex;
-    
-    /**
-    * @NoArgsConstructor相当于定义了这个构造函数
-    */
-    public User(){
-        super();
-    }
-}
-
-```
-
 
 
 ### @ToString
 
 （1）重写toString()方法
 
-```java
+```java{16-19,24-27}
 /**
 * 默认情况下，自动重写 toString() 方法，包含所有变量
 * 排除单个变量：ToString(exclude="name")
@@ -256,7 +244,7 @@ public class User {
 
 （2）调用父类的toString方法
 
-```java
+```java{13-16}
 /**
 * 调用父类的toString方法：@ToString(callSuper=true)
 */
@@ -280,9 +268,15 @@ public class User extends Person{
 
 ### @EqualsAndHashCode
 
-​	　`@EqualsAndHashCode` 会重写包含所有成员变量的 `equals方法` 和 `hashCode 方法`，包括所有非静态变量和非 transient 的变量。 另外，`exclude选项`可用于通知 Lombok排除某些成员变量。
+​	　对象比较时，默认比较的是地址，可以通过`@EqualsAndHashCode`注解**重写包含所有成员变量的`equals方法` 和 `hashCode 方法`**，包括所有非静态变量和非 transient 的变量，使其在对象比较时，进行的是成员变量值比较。 
 
 ```java
+
+/**
+* @EqualsAndHashCode : 重写包含所有成员变量的equals()和hashCode()
+* @EqualsAndHashCode(exclude = "name") : exclude选项用于排除某些成员变量
+* @EqualsAndHashCode(callSuper = true) : 用子类的属性和从父类继承的属性重写,默认为false
+*/
 @EqualsAndHashCode
 public class User {
     private String name;
@@ -291,15 +285,25 @@ public class User {
 }
 ```
 
-​	　注意，在 Java 中有规定，**当两个对象 equals 时，他们的 hashcode 一定要相同**，反之，当 hashcode 相同时，对象不一定 equals。所以 equals 和 hashcode 要一起实现，免得发生违反 Java 规定的情形发生。
+​	　注意，在 Java 中有规定，**当两个对象 equals 时，它们的 hashcode 一定要相同**，但hashcode 相同时，对象不一定 equals。所以 equals 和 hashcode 要一起实现，以免出现错误。
 
 
 
 ### @Data
 
-​	　 `@Data` 是 `@Getter`、 `@Setter`、 `@ToString`、 `@EqualsAndHashCode` 和 `@RequiredArgsConstructor` 的整合包。
-
 ```java
+/**
+* @Data= @Getter + @Setter + @ToString + @EqualsAndHashCode + @RequiredArgsConstructor
+*/
+@Data
+public class User {
+    private String name;
+
+    private Integer age;
+}
+
+// 注意，若显示声明已包含的注解，会以显示声明的为主
+@ToString(includeFieldNames = false)
 @Data
 public class User {
     private String name;
@@ -312,10 +316,11 @@ public class User {
 
 ### @Value
 
-​	　 `@Value` 是 `@Getter`、 `@ToString`、 `@EqualsAndHashCode` 和 `@RequiredArgsConstructor` 的整合包。注意，`@Value`注解会把所有的变量都加上 `final 修饰符`。
-
-```java
-import lombok.Value;
+```java{16,18}
+/**
+* @Value= @Getter + @ToString + @EqualsAndHashCode + @RequiredArgsConstructor
+* @Value注解会把所有的变量都加上 final 修饰符
+*/
 @Value
 public class User {
     private String name;
@@ -343,12 +348,14 @@ public class User {
 
 
 
+## 对象构造
+
 ### @Builder
 
 ```java
 /**
 * @Builder：默认，可以通过构建者模式简化配置代码
-* @Builder(toBuilder = true) ：表示再次修改这个对象属性值，默认是false
+* @Builder(toBuilder = true) ：表示可以获取Builder，默认是false
 */
 @Builder(toBuilder = true)
 @Data
@@ -357,7 +364,7 @@ public class User {
     private String name;
 
     /**
-    * @Builder.Default：设置默认值
+    * @Builder.Default 使定义的默认值生效
     */
     @Builder.Default
     private Integer age = 12;
@@ -434,7 +441,7 @@ public class CodeGeneratorTest {
 
 ### @Singular
 
-​	　`@Builder.Default`只能为成员变量声明有默认值；`@Singular`注解可以为List、Set、Map声明有默认值，且默认值必须为空对象。
+​	　`@Builder.Default`只能为成员变量声明有默认值；`@Singular`注解可以为List、Set、Map声明有默认值，**且默认值必须为空对象**。
 
 ```java
 @Data
@@ -478,12 +485,14 @@ public class UserTest {
 private Integer age;
 
 // @Singula必须设定value，否则会提示错误的
-// @Singula只能初始化为 [] , 这样写还是初始化为 []
+// @Singula只能初始化为 [] , 这样写仍是初始化为 []
 @Singular(value = "phone")
 private List<String> phone = new ArrayList<String>(Arrays.asList("o1", "o2"));
 ```
 
 
+
+## 日志
 
 ### @Slf4j
 

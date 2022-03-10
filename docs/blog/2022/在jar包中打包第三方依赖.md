@@ -1,10 +1,16 @@
-## 在jar包中打包lib目录
+# 在jar包中打包第三方依赖
 
-###  配置Jar项目
+##  配置打包方式
+
+### 指定第三方依赖位置
 
 ​	　首先，打开 `Project Structure` ，在 `Modules` 中标记 `Sources` 、 `Resources` 等目录，然后，在 `Libraries` 中配置 `lib目录` 的位置。
 
 ![image-20220106114935536](./images/image-20220106114935536.png)
+
+
+
+### 打包时引用lib目录
 
 ​	　接着，在 `Artifacts` 中选择 `JAR -> From modules with dependencies` ，并配置项目的 `Main class`类 ，若没有，直接点击 OK 按钮。
 
@@ -14,7 +20,7 @@
 
 ![image-20220106115156189](./images/image-20220106115156189.png)
 
-### 测试打包 
+## 测试打包 
 
 ​	　在 `Build -> Build Artifacts` 中，选择`Rebuild`，即可完成构建。构建效果如下： 
 
