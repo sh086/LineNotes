@@ -40,7 +40,7 @@ Jul 30 15:39:07 localhost Kernel: Killed process 23817 (java) total-vm:8162620kB
 
 （1）问题描述
 
-​        在本地启动Tomcat项目的时候，console中报如下错误，但是，使用Navicat连接MySQL数据库是可以连接上的。
+​	　在本地启动Tomcat项目的时候，console中报如下错误，但是，使用Navicat连接MySQL数据库是可以连接上的。
 
 ```properties
 2020-11-24 13:51:29.976 ERROR 6336 --- [reate-204484400] com.alibaba.druid.pool.DruidDataSource   : create connection SQLException, url: jdbc:mysql://56.56.56.165:3306/customerinfo?characterEncoding=utf8&useSSL=true, errorCode 0, state 08S01
@@ -54,11 +54,11 @@ Caused by: javax.net.ssl.SSLHandshakeException: sun.security.validator.Validator
 
 （2）解决方案
 
-​        这个是因为是运维在中文作为MySQL升级，将MySQL从5.7.2升级到了5.7.3 ，将`&useSSL=true`去掉，重启Tomcat即可
+​	　这个是因为是运维将MySQL从5.7.2升级到了5.7.3 ，只需将`&useSSL=true`去掉，重启Tomcat即可
 
 ```properties
-# url: jdbc:mysql://56.56.56.165:3306/customerinfo?characterEncoding=utf8&useSSL=true
-url: jdbc:mysql://56.56.56.165:3306/customerinfo?characterEncoding=utf8
+# url: jdbc:mysql://100.56.1.165:3306/mysql?characterEncoding=utf8&useSSL=true
+url: jdbc:mysql://100.56.1.165:3306/mysql?characterEncoding=utf8
 ```
 
 
@@ -67,7 +67,7 @@ url: jdbc:mysql://56.56.56.165:3306/customerinfo?characterEncoding=utf8
 
 （1）问题描述
 
-​        需要在新机器上部署预发布环境，首先使用`yum install java-1.8.0-openjdk*`命令自动安装JDK，安装成功后查询JDK版本：
+​	　需要在新机器上部署预发布环境，首先使用`yum install java-1.8.0-openjdk*`命令自动安装JDK，安装成功后查询JDK版本：
 
 ```
 [user@iZbp129lc2zntsce6uucvxZ ~]# java -version
@@ -76,7 +76,7 @@ OpenJDK Runtime Environment (build 1.8.0_262-b10)
 OpenJDK 64-Bit Server VM (build 25.262-b10, mixed mode)
 ```
 
-​        接着，继续安装Tomcat，然后启动Tomcat，发现项目可以正常启动，最后调用HTTPS接口进行测试时，报如下错误：
+​	　接着，继续安装Tomcat，然后启动Tomcat，发现项目可以正常启动，最后调用HTTPS接口进行测试时，报如下错误：
 
 ```
 java.lang.RuntimeException: java.lang.UnsupportedOperationException: clientBuilder.sslSocketFactory(SSLSocketFactory) not supported on JDK 9+
@@ -86,7 +86,7 @@ java.lang.RuntimeException: java.lang.UnsupportedOperationException: clientBuild
 
 （2）解决方案
 
-​        这个是因为代码中跳过HTTPS验证的语句在JDK9中已经不支持了，但是openjdk的8.0高版本会被错误的辨识为9.0，这个应该是openjdk8的一个BUG，所以造成了这个错误（但是JDK Oracle 8.x版本不会）。参考[这里](https://stackoverflow.com/questions/61458197/clientbuilder-sslsocketfactorysslsocketfactory-not-supported-on-jdk-9)。
+​	　这个是因为代码中跳过HTTPS验证的语句在JDK9中已经不支持了，但是openjdk的8.0高版本会被错误的辨识为9.0，这个应该是openjdk8的一个BUG，所以造成了这个错误（但是JDK Oracle 8.x版本不会）。参考[这里](https://stackoverflow.com/questions/61458197/clientbuilder-sslsocketfactorysslsocketfactory-not-supported-on-jdk-9)。
 
 ```java{6}
 public void init() {
@@ -100,7 +100,7 @@ public void init() {
 	}
 ```
 
-​        只需降**低安装的openjdk8.x版本号**或者**使用JDK Oracle 8.x版本**就可以了。
+​	　只需降**低安装的openjdk8.x版本号**或者**使用JDK Oracle 8.x版本**就可以了。
 
 ```
 [user@iZbp129lc2zntsce6uucvxZ bin]# ./java -version
@@ -115,13 +115,13 @@ Java HotSpot(TM) 64-Bit Server VM (build 25.181-b13, mixed mode)
 
 （1）问题描述
 
-​        记录插入mysql时的时间戳比本地笔记本的时间戳晚了三分钟，导致根据时间戳加签时，MQ服务器总是反馈Token验证失败，致使推送MQ失败。
+​	　 记录插入mysql时的时间戳比本地笔记本的时间戳晚了三分钟，导致根据时间戳加签时，MQ服务器总是反馈Token验证失败，致使推送MQ失败。
 
 
 
 （2）解决方案
 
-​        本地笔记本连接的是外网，时间可以及时与互联网进行同步，但是服务器部署在局域网中，时间戳不能实时与互联网的时间进行同步，只能依靠服务器的计数器进行计时，久而久之，内网服务器的时间戳必然会与互联网中的时间戳不相等，若相差较大的话，只能进行人工调整服务器当前时间戳。
+​	　本地笔记本连接的是外网，时间可以及时与互联网进行同步，但是服务器部署在局域网中，时间戳不能实时与互联网的时间进行同步，只能依靠服务器的计数器进行计时，久而久之，内网服务器的时间戳必然会与互联网中的时间戳不相等，若相差较大的话，只能进行人工调整服务器当前时间戳。
 
 ```shell
 #查看时间
@@ -160,10 +160,10 @@ nohup java -Xms512m -Xmx512m
 docker run -d   \
 -e TZ=Asia/Shanghai   \
 --restart always   \
--v /home/crm-api/logs:/usr/local/tomcat/logs  \
+-v /home/project/logs:/usr/local/tomcat/logs  \
 -e JAVA_OPTS='-server -Xms2000m -Xmx6000m' \
---name crm-api   \
--p 8080:8080 crm-api
+--name project   \
+-p 8080:8080 project
 ```
 
 ​	　JVM初始分配的堆内存由`-Xms`指定，**默认是物理内存的1/64**；JVM最大分配的堆内存由`-Xmx`指定，按需分配。**默认是物理内存的1/4**。默认空余堆内存小于`40%`时，JVM就会增大堆直到`-Xmx`的最大限制；空余堆内存大于`70%`时，`JVM`会减少堆直到`-Xms`的最小限制。因此服务器一般设置`-Xms`、`-Xmx`相等以避免在每次`GC` 后调整堆的大小。

@@ -134,22 +134,22 @@ apache/skywalking-ui:6.6.0
 # -javaagent: 指定agent包位置
 # -Dskywalking.agent.service_name: 指定服务名
 # -Dskywalking.collector.backend_service: 指定skywalking oap地址
--javaagent:/home/crm-api/agent/skywalking-agent.jar -Dskywalking.agent.service_name=CRM测试 -
-Dskywalking.collector.backend_service=172.16.205.117:11800
+-javaagent:/home/project/agent/skywalking-agent.jar -Dskywalking.agent.service_name=项目测试 -
+Dskywalking.collector.backend_service=100.26.205.117:11800
 ```
 
 （1）若项目采用jar部署，需要采用如下示例命令：
 
 ```shell
-java -javaagent:/home/crm-api/agent/skywalking-agent.jar -Dskywalking.agent.service_name=crmest
--Dskywalking.collector.backend_service=172.16.205.117:11800 -jar spring-boot.jar
+java -javaagent:/home/project/agent/skywalking-agent.jar -Dskywalking.agent.service_name=project
+-Dskywalking.collector.backend_service=100.26.205.117:11800 -jar spring-boot.jar
 ```
 
 （2）若项目采用`Tomcat`部署，需要修改`catalina.sh`，新增如下启动参数：
 
 ```shell
-CATALINA_OPTS="$CATALINA_OPTS -javaagent:/home/crm-api/agent/skywalking-agent.jar -
-Dskywalking.agent.service_name=CRM测试 -Dskywalking.collector.backend_service=172.17.0.4:11800"
+CATALINA_OPTS="$CATALINA_OPTS -javaagent:/home/project/agent/skywalking-agent.jar -
+Dskywalking.agent.service_name=项目测试 -Dskywalking.collector.backend_service=100.26.205.117:11800"
 export CATALINA_OPTS
 ```
 
