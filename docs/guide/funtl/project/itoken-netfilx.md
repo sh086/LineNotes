@@ -1,12 +1,10 @@
 ---
-sidebarDepth: 0
+sidebar: auto
 ---
 
 # 微服务实战之iToken
 
-​	　iToken 项目以**区块链技术**和**自有代币**体系为底层，打造一个为加密货币社区服务的新生态，这个生态将最大化地降低交易成本，提供最有价值的内容资讯和社交体验，并且集成更多更有价值的工具。
-
-
+​	　iToken 项目是基于 `Spring Boot` + `Spring Cloud Netflix` 的仿照[MyToken](https://mytokencap.com/)练习项目，开发前首先要进行**技术选型**和**服务规划**，并完成系统架构设计。
 
 > **Ref**：[讲义](https://www.funtl.com/zh/guide/Spring-Cloud-iToken.html) | [视频合辑](https://www.bilibili.com/video/av29882762) |  [源码](https://gitlab.com/springclouditoken) | <a href="../microservice/springcloudnetflix.html" target="_blank">笔记</a>
 
@@ -14,15 +12,11 @@ sidebarDepth: 0
 
 **参考资料：**
 
-- <a href="./itoken-netfilx-init.html" target="_blank">Spring Cloud  iToken项目初始化</a>
-- <a href="../microservice/gitlabci.html" target="_blank">GitLab CI持续集成</a>
-- <a href="./itoken-netflix.html" target="_blank">Spring Cloud  iToken正式开发</a>
+- <a href="../microservice/springcloudnetflix.html" target="_blank">Spring Cloud Netflix笔记</a>
 
 
 
-​	　iToken 项目是基于 `Spring Boot` + `Spring Cloud Netflix` 的仿照[MyToken](https://mytokencap.com/)练习项目，开发前首先要进行<a href="./itoken-netflix.html#技术选型" target="_blank">技术选型</a>和<a href="./itoken-netflix.html#服务端口规划" target="_blank">技术选型</a>，并完成系统架构设计。
-
-![image-20211125225712778](../microservice/images/image-20211125225712778.png)
+## 快速开始
 
 ​	　首先，在[GitLab](https://gitlab.com/)创建`springcloud-itoken`**项目组**，然后在项目组中新建私有的`Spring Cloud`项目，并将`springcloud-itoken`项目组中的项目拉取到本地。
 

@@ -580,7 +580,8 @@ run:
   stage: run
   script:
     - cd docker
-    # - docker-compose down
+    # d
+    - docker-compose down
     - docker-compose up -d --build
 
 # 清理

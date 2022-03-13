@@ -68,15 +68,12 @@ sidebarDepth: 0
     	<td rowspan="4" align="center">
     	    <a href="./springboot.html" target="_blank">SpringBoot</a>
     	</td>
-    	<td colspan="4" align="center">
+    	<td colspan="5" align="center">
     	    <a href="./springcloudnetflix.html" target="_blank">Spring Cloud Netflix</a>
     	</td>
-    	<td  rowspan="4" align="center">
-    	    <a href="./devops.html">SSO</a>
-    	</td> 
     </tr>
     <tr>
-    	<td  colspan="2" align="center">
+    	<td  colspan="3" align="center">
     	    <a href="./dubbo.html" target="_blank">Apache Dubbo</a>
     	</td> 
     	<td colspan=2 align="center">
@@ -84,13 +81,13 @@ sidebarDepth: 0
         </td> 
     </tr>
     <tr>
-    	<td colspan="4" align="center">
+    	<td colspan="5" align="center">
     	    <a href="./springcloudalibaba.html" target="_blank">Spring Cloud Alibaba</a>
     	</td>
     </tr>
     <tr>
     	<td >Non</td> 
-    	<td colspan="4" align="center">
+    	<td colspan="5" align="center">
     	    <a href="./springcloudalibabadubbo.html" target="_blank">Spring Cloud Alibaba Dubbo</a>
     	</td>
     </tr>
@@ -99,6 +96,6 @@ sidebarDepth: 0
 
 **实战：**
 
-- [Spring Cloud iToken项目实战](../project/README_ITOKEN.html)
-- [Spring Cloud For MyShop](../project/itoken-netflix.html)
+- <a href="../project/itoken-netfilx.html" target="_blank">Spring Cloud iToken项目实战</a>
+-  <a href="../project/myshop-springcloud.html" target="_blank">Spring Cloud For MyShop</a>
 

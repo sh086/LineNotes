@@ -12,7 +12,7 @@
 <dependency>
     <groupId>com.fasterxml.jackson.core</groupId>
     <artifactId>jackson-databind</artifactId>
-    <version>版本号</version>
+    <version>2.11.3</version>
 </dependency>
 ```
 
@@ -48,7 +48,7 @@ val user = new ObjectMapper().readValue(jsonStr, User.class)
 <dependency>
     <groupId>com.alibaba</groupId>
     <artifactId>fastjson</artifactId>
-    <version>版本号</version
+    <version>1.2.49</.version>
 </dependency>
 ```
 
