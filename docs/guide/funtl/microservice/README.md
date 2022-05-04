@@ -45,7 +45,7 @@ sidebarDepth: 0
     </tr>
     <tr>
     	<td>SaaS</td>
-        <td align="center"><a href="./registry.html" target="_blank">MQ</a></td> 
+        <td align="center"><a href="./mq.html" target="_blank">MQ</a></td> 
         <td colspan="1" align="center">
            <a href="./nginx.html" target="_blank">Nginx</a></td>
     	</td>

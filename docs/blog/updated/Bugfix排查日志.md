@@ -1,5 +1,22 @@
 # Bugfix排查日志
 
+## 不换行空格
+
+​	　在代码中，通过`trim()`方法去空格发现无法去除。经测试发现，改空格字符是**不换行空格**（no-break space，NBSP），用途是禁止自动换行，HTML页面显示时会自动合并多个连续的空白字符，但该字符是禁止合并的，因此该字符也称作`硬空格`。
+
+```java
+public static void main(String[] args) {
+    // 此处是不可换行空格NBSP
+    String str = "str ";
+    // 打印结果是：【str 】，不可换行空格NBSP不会被trim()去掉
+    System.out.println(str.trim());
+    // 解决方案：将不可换行空格NBSP去掉
+    System.out.println(str.trim().replaceAll(" ",""));
+}
+```
+
+ 
+
 ## kill内存过载进程
 
 （1）问题描述

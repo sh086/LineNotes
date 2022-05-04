@@ -6,13 +6,16 @@ sidebar: auto
 
 ​	　iToken 项目是基于 `Spring Boot` + `Spring Cloud Netflix` 的仿照[MyToken](https://mytokencap.com/)练习项目，开发前首先要进行**技术选型**和**服务规划**，并完成系统架构设计。
 
-> **Ref**：[讲义](https://www.funtl.com/zh/guide/Spring-Cloud-iToken.html) | [视频合辑](https://www.bilibili.com/video/av29882762) |  [源码](https://gitlab.com/springclouditoken) | <a href="../microservice/springcloudnetflix.html" target="_blank">笔记</a>
+> **Ref**：[讲义](https://www.funtl.com/zh/guide/Spring-Cloud-iToken.html) | [视频合辑](https://www.bilibili.com/video/av29882762) | <a href="../microservice/springcloudnetflix.html" target="_blank">Spring Cloud Netflix笔记</a>
 
 
 
-**参考资料：**
+**开发步骤：**
 
-- <a href="../microservice/springcloudnetflix.html" target="_blank">Spring Cloud Netflix笔记</a>
+- 第一步：系统详细设计
+- <a href="./itoken-netfilx-init.html" target="_blank">第二步：项目初始化</a>
+- <a href="../microservice/gitlabci.html#手动部署" target="_blank">第三步：部署持续集成</a>
+- 第四步：正式开发
 
 
 

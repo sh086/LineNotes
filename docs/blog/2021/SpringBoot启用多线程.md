@@ -140,6 +140,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 @Slf4j
 public class TaskExecutePool{
 
+    // 自定义线程池名字,默认是方法名taskAsyncPool
+    // @Bean("myAsyncPool")
     @Bean
     public Executor taskAsyncPool()  {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();

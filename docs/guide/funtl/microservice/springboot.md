@@ -246,9 +246,9 @@ templatename                                   # 引入整个模板页面
 
 ​	
 
-## MyBatis
+## tk.myBatis
 
-### 整合MyBatis
+### 整合tk.myBatis
 
 ​	　首先，引入`MyBatis`所需的依赖。
 
@@ -451,7 +451,7 @@ mvn mybatis-generator:generate
 
 
 
-### MyBatis操作数据库
+### tk.myBatis操作数据库
 
 ​	　首先，需要使用 `@MapperScan` 注解来指定 Mapper 接口的路径。
 
