@@ -15,13 +15,13 @@ const index = [
     },
     {
 
-        title: '拓展',
+        title: '专题',
         collapsable: false,
         children: [
             ['topic/','算法与数据'],
             ['startup/','软件工程'],
         ]
-    }
+    },
 ]
 
 module.exports.index = index
