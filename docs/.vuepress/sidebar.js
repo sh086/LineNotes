@@ -1,10 +1,8 @@
-
 const guide = require('./index/guide.js');
 
 module.exports = {
-
-    '/guide/': guide.index,
-    '' : 'auto'
+    '/guide/develop/java/framework/mybatisplus/': guide.mybatisplus,
+    '/guide/develop/java/': guide.java,
+    '': 'auto'
 
 }
-

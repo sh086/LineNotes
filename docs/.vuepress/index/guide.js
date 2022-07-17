@@ -1,30 +1,30 @@
-// 互联网全栈工程师
-const index = [
-    {
-        title: '指南',
-        collapsable: false,
-        children: [
-            ['', '开篇'],
-            ['develop/', '开发技术栈'],
-            ['datascience/', '大数据分析'], 
-            ['smartmart/', '人工智能'],
-            ['cloudservice/', '云计算服务'], 
-            ['metaverse/', '物联网'],
-            ['interview/','面试宝典'],
-        ]
-    },
-    {
+// // 互联网全栈工程师
+// const index = [
+//     {
+//         title: '指南',
+//         collapsable: false,
+//         children: [
+//             ['', '开篇'],
+//             ['develop/', '开发技术栈'],
+//             ['cloudservice/', '云计算服务'], 
+//             ['datascience/', '大数据分析'], 
+//             ['smartmart/', '人工智能'],
+//             ['metaverse/', '物联网'],
+//             ['interview/','面试宝典'],
+//         ]
+//     },
+//     {
 
-        title: '专题',
-        collapsable: false,
-        children: [
-            ['topic/','算法与数据'],
-            ['startup/','软件工程'],
-        ]
-    },
-]
+//         title: '专题',
+//         collapsable: false,
+//         children: [
+//             ['topic/','算法与数据'],
+//             ['startup/','软件工程'],
+//         ]
+//     },
+// ]
 
-module.exports.index = index
+// module.exports.index = index
 
 //LeetCode
 const leetcode = [
@@ -61,3 +61,33 @@ const leetcode = [
 
 module.exports.leetcode = leetcode
 
+//Java
+const java = [
+    {
+        title: '指南',
+        collapsable: false,
+        children: [
+            ['', '开篇'],
+            ['quickstart/', '快速开始'],
+            ['grammer/', 'Java编程入门'],
+            ['framework/', 'Spring轻量级Web框架'],
+            ['microservice/', '微服务解决复杂问题'],
+        ]
+    },
+    {
+        title: '专题',
+        collapsable: false,
+        children: [
+            ['springboot/', 'SpringBoot生态'],
+            ['topic/', '数据交互'],
+        ]
+    },
+    {
+        title: '实战',
+        collapsable: false,
+        children: [
+            ['project/', '项目演练'],
+        ]
+    },
+]
+module.exports.java = java

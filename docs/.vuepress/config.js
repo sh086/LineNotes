@@ -4,7 +4,7 @@ module.exports = {
     title: '学习笔记',
     description: '导航页',
     port: '8001',
-    base:'/college/',
+    base: '/college/',
     themeConfig: {
         repo: 'https://github.com/sh086/',
         nav: nav,//导航栏
@@ -15,10 +15,27 @@ module.exports = {
         lastUpdated: 'Last update time：'
     },
     head: [
-        ['link', { rel: 'icon', href: '/favicon.ico' }]
+        ['link', {rel: 'icon', href: '/favicon.ico'}]
     ],
     markdown: {
         lineNumbers: true
     },
-    plugins: ['@vuepress/back-to-top']
+    plugins: [
+        ['@vuepress/back-to-top'],
+        [
+            'vuepress-plugin-right-anchor',
+            {
+                showDepth: 2,
+                ignore: [
+                    '/',
+                    '/guide/develop/java/'
+                ],
+                expand: {
+                    trigger: 'click',
+                    clickModeDefaultOpen: true
+                },
+                customClass: 'your-customClass',
+            }
+        ]
+    ]
 }
